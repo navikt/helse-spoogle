@@ -1,0 +1,87 @@
+name: Spoogle
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'deploy/spoogle-dev.yml'
+      - 'deploy/spoogle-prod.yml'
+      - 'spoogle-backend/**'
+      - 'spoogle-frontend/**'
+      - 'build.gradle.kts'
+      - '.github/workflows/spoogle.yml'
+      - 'Dockerfile'
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Bygg
+    runs-on: ubuntu-latest
+    needs: set_version
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17.x'
+          cache: 'gradle'
+
+      - name: Test og bygg
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build :spoogle-backend:build
+        env:
+          ORG_GRADLE_PROJECT_githubUser: x-access-token
+          ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lag Docker image
+        uses: nais/docker-build-push@v0
+        id: docker-build-push
+        with:
+          team: tbd
+          cache_from: type=gha
+          cache_to: type=gha,mode=max
+          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
+          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+    outputs:
+      image: ${{ steps.docker-build-push.outputs.image }}
+
+  snyk:
+    name: Kontroller sårbarheter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Gradle vulnerability check
+        uses: snyk/actions/gradle@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --project-name=spoogle-backend --org=tbd-ty7 --fail-on=all
+          command: monitor
+
+  deployDev:
+    name: Deploy til dev
+    needs: [build, snyk]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: deploy/dev.yml
+          IMAGE: ${{ needs.build.outputs.image }}
+
+#  deployProd:
+#    name: Deploy til prod
+#    needs: [set_version, build, snyk]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: nais/deploy/actions/deploy@v1
+#        env:
+#          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+#          CLUSTER: prod-gcp
+#          RESOURCE: deploy/prod.yml
+#          IMAGE: ${{ needs.build.outputs.image }}
