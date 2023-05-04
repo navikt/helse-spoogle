@@ -4,12 +4,11 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'deploy/spoogle-dev.yml'
-      - 'deploy/spoogle-prod.yml'
+      - 'deploy/**'
       - 'spoogle-backend/**'
       - 'spoogle-frontend/**'
       - 'build.gradle.kts'
-      - '.github/workflows/spoogle.yml'
+      - '.github/workflows/**'
       - 'Dockerfile'
     branches:
       - main
