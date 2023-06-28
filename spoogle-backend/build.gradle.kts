@@ -2,6 +2,11 @@ private val mainClass = "no.nav.helse.spoogle.AppKt"
 
 private val rapidsAndRiversVersion = "2023050308441683096263.f5a276d7bd28"
 private val junitVersion = "5.9.0"
+private val flywayVersion = "9.3.0"
+private val hikariVersion = "5.0.1"
+private val kotliqueryVersion = "1.9.0"
+private val postgresqlVersion = "42.5.1"
+
 
 plugins {
     kotlin("jvm") apply true
@@ -9,6 +14,11 @@ plugins {
 
 dependencies {
     api("com.github.navikt:rapids-and-rivers:$rapidsAndRiversVersion")
+
+    implementation("com.zaxxer:HikariCP:$hikariVersion")
+    implementation("com.github.seratch:kotliquery:$kotliqueryVersion")
+    implementation("org.postgresql:postgresql:$postgresqlVersion")
+    implementation("org.flywaydb:flyway-core:$flywayVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
