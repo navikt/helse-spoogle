@@ -6,7 +6,7 @@ private val flywayVersion = "9.3.0"
 private val hikariVersion = "5.0.1"
 private val kotliqueryVersion = "1.9.0"
 private val postgresqlVersion = "42.5.1"
-
+private val testcontainersPostgresqlVersion = "1.17.3"
 
 plugins {
     kotlin("jvm") apply true
@@ -21,6 +21,7 @@ dependencies {
     implementation("org.flywaydb:flyway-core:$flywayVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.testcontainers:postgresql:$testcontainersPostgresqlVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
 
