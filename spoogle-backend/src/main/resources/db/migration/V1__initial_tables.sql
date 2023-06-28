@@ -4,7 +4,7 @@ CREATE TABLE node(
     id_type VARCHAR NOT NULL
 );
 
-CREATE UNIQUE INDEX ON node(id, id_type);
+CREATE UNIQUE INDEX ON node(id_type, id);
 
 CREATE TABLE edge(
     node_A BIGINT NOT NULL,
