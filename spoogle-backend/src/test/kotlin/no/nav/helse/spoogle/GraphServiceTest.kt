@@ -1,7 +1,8 @@
-package no.nav.helse.spoogle.db
+package no.nav.helse.spoogle
 
 import kotliquery.queryOf
 import kotliquery.sessionOf
+import no.nav.helse.spoogle.db.AbstractDatabaseTest
 import no.nav.helse.spoogle.graph.Graph
 import no.nav.helse.spoogle.graph.Identifikatortype
 import no.nav.helse.spoogle.graph.Node

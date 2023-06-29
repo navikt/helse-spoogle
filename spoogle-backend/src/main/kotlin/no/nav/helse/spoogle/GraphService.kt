@@ -1,5 +1,6 @@
-package no.nav.helse.spoogle.db
+package no.nav.helse.spoogle
 
+import no.nav.helse.spoogle.db.GraphDao
 import no.nav.helse.spoogle.graph.Graph
 import no.nav.helse.spoogle.graph.NodeDto
 import javax.sql.DataSource
