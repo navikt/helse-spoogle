@@ -11,7 +11,7 @@ internal class NodeTest {
     fun `connect two nodes`() {
         val nodeA = Node("FNR", FØDSELSNUMMER)
         val nodeB = Node("ORGNR", ORGANISASJONSNUMMER)
-        val edge = nodeA.connectTo(nodeB)
+        val edge = nodeA to nodeB
         assertEquals(Edge(nodeA, nodeB), edge)
     }
 }

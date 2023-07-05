@@ -5,7 +5,7 @@ data class Node(
     private val type: Identifikatortype
 ) {
     internal fun toDto() = NodeDto(id, type.toString())
-    internal fun connectTo(other: Node) = Edge(this, other)
+    internal infix fun to(other: Node) = Edge(this, other)
 }
 
 data class NodeDto(

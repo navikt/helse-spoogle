@@ -15,19 +15,24 @@ internal class GraphServiceTest: AbstractDatabaseTest() {
 
     @Test
     fun `ny sub-graph`() {
-        val fnrNode = fnrNode("FNR")
-        val orgnrNode = orgnrNode("ORGNR")
-        val periodeNode = periodeNode("PERIODE_ID")
-        val utbetalingNode = utbetalingNode("UTBETALING_ID")
-        val graph = Graph.buildGraph(fnrNode, orgnrNode, periodeNode, utbetalingNode)
+        val fnrNode = fnrNode("fnr")
+        val orgnrNode = orgnrNode("orgnr")
+        val periodeNode = periodeNode("periode_id_1")
+        val periodeNode2 = periodeNode("periode_id_2")
+        val utbetalingNode = utbetalingNode("utbetaling_id")
+
+        val graph = Graph.buildGraph(
+            fnrNode to orgnrNode,
+            orgnrNode to periodeNode,
+            orgnrNode to periodeNode2,
+            periodeNode to utbetalingNode
+        )
+
         service.nySubGraph(graph)
-        assertNodes("FNR", "ORGNR", "PERIODE_ID", "UTBETALING_ID")
-        assertEdge("FNR", "ORGNR")
-        assertEdge("FNR", "PERIODE_ID")
-        assertEdge("FNR", "UTBETALING_ID")
-        assertEdge("ORGNR", "PERIODE_ID")
-        assertEdge("ORGNR", "UTBETALING_ID")
-        assertEdge("PERIODE_ID", "UTBETALING_ID")
+        assertNodes("fnr", "orgnr", "periode_id_1", "utbetaling_id")
+        assertEdge("fnr", "orgnr")
+        assertEdge("orgnr", "periode_id_1")
+        assertEdge("periode_id_1", "utbetaling_id")
     }
 
     private fun assertNodes(vararg ider: String) {

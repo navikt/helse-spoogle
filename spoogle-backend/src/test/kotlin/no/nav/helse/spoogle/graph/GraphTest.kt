@@ -12,15 +12,16 @@ internal class GraphTest {
         val orgnrNode = orgnrNode("ORGNR")
         val periodeNode = periodeNode("PERIODE_ID")
         val utbetalingNode = utbetalingNode("UTBETALING_ID")
-        val graph = Graph.buildGraph(fnrNode, orgnrNode, periodeNode, utbetalingNode)
+        val graph = Graph.buildGraph(
+            fnrNode to orgnrNode,
+            orgnrNode to periodeNode,
+            periodeNode to utbetalingNode
+        )
 
         val expected = Graph(
             listOf(
                 Edge(fnrNode, orgnrNode),
-                Edge(fnrNode, periodeNode),
-                Edge(fnrNode, utbetalingNode),
                 Edge(orgnrNode, periodeNode),
-                Edge(orgnrNode, utbetalingNode),
                 Edge(periodeNode, utbetalingNode),
             )
         )

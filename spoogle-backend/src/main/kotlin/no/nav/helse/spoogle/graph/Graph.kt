@@ -10,16 +10,7 @@ internal class Graph(
     override fun hashCode() = edges.hashCode()
 
     internal companion object {
-        internal fun buildGraph(vararg nodes: Node): Graph {
-            val edges = mutableSetOf<Edge>()
-            nodes.forEachIndexed { index, node ->
-                val tail = nodes.drop(index + 1)
-                tail.forEach {
-                    edges.add(node.connectTo(it))
-                }
-            }
-            return Graph(edges.toList())
-        }
+        internal fun buildGraph(vararg edges: Edge) = Graph(edges.toList())
     }
 }
 
