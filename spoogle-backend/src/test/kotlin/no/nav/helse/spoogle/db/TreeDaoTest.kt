@@ -7,17 +7,17 @@ import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-internal class GraphDaoTest: AbstractDatabaseTest() {
+internal class TreeDaoTest: AbstractDatabaseTest() {
     private val dao = GraphDao(dataSource)
 
     @Test
-    fun `create node`() {
+    fun `opprett node`() {
         dao.nyNode(nodeDto("A"))
         assertNode("A")
     }
 
     @Test
-    fun `create node twice`() {
+    fun `forsøk å opprette samme node to ganger`() {
         dao.nyNode(nodeDto("A"))
         assertDoesNotThrow {
             dao.nyNode(nodeDto("A"))
@@ -25,7 +25,7 @@ internal class GraphDaoTest: AbstractDatabaseTest() {
     }
 
     @Test
-    fun `create edge`() {
+    fun `opprett edge`() {
         dao.nyNode(nodeDto("A"))
         dao.nyNode(nodeDto("B"))
         dao.nyEdge(nodeDto("A"), nodeDto("B"))
@@ -33,7 +33,7 @@ internal class GraphDaoTest: AbstractDatabaseTest() {
     }
 
     @Test
-    fun `create edge twice`() {
+    fun `forsøk å opprette samme edge to ganger`() {
         dao.nyNode(nodeDto("A"))
         dao.nyNode(nodeDto("B"))
         dao.nyEdge(nodeDto("A"), nodeDto("B"))
@@ -61,5 +61,5 @@ internal class GraphDaoTest: AbstractDatabaseTest() {
         assertEquals(1, antall)
     }
 
-    private fun nodeDto(id: String) = NodeDto(id, "type")
+    private fun nodeDto(id: String) = NodeDto(id, "type", emptyList())
 }

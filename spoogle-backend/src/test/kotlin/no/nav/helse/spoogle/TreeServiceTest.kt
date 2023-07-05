@@ -3,32 +3,32 @@ package no.nav.helse.spoogle
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
-import no.nav.helse.spoogle.graph.Graph
+import no.nav.helse.spoogle.graph.Tree
 import no.nav.helse.spoogle.graph.Identifikatortype
 import no.nav.helse.spoogle.graph.Node
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-internal class GraphServiceTest: AbstractDatabaseTest() {
-    private val service = GraphService(dataSource)
+internal class TreeServiceTest: AbstractDatabaseTest() {
+    private val service = TreeService(dataSource)
 
     @Test
-    fun `ny sub-graph`() {
+    fun `ny gren`() {
         val fnrNode = fnrNode("fnr")
         val orgnrNode = orgnrNode("orgnr")
         val periodeNode = periodeNode("periode_id_1")
         val periodeNode2 = periodeNode("periode_id_2")
         val utbetalingNode = utbetalingNode("utbetaling_id")
 
-        val graph = Graph.buildGraph(
-            fnrNode to orgnrNode,
-            orgnrNode to periodeNode,
-            orgnrNode to periodeNode2,
-            periodeNode to utbetalingNode
-        )
+        fnrNode parentOf orgnrNode
+        orgnrNode parentOf periodeNode
+        orgnrNode parentOf periodeNode2
+        periodeNode parentOf utbetalingNode
 
-        service.nySubGraph(graph)
+        val tree = Tree.growTree(fnrNode)
+
+        service.nyGren(tree)
         assertNodes("fnr", "orgnr", "periode_id_1", "utbetaling_id")
         assertEdge("fnr", "orgnr")
         assertEdge("orgnr", "periode_id_1")
