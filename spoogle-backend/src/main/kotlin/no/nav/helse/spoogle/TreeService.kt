@@ -8,6 +8,15 @@ import javax.sql.DataSource
 internal class TreeService(dataSource: DataSource) {
     private val dao = GraphDao(dataSource)
 
+    internal fun finnTre(id: String): Tree? {
+        val nodes = dao.finnGraph(id)
+        nodes.forEach { (parent, child) ->
+            parent parentOf child
+        }
+        val (rootNode, _) = nodes.find { !it.first.hasParent() } ?: return null
+        return Tree.buildTree(rootNode)
+    }
+
     internal fun nyGren(tree: Tree) {
         val dto = tree.toDto()
         dto.rootNode.children.forEach {

@@ -10,7 +10,7 @@ internal class Tree private constructor(
     override fun hashCode() = rootNode.hashCode()
 
     internal companion object {
-        internal fun growTree(rootNode: Node) = Tree(rootNode)
+        internal fun buildTree(rootNode: Node) = Tree(rootNode)
     }
 }
 

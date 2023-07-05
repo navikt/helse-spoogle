@@ -4,14 +4,16 @@ data class Node(
     private val id: String,
     private val type: Identifikatortype
 ) {
-    private val children: MutableList<Node> = mutableListOf()
+    private var parent: Node? = null
+    private val children: MutableSet<Node> = mutableSetOf()
 
     internal fun toDto(): NodeDto = NodeDto(id, type.toString(), children.map { it.toDto() })
 
-    internal infix fun to(other: Node) = Edge(this, other)
+    internal fun hasParent() = parent != null
 
     internal infix fun parentOf(other: Node) {
         children.add(other)
+        other.parent = this
     }
 }
 
