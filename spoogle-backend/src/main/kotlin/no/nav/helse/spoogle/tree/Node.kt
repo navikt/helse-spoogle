@@ -1,4 +1,4 @@
-package no.nav.helse.spoogle.graph
+package no.nav.helse.spoogle.tree
 
 import org.intellij.lang.annotations.Language
 

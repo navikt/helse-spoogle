@@ -3,9 +3,9 @@ package no.nav.helse.spoogle
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
-import no.nav.helse.spoogle.graph.Tree
-import no.nav.helse.spoogle.graph.Identifikatortype
-import no.nav.helse.spoogle.graph.Node
+import no.nav.helse.spoogle.tree.Tree
+import no.nav.helse.spoogle.tree.Identifikatortype
+import no.nav.helse.spoogle.tree.Node
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

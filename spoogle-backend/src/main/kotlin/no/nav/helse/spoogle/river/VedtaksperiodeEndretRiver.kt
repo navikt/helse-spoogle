@@ -6,9 +6,9 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.spoogle.TreeService
 import no.nav.helse.spoogle.asUUID
-import no.nav.helse.spoogle.graph.Identifikatortype.*
-import no.nav.helse.spoogle.graph.Node
-import no.nav.helse.spoogle.graph.Tree
+import no.nav.helse.spoogle.tree.Identifikatortype.*
+import no.nav.helse.spoogle.tree.Node
+import no.nav.helse.spoogle.tree.Tree
 
 internal class VedtaksperiodeEndretRiver(
     private val treeService: TreeService,

@@ -2,13 +2,13 @@ package no.nav.helse.spoogle.db
 
 import kotliquery.queryOf
 import kotliquery.sessionOf
-import no.nav.helse.spoogle.graph.NodeDto
+import no.nav.helse.spoogle.tree.NodeDto
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 internal class TreeDaoTest: AbstractDatabaseTest() {
-    private val dao = GraphDao(dataSource)
+    private val dao = TreeDao(dataSource)
 
     @Test
     fun `opprett node`() {
@@ -41,6 +41,31 @@ internal class TreeDaoTest: AbstractDatabaseTest() {
             dao.nyEdge(nodeDto("B"), nodeDto("A"))
         }
         assertEdge("A", "B")
+    }
+
+    @Test
+    fun `invalider relasjon`() {
+        dao.nyNode(nodeDto("A"))
+        dao.nyNode(nodeDto("B"))
+        dao.nyEdge(nodeDto("A"), nodeDto("B"))
+        dao.invaliderRelasjon(nodeDto("A"), nodeDto("B"))
+        assertUgyldig("A", "B")
+    }
+
+    private fun assertUgyldig(idNodeA: String, idNodeB: String) {
+        @Language("PostgreSQL")
+        val query = """
+             SELECT ugyldig FROM edge 
+             WHERE 
+                node_a = (SELECT node_id FROM node WHERE id = ?) AND
+                node_b = (SELECT node_id FROM node WHERE id = ?)
+        """
+
+        val ugyldig = sessionOf(dataSource).use { session ->
+            session.run(queryOf(query, idNodeA, idNodeB).map { it.localDateTimeOrNull("ugyldig") }.asSingle)
+        }
+
+        assertNotNull(ugyldig)
     }
 
     private fun assertNode(id: String) {

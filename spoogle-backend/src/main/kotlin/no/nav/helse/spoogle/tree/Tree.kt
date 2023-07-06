@@ -1,4 +1,4 @@
-package no.nav.helse.spoogle.graph
+package no.nav.helse.spoogle.tree
 
 internal class Tree private constructor(
     private val rootNode: Node

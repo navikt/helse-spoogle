@@ -1,15 +1,16 @@
 package no.nav.helse.spoogle
 
-import no.nav.helse.spoogle.db.GraphDao
-import no.nav.helse.spoogle.graph.Tree
-import no.nav.helse.spoogle.graph.NodeDto
+import no.nav.helse.spoogle.db.TreeDao
+import no.nav.helse.spoogle.tree.Node
+import no.nav.helse.spoogle.tree.Tree
+import no.nav.helse.spoogle.tree.NodeDto
 import javax.sql.DataSource
 
 internal class TreeService(dataSource: DataSource) {
-    private val dao = GraphDao(dataSource)
+    private val dao = TreeDao(dataSource)
 
     internal fun finnTre(id: String): Tree? {
-        val nodes = dao.finnGraph(id)
+        val nodes = dao.finnTre(id)
         nodes.forEach { (parent, child) ->
             parent parentOf child
         }

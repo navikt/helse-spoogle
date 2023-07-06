@@ -2,11 +2,11 @@ package no.nav.helse.spoogle.db
 
 import kotliquery.queryOf
 import kotliquery.sessionOf
-import no.nav.helse.spoogle.graph.*
+import no.nav.helse.spoogle.tree.*
 import org.intellij.lang.annotations.Language
 import javax.sql.DataSource
 
-internal class GraphDao(private val dataSource: DataSource) {
+internal class TreeDao(private val dataSource: DataSource) {
 
     internal fun nyNode(node: NodeDto) {
         @Language("PostgreSQL")
@@ -32,7 +32,31 @@ internal class GraphDao(private val dataSource: DataSource) {
         }
     }
 
-    internal fun finnGraph(id: String): List<Pair<Node, Node>> {
+    internal fun invaliderRelasjon(parent: NodeDto, child: NodeDto) {
+        @Language("PostgreSQL")
+        val query = """
+           UPDATE edge
+           SET ugyldig = now()
+           WHERE edge.node_a = (SELECT node_id FROM node WHERE id = :parent AND id_type = :parent_type) AND
+           edge.node_b = (SELECT node_id FROM node WHERE id = :child AND id_type = :child_type)
+        """
+
+        sessionOf(dataSource).use {
+            it.run(
+                queryOf(
+                    query,
+                    mapOf(
+                        "parent" to parent.id,
+                        "parent_type" to parent.type,
+                        "child" to child.id,
+                        "child_type" to child.type,
+                    )
+                ).asUpdate
+            )
+        }
+    }
+
+    internal fun finnTre(id: String): List<Pair<Node, Node>> {
         val fødselsnummer = finnFødselsnummer(id) ?: return emptyList()
 
         @Language("PostgreSQL")

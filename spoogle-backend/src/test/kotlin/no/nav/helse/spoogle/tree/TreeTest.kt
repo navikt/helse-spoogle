@@ -1,7 +1,7 @@
-package no.nav.helse.spoogle.graph
+package no.nav.helse.spoogle.tree
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import no.nav.helse.spoogle.graph.Identifikatortype.*
+import no.nav.helse.spoogle.tree.Identifikatortype.*
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
