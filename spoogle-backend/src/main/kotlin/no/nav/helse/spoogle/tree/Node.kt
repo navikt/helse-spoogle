@@ -22,12 +22,14 @@ data class Node(
 
     @Language("JSON")
     internal fun toJson(): String {
+        val ugyldigFra = parent?.let { it.invalidChildren[this]?.toString() }
         return """
             {
                 "id": "$id",
                 "type": "${type.name}",
-                "children": ${children.map { it.toJson() }}
-            } 
+                "children": ${children.map(Node::toJson)},
+                "ugyldig_fra": ${ ugyldigFra?.let { """"$it"""" }}
+            }
         """
     }
 

@@ -39,7 +39,8 @@ internal class VedtaksperiodeEndretRiverTest: AbstractDatabaseTest() {
             {
                 "id": "1234567891011",
                 "type": "AKTØR_ID",
-                "children": []
+                "children": [],
+                "ugyldig_fra": null
             },
             {
                 "id": "987654321",
@@ -48,11 +49,14 @@ internal class VedtaksperiodeEndretRiverTest: AbstractDatabaseTest() {
                     {
                         "id": "$vedtaksperiodeId",
                         "type": "VEDTAKSPERIODE_ID",
-                        "children": []
+                        "children": [],
+                        "ugyldig_fra": null
                     }
-                ]
+                ],
+                "ugyldig_fra": null
             }
-            ]
+            ],
+            "ugyldig_fra": null
        } 
     """
 

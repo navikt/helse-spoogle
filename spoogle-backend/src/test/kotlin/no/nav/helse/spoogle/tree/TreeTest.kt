@@ -29,7 +29,7 @@ internal class TreeTest {
     }
 
     @Language("JSON")
-    val expectedJson = """
+    private val expectedJson = """
        {
             "id": "fnr",
             "type": "FØDSELSNUMMER",
@@ -41,9 +41,11 @@ internal class TreeTest {
                         {
                             "id": "periode1",
                             "type": "VEDTAKSPERIODE_ID",
-                            "children": []
+                            "children": [],
+                            "ugyldig_fra": null
                         }
-                    ]
+                    ],
+                    "ugyldig_fra": null
                 },
                 {
                     "id": "orgnr2",
@@ -52,11 +54,14 @@ internal class TreeTest {
                         {
                             "id": "periode2",
                             "type": "VEDTAKSPERIODE_ID",
-                            "children": []
+                            "children": [],
+                            "ugyldig_fra": null
                         }
-                    ]
+                    ],
+                    "ugyldig_fra": null
                 }
-            ]
+            ],
+            "ugyldig_fra": null
        } 
     """
 }
