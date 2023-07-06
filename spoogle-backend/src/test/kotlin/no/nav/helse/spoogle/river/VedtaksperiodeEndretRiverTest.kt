@@ -31,7 +31,7 @@ internal class VedtaksperiodeEndretRiverTest: AbstractDatabaseTest() {
     }
 
     @Language("JSON")
-    val expectedJson = """
+    private val expectedJson = """
        {
             "id": "12345678910",
             "type": "FØDSELSNUMMER",
@@ -57,7 +57,7 @@ internal class VedtaksperiodeEndretRiverTest: AbstractDatabaseTest() {
     """
 
     @Language("JSON")
-    val vedtaksperiodeEndret = """{
+    private val vedtaksperiodeEndret = """{
     "@event_name": "vedtaksperiode_endret",
     "organisasjonsnummer": "987654321",
     "vedtaksperiodeId": "$vedtaksperiodeId",

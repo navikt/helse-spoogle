@@ -4,6 +4,7 @@ import kotliquery.queryOf
 import kotliquery.sessionOf
 import no.nav.helse.spoogle.tree.*
 import org.intellij.lang.annotations.Language
+import java.time.LocalDateTime
 import javax.sql.DataSource
 
 internal class TreeDao(private val dataSource: DataSource) {
@@ -56,14 +57,14 @@ internal class TreeDao(private val dataSource: DataSource) {
         }
     }
 
-    internal fun finnTre(id: String): List<Pair<Node, Node>> {
+    internal fun finnTre(id: String): List<Triple<Node, Node, LocalDateTime?>> {
         val fødselsnummer = finnFødselsnummer(id) ?: return emptyList()
 
         @Language("PostgreSQL")
         val query = """
-            WITH RECURSIVE traverse(parent_id, parent_type, child_node_id, child_id, child_type) AS (
+            WITH RECURSIVE traverse(parent_id, parent_type, child_node_id, child_id, child_type, ugyldig_fra) AS (
                 SELECT
-                    null::varchar, null::varchar, node_id, id, id_type
+                    null::varchar, null::varchar, node_id, id, id_type, null::timestamp
                 FROM
                     node
                 WHERE
@@ -74,15 +75,16 @@ internal class TreeDao(private val dataSource: DataSource) {
                     traverse.child_type,
                     node.node_id,
                     node.id,
-                    node.id_type
+                    node.id_type,
+                    edge.ugyldig
                 FROM traverse
                     JOIN edge ON traverse.child_node_id = node_a
                     JOIN node ON node_b = node.node_id
             )
             SELECT
-                traverse.parent_id, traverse.parent_type, traverse.child_id, traverse.child_type
+                traverse.parent_id, traverse.parent_type, traverse.child_id, traverse.child_type, traverse.ugyldig_fra
             FROM traverse
-            GROUP BY traverse.parent_id, traverse.parent_type, traverse.child_id, traverse.child_type, traverse.child_node_id
+            GROUP BY traverse.parent_id, traverse.parent_type, traverse.child_id, traverse.child_type, traverse.child_node_id, traverse.ugyldig_fra
             ORDER BY traverse.child_node_id ASC;
         """
 
@@ -90,14 +92,15 @@ internal class TreeDao(private val dataSource: DataSource) {
 
         return sessionOf(dataSource).use { session ->
             session.run(
-                queryOf(query, mapOf("fodselsnummer" to fødselsnummer)).map<Pair<Node, Node>?> {
+                queryOf(query, mapOf("fodselsnummer" to fødselsnummer)).map<Triple<Node, Node, LocalDateTime?>?> {
                     val parentId = it.stringOrNull("parent_id") ?: return@map null
                     val parentType = it.stringOrNull("parent_type") ?: return@map null
                     val childId = it.string("child_id")
                     val childType = it.string("child_type")
+                    val ugyldigFra = it.localDateTimeOrNull("ugyldig_fra")
                     val parentNode = uniqueNodes.getOrPut(parentId to parentType) { Node(parentId, enumValueOf(parentType)) }
                     val childNode = uniqueNodes.getOrPut(childId to childType) { Node(childId, enumValueOf(childType)) }
-                    parentNode to childNode
+                    Triple(parentNode, childNode, ugyldigFra)
                 }.asList
             ).filterNotNull()
         }

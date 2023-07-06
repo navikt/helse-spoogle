@@ -11,8 +11,9 @@ internal class TreeService(dataSource: DataSource) {
 
     internal fun finnTre(id: String): Tree? {
         val nodes = dao.finnTre(id)
-        nodes.forEach { (parent, child) ->
+        nodes.forEach { (parent, child, ugyldigFra) ->
             parent parentOf child
+            if (ugyldigFra != null) parent.invalidRelation(child, ugyldigFra)
         }
         val (rootNode, _) = nodes.find { !it.first.hasParent() } ?: return null
         return Tree.buildTree(rootNode)
@@ -23,6 +24,10 @@ internal class TreeService(dataSource: DataSource) {
         dto.rootNode.children.forEach {
             nyRelasjon(dto.rootNode, it)
         }
+    }
+
+    internal fun invaliderRelasjon(parent: Node, child: Node) {
+        dao.invaliderRelasjon(parent.toDto(), child.toDto())
     }
 
     private fun nyRelasjon(parent: NodeDto, child: NodeDto) {

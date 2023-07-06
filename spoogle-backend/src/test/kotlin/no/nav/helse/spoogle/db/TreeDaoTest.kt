@@ -86,5 +86,5 @@ internal class TreeDaoTest: AbstractDatabaseTest() {
         assertEquals(1, antall)
     }
 
-    private fun nodeDto(id: String) = NodeDto(id, "type", emptyList())
+    private fun nodeDto(id: String) = NodeDto(id, "type", emptyList(), emptyList())
 }
