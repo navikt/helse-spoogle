@@ -1,5 +1,7 @@
 package no.nav.helse.spoogle.graph
 
+import org.intellij.lang.annotations.Language
+
 data class Node(
     private val id: String,
     private val type: Identifikatortype
@@ -10,6 +12,17 @@ data class Node(
     internal fun toDto(): NodeDto = NodeDto(id, type.toString(), children.map { it.toDto() })
 
     internal fun hasParent() = parent != null
+
+    @Language("JSON")
+    internal fun toJson(): String {
+        return """
+            {
+                "id": "$id",
+                "type": "${type.name}",
+                "children": ${children.map { it.toJson() }}
+            } 
+        """
+    }
 
     internal infix fun parentOf(other: Node) {
         children.add(other)

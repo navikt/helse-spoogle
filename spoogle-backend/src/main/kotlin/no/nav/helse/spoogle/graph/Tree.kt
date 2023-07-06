@@ -9,6 +9,8 @@ internal class Tree private constructor(
 
     override fun hashCode() = rootNode.hashCode()
 
+    internal fun toJson(): String = rootNode.toJson()
+
     internal companion object {
         internal fun buildTree(rootNode: Node) = Tree(rootNode)
     }
