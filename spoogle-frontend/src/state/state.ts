@@ -1,7 +1,7 @@
 import {atom} from 'recoil';
 import {Bruker, Node} from '../types';
 
-export const søkState = atom<Node | undefined>({
+export const søkState = atom<Node | null | undefined>({
     key: 'søkState',
     default: undefined,
 });

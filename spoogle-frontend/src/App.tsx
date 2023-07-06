@@ -19,9 +19,9 @@ const App = () => {
                 <Søk />
                 {rootNode ?
                     <NodeComponent node={rootNode}/>
-                    : <Alert variant="info">
+                    : rootNode === null ? <Alert variant="info">
                         Det finnes ikke noe fødselsnummer knyttet til denne id-en i Spoogle
-                    </Alert>
+                    </Alert> : <></>
                 }
             </div>
 
