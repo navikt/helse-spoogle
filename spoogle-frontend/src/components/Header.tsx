@@ -7,9 +7,9 @@ import {fetchBruker} from '../endepunkter';
 export const Header = () => {
     const [bruker, setBruker] = useRecoilState(brukerState);
 
-    // useEffect(() => {
-    //     fetchBruker().then((bruker) => setBruker(bruker));
-    // }, []);
+    useEffect(() => {
+        fetchBruker().then((bruker) => setBruker(bruker));
+    }, []);
 
     return (
         <DSHeader className={'flex w-full'}>
