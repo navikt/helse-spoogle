@@ -44,12 +44,15 @@ internal class TreeDaoTest: AbstractDatabaseTest() {
     }
 
     @Test
-    fun `invalider relasjon`() {
+    fun `invalider relasjon for node`() {
         dao.nyNode(nodeDto("A"))
         dao.nyNode(nodeDto("B"))
+        dao.nyNode(nodeDto("C"))
         dao.nyEdge(nodeDto("A"), nodeDto("B"))
-        dao.invaliderRelasjon(nodeDto("A"), nodeDto("B"))
+        dao.nyEdge(nodeDto("B"), nodeDto("C"))
+        dao.invaliderRelasjonerFor(nodeDto("B"))
         assertUgyldig("A", "B")
+        assertUgyldig("B", "C")
     }
 
     private fun assertUgyldig(idNodeA: String, idNodeB: String) {

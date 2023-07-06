@@ -6,26 +6,27 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.spoogle.TreeService
 import no.nav.helse.spoogle.asUUID
-import no.nav.helse.spoogle.tree.Identifikatortype.VEDTAKSPERIODE_ID
+import no.nav.helse.spoogle.tree.Identifikatortype.UTBETALING_ID
 import no.nav.helse.spoogle.tree.Node
 
-internal class VedtaksperiodeForkastetRiver(
+internal class UtbetalingForkastetRiver(
     private val treeService: TreeService,
     rapidsConnection: RapidsConnection
 ): River.PacketListener {
-
     init {
         River(rapidsConnection).apply {
             validate {
-                it.demandValue("@event_name", "vedtaksperiode_forkastet")
-                it.requireKey("vedtaksperiodeId")
+                it.demandValue("@event_name", "utbetaling_endret")
+                it.requireKey("utbetalingId")
+                it.requireValue("gjeldendeStatus", "FORKASTET")
             }
         }.register(this)
     }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
-        val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
-        val vedtaksperiodeIdNode = Node(vedtaksperiodeId.toString(), VEDTAKSPERIODE_ID)
-        treeService.invaliderRelasjonerFor(vedtaksperiodeIdNode)
+        val utbetalingId = packet["utbetalingId"].asUUID()
+        val utbetalingIdNode = Node(utbetalingId.toString(), UTBETALING_ID)
+
+        treeService.invaliderRelasjonerFor(utbetalingIdNode)
     }
 }

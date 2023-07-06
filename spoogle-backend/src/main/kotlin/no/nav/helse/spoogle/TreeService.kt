@@ -30,8 +30,8 @@ internal class TreeService(dataSource: DataSource): ITreeService {
         }
     }
 
-    internal fun invaliderRelasjon(parent: Node, child: Node) {
-        dao.invaliderRelasjon(parent.toDto(), child.toDto())
+    internal fun invaliderRelasjonerFor(node: Node) {
+        dao.invaliderRelasjonerFor(node.toDto())
     }
 
     private fun nyRelasjon(parent: NodeDto, child: NodeDto) {

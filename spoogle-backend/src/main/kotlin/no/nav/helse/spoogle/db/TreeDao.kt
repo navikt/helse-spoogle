@@ -33,13 +33,13 @@ internal class TreeDao(private val dataSource: DataSource) {
         }
     }
 
-    internal fun invaliderRelasjon(parent: NodeDto, child: NodeDto) {
+    internal fun invaliderRelasjonerFor(node: NodeDto) {
         @Language("PostgreSQL")
         val query = """
            UPDATE edge
            SET ugyldig = now()
-           WHERE edge.node_a = (SELECT node_id FROM node WHERE id = :parent AND id_type = :parent_type) AND
-           edge.node_b = (SELECT node_id FROM node WHERE id = :child AND id_type = :child_type)
+           WHERE edge.node_a = (SELECT node_id FROM node WHERE id = :node AND id_type = :node_type) OR
+           edge.node_b = (SELECT node_id FROM node WHERE id = :node AND id_type = :node_type)
         """
 
         sessionOf(dataSource).use {
@@ -47,10 +47,8 @@ internal class TreeDao(private val dataSource: DataSource) {
                 queryOf(
                     query,
                     mapOf(
-                        "parent" to parent.id,
-                        "parent_type" to parent.type,
-                        "child" to child.id,
-                        "child_type" to child.type,
+                        "node" to node.id,
+                        "node_type" to node.type,
                     )
                 ).asUpdate
             )

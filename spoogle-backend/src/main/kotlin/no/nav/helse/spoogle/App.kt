@@ -15,7 +15,10 @@ import no.nav.helse.spoogle.plugins.configureAuthentication
 import no.nav.helse.spoogle.plugins.configureServerContentNegotiation
 import no.nav.helse.spoogle.plugins.configureUtilities
 import no.nav.helse.spoogle.plugins.statusPages
+import no.nav.helse.spoogle.river.UtbetalingForkastetRiver
 import no.nav.helse.spoogle.river.VedtaksperiodeEndretRiver
+import no.nav.helse.spoogle.river.VedtaksperiodeForkastetRiver
+import no.nav.helse.spoogle.river.VedtaksperiodeNyUtbetalingRiver
 import no.nav.helse.spoogle.routes.brukerRoutes
 import no.nav.helse.spoogle.routes.treeRoutes
 
@@ -50,6 +53,9 @@ internal class App(
     internal fun ktorApp(application: Application) = application.app(env, service, azureAD)
     internal fun start() {
         VedtaksperiodeEndretRiver(service, rapidsConnection)
+        VedtaksperiodeForkastetRiver(service, rapidsConnection)
+        VedtaksperiodeNyUtbetalingRiver(service, rapidsConnection)
+        UtbetalingForkastetRiver(service, rapidsConnection)
         rapidsConnection.register(this)
         rapidsConnection.start()
     }
