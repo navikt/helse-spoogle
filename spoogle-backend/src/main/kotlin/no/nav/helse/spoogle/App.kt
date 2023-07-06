@@ -15,6 +15,7 @@ import no.nav.helse.spoogle.plugins.configureAuthentication
 import no.nav.helse.spoogle.plugins.configureServerContentNegotiation
 import no.nav.helse.spoogle.plugins.configureUtilities
 import no.nav.helse.spoogle.plugins.statusPages
+import no.nav.helse.spoogle.river.*
 import no.nav.helse.spoogle.river.UtbetalingForkastetRiver
 import no.nav.helse.spoogle.river.VedtaksperiodeEndretRiver
 import no.nav.helse.spoogle.river.VedtaksperiodeForkastetRiver
@@ -56,6 +57,7 @@ internal class App(
         VedtaksperiodeForkastetRiver(service, rapidsConnection)
         VedtaksperiodeNyUtbetalingRiver(service, rapidsConnection)
         UtbetalingForkastetRiver(service, rapidsConnection)
+        SøknadHåndtertRiver(service, rapidsConnection)
         rapidsConnection.register(this)
         rapidsConnection.start()
     }

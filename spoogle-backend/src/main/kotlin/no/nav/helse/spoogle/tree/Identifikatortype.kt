@@ -6,4 +6,5 @@ enum class Identifikatortype {
     ORGANISASJONSNUMMER,
     VEDTAKSPERIODE_ID,
     UTBETALING_ID,
+    SØKNAD_ID,
 }
