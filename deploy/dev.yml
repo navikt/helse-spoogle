@@ -37,6 +37,9 @@ spec:
   secureLogs:
     enabled: true
   azure:
+    sidecar:
+      enabled: true
+      autoLogin: true
     application:
       enabled: true
       tenant: nav.no
@@ -45,6 +48,7 @@ spec:
           - "NAVident"
         groups:
           - id: "f787f900-6697-440d-a086-d5bb56e26a9c"
+      allowAllUsers: false
   gcp:
     sqlInstances:
       - type: POSTGRES_14
