@@ -5,6 +5,7 @@ import no.nav.helse.rapids_rivers.RapidApplication
 import no.nav.helse.rapids_rivers.RapidApplication.Builder
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.spoogle.db.DataSourceBuilder
+import no.nav.helse.spoogle.river.VedtaksperiodeEndretRiver
 
 fun main() {
     RapidApp(System.getenv()).start()
@@ -31,9 +32,11 @@ internal class App(
 ) : RapidsConnection.StatusListener {
     private val rapidsConnection: RapidsConnection by lazy { rapidsConnection() }
     private val dataSourceBuilder = DataSourceBuilder(env)
+    private val service = TreeService(dataSourceBuilder.getDataSource())
 
     internal fun ktorApp(application: Application) = Unit
     internal fun start() {
+        VedtaksperiodeEndretRiver(service, rapidsConnection)
         rapidsConnection.register(this)
         rapidsConnection.start()
     }
