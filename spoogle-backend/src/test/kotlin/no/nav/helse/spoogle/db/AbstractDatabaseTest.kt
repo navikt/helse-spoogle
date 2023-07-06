@@ -18,7 +18,7 @@ internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = t
         internal const val database: String = "test"
         private val postgres = PostgreSQLContainer<Nothing>("postgres:14").apply {
             withReuse(true)
-            withLabel("app-navn", "speaker")
+            withLabel("app-navn", "spoogle")
             start()
             port = firstMappedPort.toString()
             println("Database: jdbc:postgresql://${hostAddress}:$firstMappedPort/test startet opp, credentials: test og test")
