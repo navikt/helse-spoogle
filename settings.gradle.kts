@@ -6,4 +6,4 @@ pluginManagement {
     }
 }
 
-include("spoogle-backend")
+include("spoogle-frontend", "spoogle-backend")
