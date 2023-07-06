@@ -16,6 +16,7 @@ import no.nav.helse.spoogle.plugins.configureServerContentNegotiation
 import no.nav.helse.spoogle.plugins.configureUtilities
 import no.nav.helse.spoogle.plugins.statusPages
 import no.nav.helse.spoogle.river.VedtaksperiodeEndretRiver
+import no.nav.helse.spoogle.routes.treeRoutes
 
 fun main() {
     RapidApp(System.getenv()).start()
@@ -74,6 +75,7 @@ internal fun Application.app(
                 react("spoogle-frontend/dist")
                 ignoreFiles { it.endsWith(".txt") }
             }
+            treeRoutes(service)
         }
     }
 }

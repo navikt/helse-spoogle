@@ -8,3 +8,5 @@ replay_pid*
 build/
 out/
 .gradle/
+
+testtoken.json

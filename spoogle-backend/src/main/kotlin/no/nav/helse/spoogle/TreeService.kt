@@ -6,10 +6,14 @@ import no.nav.helse.spoogle.tree.Tree
 import no.nav.helse.spoogle.tree.NodeDto
 import javax.sql.DataSource
 
-internal class TreeService(dataSource: DataSource) {
+internal interface ITreeService {
+    fun finnTre(id: String): Tree?
+}
+
+internal class TreeService(dataSource: DataSource): ITreeService {
     private val dao = TreeDao(dataSource)
 
-    internal fun finnTre(id: String): Tree? {
+    override fun finnTre(id: String): Tree? {
         val nodes = dao.finnTre(id)
         nodes.forEach { (parent, child, ugyldigFra) ->
             parent parentOf child
