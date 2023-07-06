@@ -31,7 +31,7 @@ jobs:
       - name: Test og bygg
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build :spoogle-backend:build
+          arguments: :spoogle-frontend:build :spoogle-backend:test :spoogle-backend:build
         env:
           ORG_GRADLE_PROJECT_githubUser: x-access-token
           ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}

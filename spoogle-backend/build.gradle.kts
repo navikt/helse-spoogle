@@ -1,3 +1,5 @@
+import java.nio.file.Paths
+
 private val mainClass = "no.nav.helse.spoogle.AppKt"
 
 private val rapidsAndRiversVersion = "2023050308441683096263.f5a276d7bd28"
@@ -7,7 +9,7 @@ private val hikariVersion = "5.0.1"
 private val kotliqueryVersion = "1.9.0"
 private val postgresqlVersion = "42.5.1"
 private val testcontainersPostgresqlVersion = "1.17.3"
-private val ktorVersion = "2.3.1"
+private val ktorVersion = "2.3.2"
 private val micrometerVersion = "1.9.4"
 
 
@@ -67,6 +69,7 @@ tasks {
     }
 
     jar {
+        mustRunAfter(":spoogle-frontend:npm_run_build")
         archiveBaseName.set("app")
 
         manifest {
@@ -74,6 +77,10 @@ tasks {
             attributes["Class-Path"] = configurations.runtimeClasspath.get().joinToString(separator = " ") {
                 it.name
             }
+        }
+
+        from({ Paths.get(project(":spoogle-frontend").buildDir.path) }) {
+            into("spoogle-frontend/dist")
         }
 
         doLast {
