@@ -7,4 +7,5 @@ enum class Identifikatortype {
     VEDTAKSPERIODE_ID,
     UTBETALING_ID,
     SØKNAD_ID,
+    INNTEKTSMELDING_ID,
 }

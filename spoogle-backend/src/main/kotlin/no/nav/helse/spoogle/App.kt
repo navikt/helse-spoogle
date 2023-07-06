@@ -58,6 +58,7 @@ internal class App(
         VedtaksperiodeNyUtbetalingRiver(service, rapidsConnection)
         UtbetalingForkastetRiver(service, rapidsConnection)
         SøknadHåndtertRiver(service, rapidsConnection)
+        InntektsmeldingHåndtertRiver(service, rapidsConnection)
         rapidsConnection.register(this)
         rapidsConnection.start()
     }
