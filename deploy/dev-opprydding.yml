@@ -43,7 +43,7 @@ spec:
   secureLogs:
     enabled: true
   envFrom:
-    - secret: google-sql-spoogle-spoogle-spoogle-opprydding-b203ea44
+    - secret: google-sql-spoogle-spoogle-spoogle-opprydding-dev-a4eb479d
   env:
     - name: KAFKA_RAPID_TOPIC
       value: tbd.rapid.v1
