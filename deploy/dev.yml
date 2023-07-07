@@ -56,6 +56,8 @@ spec:
         databases:
           - name: spoogle
             envVarPrefix: DATABASE
+            users:
+              - name: spoogle-opprydding-dev
   env:
     - name: KAFKA_RAPID_TOPIC
       value: tbd.rapid.v1
