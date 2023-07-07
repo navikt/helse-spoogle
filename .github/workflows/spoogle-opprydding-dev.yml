@@ -3,7 +3,7 @@ name: Spoogle-opprydding-dev
 on:
   push:
     branches:
-      - master
+      - main
     paths:
       - 'Dockerfile-opprydding-dev'
       - 'spoogle-opprydding-dev/**'
