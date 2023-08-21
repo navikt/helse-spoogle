@@ -9,7 +9,18 @@ import {søkState} from "./state/state";
 import {NodeComponent} from "./components/NodeComponent";
 import {Alert} from "@navikt/ds-react";
 
+const hostname = window.location.hostname
+const port = window.location.port
+const ws = new WebSocket(`ws://${hostname}:${port}/echo`)
 const App = () => {
+    ws.onopen = () => {
+        console.log("Connection opened")
+    }
+
+    ws.onmessage = (event) => {
+        console.log(event.data)
+    }
+
     const [rootNode] = useRecoilState(søkState);
 
     return (

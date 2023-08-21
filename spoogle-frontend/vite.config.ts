@@ -16,6 +16,16 @@ export default defineConfig({
     server: {
         headers: {},
         proxy: {
+            '/echo': {
+                target: 'ws://localhost:8080',
+                changeOrigin: true,
+                configure: (proxy, options) => {
+                    options.headers = {
+                        ...options.headers,
+                        Authorization: `Bearer ${tokenfile?.token}`,
+                    };
+                },
+            },
             '/api': {
                 target: 'http://localhost:8080',
                 changeOrigin: true,

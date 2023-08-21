@@ -6,6 +6,9 @@ import io.ktor.server.http.content.ignoreFiles
 import io.ktor.server.http.content.react
 import io.ktor.server.http.content.singlePageApplication
 import io.ktor.server.routing.routing
+import io.ktor.server.websocket.webSocket
+import io.ktor.websocket.Frame
+import kotlinx.coroutines.delay
 import no.nav.helse.rapids_rivers.RapidApplication
 import no.nav.helse.rapids_rivers.RapidApplication.Builder
 import no.nav.helse.rapids_rivers.RapidsConnection
@@ -16,10 +19,6 @@ import no.nav.helse.spoogle.plugins.configureServerContentNegotiation
 import no.nav.helse.spoogle.plugins.configureUtilities
 import no.nav.helse.spoogle.plugins.statusPages
 import no.nav.helse.spoogle.river.*
-import no.nav.helse.spoogle.river.UtbetalingForkastetRiver
-import no.nav.helse.spoogle.river.VedtaksperiodeEndretRiver
-import no.nav.helse.spoogle.river.VedtaksperiodeForkastetRiver
-import no.nav.helse.spoogle.river.VedtaksperiodeNyUtbetalingRiver
 import no.nav.helse.spoogle.routes.brukerRoutes
 import no.nav.helse.spoogle.routes.treeRoutes
 
@@ -87,6 +86,12 @@ internal fun Application.app(
             }
             treeRoutes(service)
             brukerRoutes(azureAD.issuer())
+        }
+        webSocket("/echo") {
+            while (true) {
+                send(Frame.Text("Websocket ping"))
+                delay(1000L)
+            }
         }
     }
 }
