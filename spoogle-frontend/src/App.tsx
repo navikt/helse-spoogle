@@ -10,8 +10,11 @@ import {NodeComponent} from "./components/NodeComponent";
 import {Alert} from "@navikt/ds-react";
 
 const hostname = window.location.hostname
+const isDevelopment = window.location.host.includes("0.0.0.0") || window.location.host.includes("localhost")
 const port = window.location.port
-const ws = new WebSocket(`wss://${hostname}:${port}/echo`)
+const url = isDevelopment ? `ws://${hostname}:${port}` : `wss://${hostname}`
+const ws = new WebSocket(`${url}/echo`)
+
 const App = () => {
     ws.onopen = () => {
         console.log("Connection opened")
