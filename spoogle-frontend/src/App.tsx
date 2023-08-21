@@ -11,7 +11,7 @@ import {Alert} from "@navikt/ds-react";
 
 const hostname = window.location.hostname
 const port = window.location.port
-const ws = new WebSocket(`ws://${hostname}:${port}/echo`)
+const ws = new WebSocket(`wss://${hostname}:${port}/echo`)
 const App = () => {
     ws.onopen = () => {
         console.log("Connection opened")
