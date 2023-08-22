@@ -1,17 +1,23 @@
+import React from "react";
 import {Node} from "../types";
 import {Accordion, Tag} from "@navikt/ds-react";
 import styles from './NodeComponent.module.css'
+import {useRecoilValue} from "recoil";
+import {søkestrengState} from "../state/state";
+import classNames from "classnames";
 
 export interface NodeComponentProps {
-    node: Node
+    node: Node,
 }
 
 export const NodeComponent = ({node}: NodeComponentProps) => {
+    const currentSøkestreng = useRecoilValue(søkestrengState)
+    const isCurrentClass = currentSøkestreng === node.id ? 'current' : ''
     const isLeaf = node.children.length === 0
     return <div className={'w-full'}>
         <Accordion>
             <Accordion.Item>
-                <Accordion.Header className={isLeaf ? styles.RemoveExpandable : ''}>
+                <Accordion.Header className={classNames(isLeaf ? styles.RemoveExpandable : '', isCurrentClass ? '!bg-blue-50' : '')}>
                     <div className={'flex flex-row items-center gap-2'}>
                         <Tag variant={'neutral'} className={finnVariant(node.type)}>{node.type}</Tag>
                         {node.id}
