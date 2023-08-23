@@ -48,22 +48,46 @@ jobs:
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
 
-  snyk:
+  analyze:
     name: Kontroller sårbarheter
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ["kotlin"]
+
     steps:
-      - uses: actions/checkout@v3
-      - name: Gradle vulnerability check
-        uses: snyk/actions/gradle@master
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
         with:
-          args: --project-name=spoogle-backend --org=tbd-ty7 --fail-on=all
-          command: monitor
+          languages: ${{ matrix.language }}
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17.x'
+          cache: 'gradle'
+
+      - name: Build
+        run: ./gradlew clean build -x test
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          category: "/language:${{matrix.language}}"
 
   deployDev:
     name: Deploy til dev
-    needs: [build, snyk]
+    needs: [build, analyze]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -76,7 +100,7 @@ jobs:
 
 #  deployProd:
 #    name: Deploy til prod
-#    needs: [set_version, build, snyk]
+#    needs: [build, analyze]
 #    runs-on: ubuntu-latest
 #    steps:
 #      - uses: actions/checkout@v3
