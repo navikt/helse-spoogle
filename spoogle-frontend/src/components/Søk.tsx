@@ -12,8 +12,8 @@ export const Søk = () => {
         <form onSubmit={(e) => {
             e.preventDefault()
             setLoading(true)
-            return søk(søkestreng).then((node) => {
-                node === undefined ? setSøk(null) : setSøk(node);
+            return søk(søkestreng).then((response) => {
+                response === undefined ? setSøk(null) : setSøk(response.tree);
             }).finally(() => setLoading(false));
 
         }}>

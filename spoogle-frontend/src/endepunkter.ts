@@ -1,11 +1,15 @@
 import { Bruker, Node } from './types';
 
-export const søk = (id: string) =>
+export interface TreeResponse {
+    path: string[];
+    tree: Node | undefined;
+}
+export const søk = (id: string): Promise<TreeResponse | undefined> =>
     fetch(`/api/sok/${id}`)
         .then(async (response) => {
             return response.json();
         })
-        .then((data) => !isObjectEmpty(data) ? data as Node : undefined)
+        .then((data) => !isObjectEmpty(data) ? data as TreeResponse : undefined)
         .catch(() => undefined)
 
 const isObjectEmpty = (objectName: any) => {

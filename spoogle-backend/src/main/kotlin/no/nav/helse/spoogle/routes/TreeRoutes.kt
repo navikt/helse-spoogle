@@ -9,6 +9,7 @@ import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import no.nav.helse.spoogle.ITreeService
+import org.intellij.lang.annotations.Language
 import org.slf4j.LoggerFactory
 
 private val auditlogg = LoggerFactory.getLogger("auditLogger")
@@ -22,6 +23,16 @@ internal fun Route.treeRoutes(service: ITreeService) {
             val navIdent = principal.payload.getClaim("NAVident").asString()
             auditlogg.info("CEF:0|Vedtaksløsning for sykepenger|Spoogle|1.0|audit:access|Sporingslogg|INFO|end=${System.currentTimeMillis()} duid=${id} suid=$navIdent request=$path")
         }
-        call.respond(HttpStatusCode.OK, service.finnTre(id)?.toJson() ?: "{}")
+        val tree = service.finnTre(id)
+        val treeJson = tree?.toJson() ?: "{}"
+        val path = tree?.pathTo(id) ?: emptyList()
+        @Language("JSON")
+        val response = """
+            {
+                "tree": $treeJson,
+                "path": ${path.map { """"$it"""" }}
+            }
+        """
+        call.respond(HttpStatusCode.OK, response)
     }
 }
