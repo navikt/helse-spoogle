@@ -1,9 +1,9 @@
 import React from "react";
 import {Node} from "../types";
-import {Accordion, Tag} from "@navikt/ds-react";
+import {Accordion, CopyButton, Tag} from "@navikt/ds-react";
 import styles from './NodeComponent.module.css'
 import {useRecoilValue} from "recoil";
-import {søkestrengState} from "../state/state";
+import {søkestrengState, søkState} from "../state/state";
 import classNames from "classnames";
 
 export interface NodeComponentProps {
@@ -11,16 +11,19 @@ export interface NodeComponentProps {
 }
 
 export const NodeComponent = ({node}: NodeComponentProps) => {
+    const søk = useRecoilValue(søkState)
     const currentSøkestreng = useRecoilValue(søkestrengState)
     const isCurrentClass = currentSøkestreng === node.id ? 'current' : ''
     const isLeaf = node.children.length === 0
+    if (!søk) return <></>
     return <div className={'w-full'}>
         <Accordion>
-            <Accordion.Item>
-                <Accordion.Header className={classNames(isLeaf ? styles.RemoveExpandable : '', isCurrentClass ? '!bg-blue-50' : '')}>
+            <Accordion.Item defaultOpen={søk.path.includes(node.id)}>
+                <Accordion.Header className={classNames(isLeaf ? styles.RemoveExpandable : '', isCurrentClass ? '!bg-blue-50' : '', styles.FullWidth)}>
                     <div className={'flex flex-row items-center gap-2'}>
                         <Tag variant={'neutral'} className={finnVariant(node.type)}>{node.type}</Tag>
-                        {node.id}
+                        <p className={'flex-1'}>{node.id}</p>
+                        <CopyButton onClick={(e) => e.stopPropagation()} copyText={node.id}/>
                     </div>
                 </Accordion.Header>
                 {!isLeaf &&

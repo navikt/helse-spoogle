@@ -6,3 +6,7 @@
     pointer-events: visible;
     cursor: default;
 }
+
+.FullWidth > span {
+    width: 100%;
+}

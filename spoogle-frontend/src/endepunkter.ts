@@ -2,7 +2,7 @@ import { Bruker, Node } from './types';
 
 export interface TreeResponse {
     path: string[];
-    tree: Node | undefined;
+    tree: Node;
 }
 export const søk = (id: string): Promise<TreeResponse | undefined> =>
     fetch(`/api/sok/${id}`)

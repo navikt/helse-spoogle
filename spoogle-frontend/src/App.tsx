@@ -24,16 +24,16 @@ const App = () => {
         console.log(event.data)
     }
 
-    const [rootNode] = useRecoilState(søkState);
+    const [response] = useRecoilState(søkState);
 
     return (
         <>
             <Header />
             <div className={'flex flex-1 self-center items-center flex-col w-[1000px] gap-10 my-20'}>
                 <Søk />
-                {rootNode ?
-                    <NodeComponent node={rootNode}/>
-                    : rootNode === null ? <Alert variant="info">
+                {response ?
+                    <NodeComponent node={response.tree}/>
+                    : response === null ? <Alert variant="info">
                         Det finnes ikke noe fødselsnummer knyttet til denne id-en i Spoogle
                     </Alert> : <></>
                 }

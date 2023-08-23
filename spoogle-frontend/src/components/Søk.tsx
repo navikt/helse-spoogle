@@ -9,11 +9,11 @@ export const Søk = () => {
     const [loading, setLoading] = useState(false)
     const [søkestreng, setSøkestreng] = useRecoilState(søkestrengState)
     return (
-        <form onSubmit={(e) => {
+        <form onSubmit={async (e) => {
             e.preventDefault()
             setLoading(true)
             return søk(søkestreng).then((response) => {
-                response === undefined ? setSøk(null) : setSøk(response.tree);
+                response === undefined ? setSøk(null) : setSøk(response);
             }).finally(() => setLoading(false));
 
         }}>
