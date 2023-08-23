@@ -146,8 +146,13 @@ internal class RoutingTest {
     }
 
     @Language("JSON")
-    private val expectedJson = """
-    {
+    private val expectedJson = """{
+    "path": [
+        "123456791011",
+        "987654321",
+        "$vedtaksperiodeId"
+    ],
+    "tree": {
         "id": "123456791011",
         "type": "FØDSELSNUMMER",
         "children": [
@@ -174,6 +179,7 @@ internal class RoutingTest {
         ],
         "ugyldig_fra": null
     }
+}
     """
 
     private companion object {
