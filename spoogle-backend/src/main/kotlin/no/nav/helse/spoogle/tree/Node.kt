@@ -18,6 +18,13 @@ data class Node(
         invalidChildren = invalidChildren.map { (key, _) -> key.toDto() }
     )
 
+    internal fun find(id: String): List<String> {
+        if (id == this.id) return listOf(id)
+        val foo = children.flatMap { it.find(id) }
+        if (foo.contains(id)) return listOf(this.id) + foo
+        return emptyList()
+    }
+
     internal fun hasParent() = parent != null
 
     @Language("JSON")
