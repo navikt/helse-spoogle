@@ -2,23 +2,20 @@ import React from "react";
 import {Node} from "../types";
 import {Accordion, CopyButton, Tag} from "@navikt/ds-react";
 import styles from './NodeComponent.module.css'
-import {useRecoilValue} from "recoil";
-import {søkestrengState, søkState} from "../state/state";
 import classNames from "classnames";
 
 export interface NodeComponentProps {
     node: Node,
+    path: string[]
 }
 
-export const NodeComponent = ({node}: NodeComponentProps) => {
-    const søk = useRecoilValue(søkState)
-    const currentSøkestreng = useRecoilValue(søkestrengState)
+export const NodeComponent = ({node, path}: NodeComponentProps) => {
+    const currentSøkestreng = path[path.length - 1]
     const isCurrentClass = currentSøkestreng === node.id ? 'current' : ''
     const isLeaf = node.children.length === 0
-    if (!søk) return <></>
     return <div className={'w-full'}>
         <Accordion>
-            <Accordion.Item defaultOpen={søk.path.includes(node.id)}>
+            <Accordion.Item defaultOpen={path.includes(node.id)}>
                 <Accordion.Header className={classNames(isLeaf ? styles.RemoveExpandable : '', isCurrentClass ? '!bg-blue-50' : '', styles.FullWidth)}>
                     <div className={'flex flex-row items-center gap-2'}>
                         <Tag variant={'neutral'} className={finnVariant(node.type)}>{node.type}</Tag>
@@ -28,7 +25,7 @@ export const NodeComponent = ({node}: NodeComponentProps) => {
                 </Accordion.Header>
                 {!isLeaf &&
                     <Accordion.Content>
-                        {node.children.map((it, index) => <NodeComponent key={index} node={it}/>)}
+                        {node.children.map((it, index) => <NodeComponent key={index} node={it} path={path}/>)}
                     </Accordion.Content>
                 }
             </Accordion.Item>

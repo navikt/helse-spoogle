@@ -24,8 +24,9 @@ internal fun Route.treeRoutes(service: ITreeService) {
             auditlogg.info("CEF:0|Vedtaksløsning for sykepenger|Spoogle|1.0|audit:access|Sporingslogg|INFO|end=${System.currentTimeMillis()} duid=${id} suid=$navIdent request=$path")
         }
         val tree = service.finnTre(id)
-        val treeJson = tree?.toJson() ?: "{}"
-        val path = tree?.pathTo(id) ?: emptyList()
+        val treeJson = tree?.toJson() ?: return@get call.respond(HttpStatusCode.NotFound)
+
+        val path = tree.pathTo(id)
         @Language("JSON")
         val response = """
             {

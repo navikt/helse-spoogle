@@ -32,7 +32,7 @@ const App = () => {
             <div className={'flex flex-1 self-center items-center flex-col w-[1000px] gap-10 my-20'}>
                 <Søk />
                 {response ?
-                    <NodeComponent node={response.tree}/>
+                    <NodeComponent node={response.tree} path={response.path}/>
                     : response === null ? <Alert variant="info">
                         Det finnes ikke noe fødselsnummer knyttet til denne id-en i Spoogle
                     </Alert> : <></>

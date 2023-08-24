@@ -4,18 +4,14 @@ export interface TreeResponse {
     path: string[];
     tree: Node;
 }
-export const søk = (id: string): Promise<TreeResponse | undefined> =>
+export const søk = (id: string): Promise<TreeResponse | null> =>
     fetch(`/api/sok/${id}`)
         .then(async (response) => {
-            return response.json();
+            if (!response.ok) return null
+            return await response.json();
         })
-        .then((data) => !isObjectEmpty(data) ? data as TreeResponse : undefined)
-        .catch(() => undefined)
-
-const isObjectEmpty = (objectName: any) => {
-    return Object.keys(objectName).length === 0
-}
-
+        .then((data) => data as TreeResponse)
+        .catch(() => null)
 export const fetchBruker = () =>
     fetch('/api/bruker', {})
         .then((response) => response.json())

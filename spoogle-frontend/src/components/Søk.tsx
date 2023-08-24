@@ -13,7 +13,7 @@ export const Søk = () => {
             e.preventDefault()
             setLoading(true)
             return søk(søkestreng).then((response) => {
-                response === undefined ? setSøk(null) : setSøk(response);
+                response === null ? setSøk(null) : setSøk(response);
             }).finally(() => setLoading(false));
 
         }}>
