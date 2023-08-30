@@ -15,10 +15,10 @@ internal class TreeTest {
         val grandChildNode1 = Node.vedtaksperiodeId("periode1")
         val grandChildNode2 = Node.vedtaksperiodeId("periode2")
 
-        rootNode parentOf childNode1
-        rootNode parentOf childNode2
-        childNode1 parentOf grandChildNode1
-        childNode2 parentOf grandChildNode2
+        rootNode forelderAv childNode1
+        rootNode forelderAv childNode2
+        childNode1 forelderAv grandChildNode1
+        childNode2 forelderAv grandChildNode2
 
         val tree = Tree.buildTree(rootNode)
         val json = jacksonObjectMapper().readTree(tree.toJson())
@@ -35,10 +35,10 @@ internal class TreeTest {
         val grandChildNode1 = Node.vedtaksperiodeId("periode1")
         val grandChildNode2 = Node.vedtaksperiodeId("periode2")
 
-        rootNode parentOf childNode1
-        rootNode parentOf childNode2
-        childNode1 parentOf grandChildNode1
-        childNode2 parentOf grandChildNode2
+        rootNode forelderAv childNode1
+        rootNode forelderAv childNode2
+        childNode1 forelderAv grandChildNode1
+        childNode2 forelderAv grandChildNode2
 
         val tree = Tree.buildTree(rootNode)
         val path1 = tree.pathTo("periode2")
@@ -61,14 +61,14 @@ internal class TreeTest {
         val periodeNode3 = Node.vedtaksperiodeId("periode3")
         val periodeNode4 = Node.vedtaksperiodeId("periode4")
 
-        fnrNode1 parentOf orgnrNode1
-        fnrNode1 parentOf orgnrNode2
-        orgnrNode1 parentOf periodeNode1
-        orgnrNode2 parentOf periodeNode2
+        fnrNode1 forelderAv orgnrNode1
+        fnrNode1 forelderAv orgnrNode2
+        orgnrNode1 forelderAv periodeNode1
+        orgnrNode2 forelderAv periodeNode2
 
-        fnrNode2 parentOf orgnrNode3
-        orgnrNode3 parentOf periodeNode3
-        orgnrNode3 parentOf periodeNode4
+        fnrNode2 forelderAv orgnrNode3
+        orgnrNode3 forelderAv periodeNode3
+        orgnrNode3 forelderAv periodeNode4
 
         val tree1 = Tree.buildTree(fnrNode1)
         val path1 = tree1.pathTo("periode2")

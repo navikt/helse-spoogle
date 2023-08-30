@@ -11,7 +11,7 @@ internal class Tree private constructor(
 
     internal fun toJson(): String = rootNode.toJson()
 
-    internal fun pathTo(id: String): List<String> = rootNode.find(id)
+    internal fun pathTo(id: String): List<String> = rootNode.finn(id)
 
     internal companion object {
         internal fun buildTree(rootNode: Node) = Tree(rootNode)

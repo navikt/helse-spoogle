@@ -21,10 +21,10 @@ internal class TreeServiceTest: AbstractDatabaseTest() {
         val periodeNode2 = periodeNode("periode_id_2")
         val utbetalingNode = utbetalingNode("utbetaling_id")
 
-        fnrNode parentOf orgnrNode
-        orgnrNode parentOf periodeNode
-        orgnrNode parentOf periodeNode2
-        periodeNode parentOf utbetalingNode
+        fnrNode forelderAv orgnrNode
+        orgnrNode forelderAv periodeNode
+        orgnrNode forelderAv periodeNode2
+        periodeNode forelderAv utbetalingNode
 
         val tree = Tree.buildTree(fnrNode)
 
@@ -46,18 +46,18 @@ internal class TreeServiceTest: AbstractDatabaseTest() {
 
         run {
             val fnrNode = fnrNode("fnr")
-            fnrNode parentOf orgnrNode1
-            orgnrNode1 parentOf periodeNode1
-            periodeNode1 parentOf utbetalingNode1
+            fnrNode forelderAv orgnrNode1
+            orgnrNode1 forelderAv periodeNode1
+            periodeNode1 forelderAv utbetalingNode1
             val gren1 = Tree.buildTree(fnrNode)
             service.nyGren(gren1)
         }
 
         run {
             val fnrNode = fnrNode("fnr")
-            fnrNode parentOf orgnrNode2
-            orgnrNode2 parentOf periodeNode2
-            periodeNode2 parentOf utbetalingNode2
+            fnrNode forelderAv orgnrNode2
+            orgnrNode2 forelderAv periodeNode2
+            periodeNode2 forelderAv utbetalingNode2
             val gren2 = Tree.buildTree(fnrNode)
             service.nyGren(gren2)
         }
@@ -67,13 +67,13 @@ internal class TreeServiceTest: AbstractDatabaseTest() {
 
         run {
             val fnrNode = fnrNode("fnr")
-            fnrNode parentOf orgnrNode1
-            orgnrNode1 parentOf periodeNode1
-            periodeNode1 parentOf utbetalingNode1
+            fnrNode forelderAv orgnrNode1
+            orgnrNode1 forelderAv periodeNode1
+            periodeNode1 forelderAv utbetalingNode1
 
-            fnrNode parentOf orgnrNode2
-            orgnrNode2 parentOf periodeNode2
-            periodeNode2 parentOf utbetalingNode2
+            fnrNode forelderAv orgnrNode2
+            orgnrNode2 forelderAv periodeNode2
+            periodeNode2 forelderAv utbetalingNode2
 
             val expected = Tree.buildTree(fnrNode)
             assertEquals(expected, tree)

@@ -34,9 +34,9 @@ internal class VedtaksperiodeEndretRiver(
         val organisasjonsnummerNode = Node.organisasjonsnummer(organisasjonsnummer, fødselsnummer)
         val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())
 
-        fødselsnummerNode parentOf aktørIdNode
-        fødselsnummerNode parentOf organisasjonsnummerNode
-        organisasjonsnummerNode parentOf vedtaksperiodeIdNode
+        fødselsnummerNode forelderAv aktørIdNode
+        fødselsnummerNode forelderAv organisasjonsnummerNode
+        organisasjonsnummerNode forelderAv vedtaksperiodeIdNode
 
         val tre = Tree.buildTree(fødselsnummerNode)
         treeService.nyGren(tre)

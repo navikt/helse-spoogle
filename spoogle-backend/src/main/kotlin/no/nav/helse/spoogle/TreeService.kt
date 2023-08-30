@@ -16,16 +16,16 @@ internal class TreeService(dataSource: DataSource): ITreeService {
     override fun finnTre(id: String): Tree? {
         val nodes = dao.finnTre(id)
         nodes.forEach { (parent, child, ugyldigFra) ->
-            parent parentOf child
-            if (ugyldigFra != null) parent.invalidRelation(child, ugyldigFra)
+            parent forelderAv child
+            if (ugyldigFra != null) parent.ugyldigRelasjon(child, ugyldigFra)
         }
-        val (rootNode, _) = nodes.find { !it.first.hasParent() } ?: return null
+        val (rootNode, _) = nodes.find { !it.first.harForelder() } ?: return null
         return Tree.buildTree(rootNode)
     }
 
     internal fun nyGren(tree: Tree) {
         val dto = tree.toDto()
-        dto.rootNode.children.forEach {
+        dto.rootNode.barn.forEach {
             nyRelasjon(dto.rootNode, it)
         }
     }
@@ -38,7 +38,7 @@ internal class TreeService(dataSource: DataSource): ITreeService {
         dao.nyNode(parent)
         dao.nyNode(child)
         dao.nyEdge(parent, child)
-        child.children.forEach {
+        child.barn.forEach {
             nyRelasjon(child, it)
         }
     }
