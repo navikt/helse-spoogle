@@ -109,7 +109,7 @@ internal class TreDao(private val dataSource: DataSource) {
 
     private fun toNode(id: String, type: String, fødselsnummer: String) =
         when (enumValueOf<Identifikatortype>(type)) {
-            ORGANISASJONSNUMMER -> Node.organisasjonsnummer(id, fødselsnummer)
+            ORGANISASJONSNUMMER -> Node.organisasjonsnummer(id.split("+").first(), fødselsnummer)
             FØDSELSNUMMER -> Node.fødselsnummer(id)
             AKTØR_ID -> Node.aktørId(id)
             VEDTAKSPERIODE_ID -> Node.vedtaksperiodeId(id)

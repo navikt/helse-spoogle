@@ -208,9 +208,9 @@ internal class RoutingTest {
                 val periodeNode = periodeNode("$vedtaksperiodeId")
                 val utbetalingNode = utbetalingNode("$utbetalingId")
 
-                fnrNode forelderAv orgnrNode
-                orgnrNode forelderAv periodeNode
-                periodeNode forelderAv utbetalingNode
+                orgnrNode barnAv fnrNode
+                periodeNode barnAv orgnrNode
+                utbetalingNode barnAv periodeNode
                 Tre.byggTre(fnrNode)
             }
 

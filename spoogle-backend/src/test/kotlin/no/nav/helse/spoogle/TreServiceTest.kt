@@ -21,10 +21,10 @@ internal class TreServiceTest: AbstractDatabaseTest() {
         val periodeNode2 = periodeNode("periode_id_2")
         val utbetalingNode = utbetalingNode("utbetaling_id")
 
-        fnrNode forelderAv orgnrNode
-        orgnrNode forelderAv periodeNode
-        orgnrNode forelderAv periodeNode2
-        periodeNode forelderAv utbetalingNode
+        orgnrNode barnAv fnrNode
+        periodeNode barnAv orgnrNode
+        periodeNode2 barnAv orgnrNode
+        utbetalingNode barnAv periodeNode
 
         val tre = Tre.byggTre(fnrNode)
 
@@ -46,18 +46,18 @@ internal class TreServiceTest: AbstractDatabaseTest() {
 
         run {
             val fnrNode = fnrNode("fnr")
-            fnrNode forelderAv orgnrNode1
-            orgnrNode1 forelderAv periodeNode1
-            periodeNode1 forelderAv utbetalingNode1
+            orgnrNode1 barnAv fnrNode
+            periodeNode1 barnAv orgnrNode1
+            utbetalingNode1 barnAv periodeNode1
             val gren1 = Tre.byggTre(fnrNode)
             service.nyGren(gren1)
         }
 
         run {
             val fnrNode = fnrNode("fnr")
-            fnrNode forelderAv orgnrNode2
-            orgnrNode2 forelderAv periodeNode2
-            periodeNode2 forelderAv utbetalingNode2
+            orgnrNode2 barnAv fnrNode
+            periodeNode2 barnAv orgnrNode2
+            utbetalingNode2 barnAv periodeNode2
             val gren2 = Tre.byggTre(fnrNode)
             service.nyGren(gren2)
         }
@@ -67,13 +67,13 @@ internal class TreServiceTest: AbstractDatabaseTest() {
 
         run {
             val fnrNode = fnrNode("fnr")
-            fnrNode forelderAv orgnrNode1
-            orgnrNode1 forelderAv periodeNode1
-            periodeNode1 forelderAv utbetalingNode1
+            orgnrNode1 barnAv fnrNode
+            periodeNode1 barnAv orgnrNode1
+            utbetalingNode1 barnAv periodeNode1
 
-            fnrNode forelderAv orgnrNode2
-            orgnrNode2 forelderAv periodeNode2
-            periodeNode2 forelderAv utbetalingNode2
+            orgnrNode2 barnAv fnrNode
+            periodeNode2 barnAv orgnrNode2
+            utbetalingNode2 barnAv periodeNode2
 
             val expected = Tre.byggTre(fnrNode)
             assertEquals(expected, tree)

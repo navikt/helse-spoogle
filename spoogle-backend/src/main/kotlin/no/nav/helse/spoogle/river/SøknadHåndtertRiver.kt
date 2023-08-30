@@ -28,7 +28,7 @@ internal class SøknadHåndtertRiver(
         val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())
         val søknadIdNode = Node.søknadId(søknadId.toString())
 
-        vedtaksperiodeIdNode forelderAv søknadIdNode
+        søknadIdNode barnAv vedtaksperiodeIdNode
 
         treService.nyGren(Tre.byggTre(vedtaksperiodeIdNode))
     }

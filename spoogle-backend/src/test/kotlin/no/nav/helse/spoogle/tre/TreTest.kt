@@ -15,10 +15,10 @@ internal class TreTest {
         val grandChildNode1 = Node.vedtaksperiodeId("periode1")
         val grandChildNode2 = Node.vedtaksperiodeId("periode2")
 
-        rootNode forelderAv childNode1
-        rootNode forelderAv childNode2
-        childNode1 forelderAv grandChildNode1
-        childNode2 forelderAv grandChildNode2
+        childNode1 barnAv rootNode
+        childNode2 barnAv rootNode
+        grandChildNode1 barnAv childNode1
+        grandChildNode2 barnAv childNode2
 
         val tre = Tre.byggTre(rootNode)
         val json = jacksonObjectMapper().readTree(tre.toJson())
@@ -35,10 +35,10 @@ internal class TreTest {
         val grandChildNode1 = Node.vedtaksperiodeId("periode1")
         val grandChildNode2 = Node.vedtaksperiodeId("periode2")
 
-        rootNode forelderAv childNode1
-        rootNode forelderAv childNode2
-        childNode1 forelderAv grandChildNode1
-        childNode2 forelderAv grandChildNode2
+        childNode1 barnAv rootNode
+        childNode2 barnAv rootNode
+        grandChildNode1 barnAv childNode1
+        grandChildNode2 barnAv childNode2
 
         val tre = Tre.byggTre(rootNode)
         val path1 = tre.pathTo("periode2")
@@ -61,14 +61,14 @@ internal class TreTest {
         val periodeNode3 = Node.vedtaksperiodeId("periode3")
         val periodeNode4 = Node.vedtaksperiodeId("periode4")
 
-        fnrNode1 forelderAv orgnrNode1
-        fnrNode1 forelderAv orgnrNode2
-        orgnrNode1 forelderAv periodeNode1
-        orgnrNode2 forelderAv periodeNode2
+        orgnrNode1 barnAv fnrNode1
+        orgnrNode2 barnAv fnrNode1
+        periodeNode1 barnAv orgnrNode1
+        periodeNode2 barnAv orgnrNode2
 
-        fnrNode2 forelderAv orgnrNode3
-        orgnrNode3 forelderAv periodeNode3
-        orgnrNode3 forelderAv periodeNode4
+        orgnrNode3 barnAv fnrNode2
+        periodeNode3 barnAv orgnrNode3
+        periodeNode4 barnAv orgnrNode3
 
         val tre1 = Tre.byggTre(fnrNode1)
         val path1 = tre1.pathTo("periode2")

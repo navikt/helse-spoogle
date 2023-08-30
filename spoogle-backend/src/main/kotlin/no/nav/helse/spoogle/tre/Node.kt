@@ -4,7 +4,8 @@ import no.nav.helse.spoogle.tre.Identifikatortype.*
 import org.intellij.lang.annotations.Language
 import java.time.LocalDateTime
 
-data class Node private constructor(
+
+open class Node private constructor(
     private val id: String,
     private val type: Identifikatortype
 ) {
@@ -20,7 +21,7 @@ data class Node private constructor(
             return Node(aktørId, AKTØR_ID)
         }
         internal fun organisasjonsnummer(organisasjonsnummer: String, fødselsnummer: String): Node {
-            return Node("$organisasjonsnummer+$fødselsnummer", ORGANISASJONSNUMMER)
+            return OrganisasjonsnummerNode(organisasjonsnummer, fødselsnummer)
         }
         internal fun søknadId(søknadId: String): Node {
             return Node(søknadId, SØKNAD_ID)
@@ -36,15 +37,7 @@ data class Node private constructor(
         }
     }
 
-    internal fun toDto(): NodeDto = NodeDto(
-        id = id,
-        type = type.toString(),
-        barn = barn.map(Node::toDto),
-        ugyldigeBarn = ugyldigeBarn.map { (key, _) -> key.toDto() }
-    )
-
     internal fun finn(targetId: String): List<String> {
-        val id = if (type == ORGANISASJONSNUMMER) this.id.split("+").first() else this.id
         if (targetId == id) return listOf(id)
         val foo = barn.flatMap { it.finn(targetId) }
         if (foo.contains(targetId)) return listOf(id) + foo
@@ -53,10 +46,25 @@ data class Node private constructor(
 
     internal fun harForelder() = forelder != null
 
+    internal open infix fun barnAv(other: Node) {
+        other.barn.add(this)
+        this.forelder = other
+    }
+
+    internal fun ugyldigRelasjon(other: Node, tidspunkt: LocalDateTime) {
+        ugyldigeBarn[other] = tidspunkt
+    }
+
+    internal open fun toDto(): NodeDto = NodeDto(
+        id = id,
+        type = type.toString(),
+        barn = barn.map(Node::toDto),
+        ugyldigeBarn = ugyldigeBarn.map { (key, _) -> key.toDto() }
+    )
+
     @Language("JSON")
     internal fun toJson(): String {
         val ugyldigFra = forelder?.let { it.ugyldigeBarn[this]?.toString() }
-        val id = if (type == ORGANISASJONSNUMMER) this.id.split("+").first() else this.id
         return """
             {
                 "id": "$id",
@@ -67,18 +75,37 @@ data class Node private constructor(
         """
     }
 
-    internal infix fun forelderAv(other: Node) {
-        if (other.type == ORGANISASJONSNUMMER) {
-            val fødselsnummer = other.id.split("+").last()
-            if (id != fødselsnummer)
-                throw IllegalArgumentException("Barn er type=ORGANISASJONSNUMMER og må dermed ha samme fødselsnummer som forelder")
-        }
-        barn.add(other)
-        other.forelder = this
+    override fun equals(other: Any?): Boolean = this === other ||
+        (other is Node && id == other.id && type == other.type)
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + type.hashCode()
+        return result
     }
 
-    internal fun ugyldigRelasjon(other: Node, tidspunkt: LocalDateTime) {
-        ugyldigeBarn[other] = tidspunkt
+    private class OrganisasjonsnummerNode(
+        private val organisasjonsnummer: String,
+        private val fødselsnummer: String
+    ): Node(organisasjonsnummer, ORGANISASJONSNUMMER) {
+        override fun toDto(): NodeDto = super.toDto().copy(id = "$organisasjonsnummer+$fødselsnummer")
+        override fun barnAv(other: Node) {
+            if (other.type == FØDSELSNUMMER && other.id != fødselsnummer)
+                throw IllegalArgumentException("Barn er type=ORGANISASJONSNUMMER og må dermed ha samme fødselsnummer som forelder")
+            super.barnAv(other)
+        }
+
+        override fun equals(other: Any?): Boolean = super.equals(other) &&
+            other is OrganisasjonsnummerNode &&
+            other.organisasjonsnummer == organisasjonsnummer &&
+            other.fødselsnummer == fødselsnummer
+
+        override fun hashCode(): Int {
+            var result = super.hashCode()
+            result = 31 * result + organisasjonsnummer.hashCode()
+            result = 31 * result + fødselsnummer.hashCode()
+            return result
+        }
     }
 }
 

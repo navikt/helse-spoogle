@@ -29,7 +29,7 @@ internal class VedtaksperiodeNyUtbetalingRiver(
         val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())
         val utbetalingIdNode = Node.utbetalingId(utbetalingId.toString())
 
-        vedtaksperiodeIdNode forelderAv utbetalingIdNode
+        utbetalingIdNode barnAv vedtaksperiodeIdNode
 
         val tre = Tre.byggTre(vedtaksperiodeIdNode)
         treService.nyGren(tre)

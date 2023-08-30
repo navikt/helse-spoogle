@@ -16,7 +16,7 @@ internal class TreService(dataSource: DataSource): ITreeService {
     override fun finnTre(id: String): Tre? {
         val noder = dao.finnTre(id)
         noder.forEach { (forelder, barn, ugyldigFra) ->
-            forelder forelderAv barn
+            barn barnAv forelder
             if (ugyldigFra != null) forelder.ugyldigRelasjon(barn, ugyldigFra)
         }
         val (rotnode, _) = noder.find { !it.first.harForelder() } ?: return null
