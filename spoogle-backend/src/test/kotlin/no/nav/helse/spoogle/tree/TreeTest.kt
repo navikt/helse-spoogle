@@ -1,20 +1,19 @@
 package no.nav.helse.spoogle.tree
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import no.nav.helse.spoogle.tree.Identifikatortype.*
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class TreeTest {
 
     @Test
     fun `to json`() {
-        val rootNode = Node("fnr", FØDSELSNUMMER)
-        val childNode1 = Node("orgnr1", ORGANISASJONSNUMMER)
-        val childNode2 = Node("orgnr2", ORGANISASJONSNUMMER)
-        val grandChildNode1 = Node("periode1", VEDTAKSPERIODE_ID)
-        val grandChildNode2 = Node("periode2", VEDTAKSPERIODE_ID)
+        val rootNode = Node.fødselsnummer("fnr")
+        val childNode1 = Node.organisasjonsnummer("orgnr1", "fnr")
+        val childNode2 = Node.organisasjonsnummer("orgnr2", "fnr")
+        val grandChildNode1 = Node.vedtaksperiodeId("periode1")
+        val grandChildNode2 = Node.vedtaksperiodeId("periode2")
 
         rootNode parentOf childNode1
         rootNode parentOf childNode2
@@ -30,11 +29,11 @@ internal class TreeTest {
 
     @Test
     fun `path to - ett fnr`() {
-        val rootNode = Node("fnr", FØDSELSNUMMER)
-        val childNode1 = Node("orgnr1", ORGANISASJONSNUMMER)
-        val childNode2 = Node("orgnr2", ORGANISASJONSNUMMER)
-        val grandChildNode1 = Node("periode1", VEDTAKSPERIODE_ID)
-        val grandChildNode2 = Node("periode2", VEDTAKSPERIODE_ID)
+        val rootNode = Node.fødselsnummer("fnr")
+        val childNode1 = Node.organisasjonsnummer("orgnr1", "fnr")
+        val childNode2 = Node.organisasjonsnummer("orgnr2", "fnr")
+        val grandChildNode1 = Node.vedtaksperiodeId("periode1")
+        val grandChildNode2 = Node.vedtaksperiodeId("periode2")
 
         rootNode parentOf childNode1
         rootNode parentOf childNode2
@@ -52,23 +51,24 @@ internal class TreeTest {
 
     @Test
     fun `path to - to fnr`() {
-        val fnrNode1 = Node("fnr1", FØDSELSNUMMER)
-        val fnrNode2 = Node("fnr2", FØDSELSNUMMER)
-        val orgnrNode1 = Node("orgnr1", ORGANISASJONSNUMMER)
-        val orgnrNode2 = Node("orgnr2", ORGANISASJONSNUMMER)
-        val periodeNode1 = Node("periode1", VEDTAKSPERIODE_ID)
-        val periodeNode2 = Node("periode2", VEDTAKSPERIODE_ID)
-        val periodeNode3 = Node("periode3", VEDTAKSPERIODE_ID)
-        val periodeNode4 = Node("periode4", VEDTAKSPERIODE_ID)
+        val fnrNode1 = Node.fødselsnummer("fnr1")
+        val fnrNode2 = Node.fødselsnummer("fnr2")
+        val orgnrNode1 = Node.organisasjonsnummer("orgnr1", "fnr1")
+        val orgnrNode2 = Node.organisasjonsnummer("orgnr2", "fnr1")
+        val orgnrNode3 = Node.organisasjonsnummer("orgnr1", "fnr2")
+        val periodeNode1 = Node.vedtaksperiodeId("periode1")
+        val periodeNode2 = Node.vedtaksperiodeId("periode2")
+        val periodeNode3 = Node.vedtaksperiodeId("periode3")
+        val periodeNode4 = Node.vedtaksperiodeId("periode4")
 
         fnrNode1 parentOf orgnrNode1
         fnrNode1 parentOf orgnrNode2
         orgnrNode1 parentOf periodeNode1
         orgnrNode2 parentOf periodeNode2
 
-        fnrNode2 parentOf orgnrNode1
-        orgnrNode1 parentOf periodeNode3
-        orgnrNode1 parentOf periodeNode4
+        fnrNode2 parentOf orgnrNode3
+        orgnrNode3 parentOf periodeNode3
+        orgnrNode3 parentOf periodeNode4
 
         val tree1 = Tree.buildTree(fnrNode1)
         val path1 = tree1.pathTo("periode2")

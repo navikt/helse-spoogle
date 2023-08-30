@@ -11,7 +11,6 @@ import io.ktor.server.testing.testApplication
 import no.nav.helse.spoogle.ITreeService
 import no.nav.helse.spoogle.app
 import no.nav.helse.spoogle.microsoft.AzureAD
-import no.nav.helse.spoogle.tree.Identifikatortype
 import no.nav.helse.spoogle.tree.Node
 import no.nav.helse.spoogle.tree.Tree
 import no.nav.security.mock.oauth2.MockOAuth2Server
@@ -205,7 +204,7 @@ internal class RoutingTest {
 
             private val tree = let {
                 val fnrNode = fnrNode("123456791011")
-                val orgnrNode = orgnrNode("987654321")
+                val orgnrNode = orgnrNode("987654321", "123456791011")
                 val periodeNode = periodeNode("$vedtaksperiodeId")
                 val utbetalingNode = utbetalingNode("$utbetalingId")
 
@@ -217,10 +216,10 @@ internal class RoutingTest {
 
             override fun finnTre(id: String): Tree = tree
 
-            private fun fnrNode(fnr: String) = Node(fnr, Identifikatortype.FØDSELSNUMMER)
-            private fun orgnrNode(orgnr: String) = Node(orgnr, Identifikatortype.ORGANISASJONSNUMMER)
-            private fun periodeNode(id: String) = Node(id, Identifikatortype.VEDTAKSPERIODE_ID)
-            private fun utbetalingNode(id: String) = Node(id, Identifikatortype.UTBETALING_ID)
+            private fun fnrNode(fnr: String) = Node.fødselsnummer(fnr)
+            private fun orgnrNode(orgnr: String, fnr: String) = Node.organisasjonsnummer(orgnr, fnr)
+            private fun periodeNode(id: String) = Node.vedtaksperiodeId(id)
+            private fun utbetalingNode(id: String) = Node.utbetalingId(id)
         }
 
         @BeforeAll

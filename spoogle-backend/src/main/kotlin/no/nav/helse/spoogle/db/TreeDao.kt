@@ -2,7 +2,10 @@ package no.nav.helse.spoogle.db
 
 import kotliquery.queryOf
 import kotliquery.sessionOf
-import no.nav.helse.spoogle.tree.*
+import no.nav.helse.spoogle.tree.Identifikatortype
+import no.nav.helse.spoogle.tree.Identifikatortype.*
+import no.nav.helse.spoogle.tree.Node
+import no.nav.helse.spoogle.tree.NodeDto
 import org.intellij.lang.annotations.Language
 import java.time.LocalDateTime
 import javax.sql.DataSource
@@ -96,13 +99,24 @@ internal class TreeDao(private val dataSource: DataSource) {
                     val childId = it.string("child_id")
                     val childType = it.string("child_type")
                     val ugyldigFra = it.localDateTimeOrNull("ugyldig_fra")
-                    val parentNode = uniqueNodes.getOrPut(parentId to parentType) { Node(parentId, enumValueOf(parentType)) }
-                    val childNode = uniqueNodes.getOrPut(childId to childType) { Node(childId, enumValueOf(childType)) }
+                    val parentNode = uniqueNodes.getOrPut(parentId to parentType) { toNode(parentId, parentType, fødselsnummer) }
+                    val childNode = uniqueNodes.getOrPut(childId to childType) { toNode(childId, childType, fødselsnummer) }
                     Triple(parentNode, childNode, ugyldigFra)
                 }.asList
             ).filterNotNull()
         }
     }
+
+    private fun toNode(id: String, type: String, fødselsnummer: String) =
+        when (enumValueOf<Identifikatortype>(type)) {
+            ORGANISASJONSNUMMER -> Node.organisasjonsnummer(id, fødselsnummer)
+            FØDSELSNUMMER -> Node.fødselsnummer(id)
+            AKTØR_ID -> Node.aktørId(id)
+            VEDTAKSPERIODE_ID -> Node.vedtaksperiodeId(id)
+            UTBETALING_ID -> Node.utbetalingId(id)
+            SØKNAD_ID -> Node.søknadId(id)
+            INNTEKTSMELDING_ID -> Node.inntektsmeldingId(id)
+        }
 
     private fun finnFødselsnummer(id: String): String? {
         @Language("PostgreSQL")

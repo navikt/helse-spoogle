@@ -6,7 +6,6 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.spoogle.TreeService
 import no.nav.helse.spoogle.asUUID
-import no.nav.helse.spoogle.tree.Identifikatortype.VEDTAKSPERIODE_ID
 import no.nav.helse.spoogle.tree.Node
 
 internal class VedtaksperiodeForkastetRiver(
@@ -25,7 +24,7 @@ internal class VedtaksperiodeForkastetRiver(
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
-        val vedtaksperiodeIdNode = Node(vedtaksperiodeId.toString(), VEDTAKSPERIODE_ID)
+        val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())
         treeService.invaliderRelasjonerFor(vedtaksperiodeIdNode)
     }
 }

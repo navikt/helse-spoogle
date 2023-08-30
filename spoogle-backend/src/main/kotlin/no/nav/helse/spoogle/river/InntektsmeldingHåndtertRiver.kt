@@ -6,8 +6,6 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.spoogle.TreeService
 import no.nav.helse.spoogle.asUUID
-import no.nav.helse.spoogle.tree.Identifikatortype
-import no.nav.helse.spoogle.tree.Identifikatortype.VEDTAKSPERIODE_ID
 import no.nav.helse.spoogle.tree.Node
 import no.nav.helse.spoogle.tree.Tree
 
@@ -27,8 +25,8 @@ internal class InntektsmeldingHåndtertRiver(
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
         val søknadId = packet["inntektsmeldingId"].asUUID()
-        val vedtaksperiodeIdNode = Node(vedtaksperiodeId.toString(), VEDTAKSPERIODE_ID)
-        val inntektsmeldingIdNode = Node(søknadId.toString(), Identifikatortype.INNTEKTSMELDING_ID)
+        val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())
+        val inntektsmeldingIdNode = Node.inntektsmeldingId(søknadId.toString())
 
         vedtaksperiodeIdNode parentOf inntektsmeldingIdNode
 

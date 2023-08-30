@@ -3,11 +3,11 @@ package no.nav.helse.spoogle
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
-import no.nav.helse.spoogle.tree.Tree
-import no.nav.helse.spoogle.tree.Identifikatortype
 import no.nav.helse.spoogle.tree.Node
+import no.nav.helse.spoogle.tree.Tree
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
 internal class TreeServiceTest: AbstractDatabaseTest() {
@@ -16,7 +16,7 @@ internal class TreeServiceTest: AbstractDatabaseTest() {
     @Test
     fun `ny gren`() {
         val fnrNode = fnrNode("fnr")
-        val orgnrNode = orgnrNode("orgnr")
+        val orgnrNode = orgnrNode("orgnr", "fnr")
         val periodeNode = periodeNode("periode_id_1")
         val periodeNode2 = periodeNode("periode_id_2")
         val utbetalingNode = utbetalingNode("utbetaling_id")
@@ -29,16 +29,16 @@ internal class TreeServiceTest: AbstractDatabaseTest() {
         val tree = Tree.buildTree(fnrNode)
 
         service.nyGren(tree)
-        assertNodes("fnr", "orgnr", "periode_id_1", "utbetaling_id")
-        assertEdge("fnr", "orgnr")
-        assertEdge("orgnr", "periode_id_1")
+        assertNodes("fnr", "orgnr+fnr", "periode_id_1", "utbetaling_id")
+        assertEdge("fnr", "orgnr+fnr")
+        assertEdge("orgnr+fnr", "periode_id_1")
         assertEdge("periode_id_1", "utbetaling_id")
     }
 
     @Test
     fun `finn tre`() {
-        val orgnrNode1 = orgnrNode("orgnr1")
-        val orgnrNode2 = orgnrNode("orgnr2")
+        val orgnrNode1 = orgnrNode("orgnr1", "fnr")
+        val orgnrNode2 = orgnrNode("orgnr2", "fnr")
         val periodeNode1 = periodeNode("periode_id_1")
         val periodeNode2 = periodeNode("periode_id_2")
         val utbetalingNode1 = utbetalingNode("utbetaling_id_1")
@@ -99,8 +99,8 @@ internal class TreeServiceTest: AbstractDatabaseTest() {
         assertEquals(1, antall)
     }
 
-    private fun fnrNode(fnr: String) = Node(fnr, Identifikatortype.FØDSELSNUMMER)
-    private fun orgnrNode(orgnr: String) = Node(orgnr, Identifikatortype.ORGANISASJONSNUMMER)
-    private fun periodeNode(id: String) = Node(id, Identifikatortype.VEDTAKSPERIODE_ID)
-    private fun utbetalingNode(id: String) = Node(id, Identifikatortype.UTBETALING_ID)
+    private fun fnrNode(fnr: String) = Node.fødselsnummer(fnr)
+    private fun orgnrNode(orgnr: String, fødselsnummer: String) = Node.organisasjonsnummer(orgnr, fødselsnummer)
+    private fun periodeNode(id: String) = Node.vedtaksperiodeId(id)
+    private fun utbetalingNode(id: String) = Node.utbetalingId(id)
 }

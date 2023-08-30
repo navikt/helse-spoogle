@@ -6,8 +6,6 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.spoogle.TreeService
 import no.nav.helse.spoogle.asUUID
-import no.nav.helse.spoogle.tree.Identifikatortype.UTBETALING_ID
-import no.nav.helse.spoogle.tree.Identifikatortype.VEDTAKSPERIODE_ID
 import no.nav.helse.spoogle.tree.Node
 import no.nav.helse.spoogle.tree.Tree
 
@@ -28,8 +26,8 @@ internal class VedtaksperiodeNyUtbetalingRiver(
         val utbetalingId = packet["utbetalingId"].asUUID()
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
 
-        val vedtaksperiodeIdNode = Node(vedtaksperiodeId.toString(), VEDTAKSPERIODE_ID)
-        val utbetalingIdNode = Node(utbetalingId.toString(), UTBETALING_ID)
+        val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())
+        val utbetalingIdNode = Node.utbetalingId(utbetalingId.toString())
 
         vedtaksperiodeIdNode parentOf utbetalingIdNode
 

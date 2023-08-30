@@ -7,7 +7,8 @@ import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.helse.spoogle.TreeService
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*
@@ -29,7 +30,7 @@ internal class VedtaksperiodeForkastetRiverTest: AbstractDatabaseTest() {
         val tree = treeService.finnTre(vedtaksperiodeId.toString())
         assertNotNull(tree)
 
-        val ugyldigFra = finnUgyldigFra("987654321", vedtaksperiodeId.toString())
+        val ugyldigFra = finnUgyldigFra("987654321+12345678910", vedtaksperiodeId.toString())
         assertNotNull(ugyldigFra)
 
         val json = tree?.let { jacksonObjectMapper().readTree(it.toJson()) }

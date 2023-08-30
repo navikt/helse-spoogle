@@ -6,7 +6,6 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.spoogle.TreeService
 import no.nav.helse.spoogle.asUUID
-import no.nav.helse.spoogle.tree.Identifikatortype.*
 import no.nav.helse.spoogle.tree.Node
 import no.nav.helse.spoogle.tree.Tree
 
@@ -30,10 +29,10 @@ internal class VedtaksperiodeEndretRiver(
         val organisasjonsnummer = packet["organisasjonsnummer"].asText()
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
 
-        val fødselsnummerNode = Node(fødselsnummer, FØDSELSNUMMER)
-        val aktørIdNode = Node(aktørId, AKTØR_ID)
-        val organisasjonsnummerNode = Node(organisasjonsnummer, ORGANISASJONSNUMMER)
-        val vedtaksperiodeIdNode = Node(vedtaksperiodeId.toString(), VEDTAKSPERIODE_ID)
+        val fødselsnummerNode = Node.fødselsnummer(fødselsnummer)
+        val aktørIdNode = Node.aktørId(aktørId)
+        val organisasjonsnummerNode = Node.organisasjonsnummer(organisasjonsnummer, fødselsnummer)
+        val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())
 
         fødselsnummerNode parentOf aktørIdNode
         fødselsnummerNode parentOf organisasjonsnummerNode
