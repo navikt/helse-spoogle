@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory
 
 private val auditlogg = LoggerFactory.getLogger("auditLogger")
 
-internal fun Route.treeRoutes(service: ITreeService) {
+internal fun Route.treRoutes(service: ITreeService) {
     get("/api/sok/{id}") {
         val id = call.parameters["id"]
             ?: return@get call.respond(HttpStatusCode.BadRequest, "Id må være satt")

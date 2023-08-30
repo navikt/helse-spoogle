@@ -3,15 +3,15 @@ package no.nav.helse.spoogle
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
-import no.nav.helse.spoogle.tree.Node
-import no.nav.helse.spoogle.tree.Tree
+import no.nav.helse.spoogle.tre.Node
+import no.nav.helse.spoogle.tre.Tre
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
-internal class TreeServiceTest: AbstractDatabaseTest() {
-    private val service = TreeService(dataSource)
+internal class TreServiceTest: AbstractDatabaseTest() {
+    private val service = TreService(dataSource)
 
     @Test
     fun `ny gren`() {
@@ -26,9 +26,9 @@ internal class TreeServiceTest: AbstractDatabaseTest() {
         orgnrNode forelderAv periodeNode2
         periodeNode forelderAv utbetalingNode
 
-        val tree = Tree.buildTree(fnrNode)
+        val tre = Tre.byggTre(fnrNode)
 
-        service.nyGren(tree)
+        service.nyGren(tre)
         assertNodes("fnr", "orgnr+fnr", "periode_id_1", "utbetaling_id")
         assertEdge("fnr", "orgnr+fnr")
         assertEdge("orgnr+fnr", "periode_id_1")
@@ -49,7 +49,7 @@ internal class TreeServiceTest: AbstractDatabaseTest() {
             fnrNode forelderAv orgnrNode1
             orgnrNode1 forelderAv periodeNode1
             periodeNode1 forelderAv utbetalingNode1
-            val gren1 = Tree.buildTree(fnrNode)
+            val gren1 = Tre.byggTre(fnrNode)
             service.nyGren(gren1)
         }
 
@@ -58,7 +58,7 @@ internal class TreeServiceTest: AbstractDatabaseTest() {
             fnrNode forelderAv orgnrNode2
             orgnrNode2 forelderAv periodeNode2
             periodeNode2 forelderAv utbetalingNode2
-            val gren2 = Tree.buildTree(fnrNode)
+            val gren2 = Tre.byggTre(fnrNode)
             service.nyGren(gren2)
         }
 
@@ -75,7 +75,7 @@ internal class TreeServiceTest: AbstractDatabaseTest() {
             orgnrNode2 forelderAv periodeNode2
             periodeNode2 forelderAv utbetalingNode2
 
-            val expected = Tree.buildTree(fnrNode)
+            val expected = Tre.byggTre(fnrNode)
             assertEquals(expected, tree)
         }
     }

@@ -2,15 +2,15 @@ package no.nav.helse.spoogle.db
 
 import kotliquery.queryOf
 import kotliquery.sessionOf
-import no.nav.helse.spoogle.tree.Identifikatortype
-import no.nav.helse.spoogle.tree.Identifikatortype.*
-import no.nav.helse.spoogle.tree.Node
-import no.nav.helse.spoogle.tree.NodeDto
+import no.nav.helse.spoogle.tre.Identifikatortype
+import no.nav.helse.spoogle.tre.Identifikatortype.*
+import no.nav.helse.spoogle.tre.Node
+import no.nav.helse.spoogle.tre.NodeDto
 import org.intellij.lang.annotations.Language
 import java.time.LocalDateTime
 import javax.sql.DataSource
 
-internal class TreeDao(private val dataSource: DataSource) {
+internal class TreDao(private val dataSource: DataSource) {
 
     internal fun nyNode(node: NodeDto) {
         @Language("PostgreSQL")
@@ -20,7 +20,7 @@ internal class TreeDao(private val dataSource: DataSource) {
         }
     }
 
-    internal fun nyEdge(nodeA: NodeDto, nodeB: NodeDto) {
+    internal fun nyKant(forelder: NodeDto, barn: NodeDto) {
         @Language("PostgreSQL")
         val query =
             """
@@ -32,7 +32,7 @@ internal class TreeDao(private val dataSource: DataSource) {
                 ON CONFLICT DO NOTHING
             """
         sessionOf(dataSource).use {
-            it.run(queryOf(query, mapOf("nodeAId" to nodeA.id, "nodeBId" to nodeB.id)).asUpdate)
+            it.run(queryOf(query, mapOf("nodeAId" to forelder.id, "nodeBId" to barn.id)).asUpdate)
         }
     }
 

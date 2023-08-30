@@ -11,8 +11,8 @@ import io.ktor.server.testing.testApplication
 import no.nav.helse.spoogle.ITreeService
 import no.nav.helse.spoogle.app
 import no.nav.helse.spoogle.microsoft.AzureAD
-import no.nav.helse.spoogle.tree.Node
-import no.nav.helse.spoogle.tree.Tree
+import no.nav.helse.spoogle.tre.Node
+import no.nav.helse.spoogle.tre.Tre
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.mock.oauth2.http.objectMapper
 import no.nav.security.mock.oauth2.token.DefaultOAuth2TokenCallback
@@ -202,7 +202,7 @@ internal class RoutingTest {
 
         private fun repository() = object : ITreeService {
 
-            private val tree = let {
+            private val tre = let {
                 val fnrNode = fnrNode("123456791011")
                 val orgnrNode = orgnrNode("987654321", "123456791011")
                 val periodeNode = periodeNode("$vedtaksperiodeId")
@@ -211,10 +211,10 @@ internal class RoutingTest {
                 fnrNode forelderAv orgnrNode
                 orgnrNode forelderAv periodeNode
                 periodeNode forelderAv utbetalingNode
-                Tree.buildTree(fnrNode)
+                Tre.byggTre(fnrNode)
             }
 
-            override fun finnTre(id: String): Tree = tree
+            override fun finnTre(id: String): Tre = tre
 
             private fun fnrNode(fnr: String) = Node.fødselsnummer(fnr)
             private fun orgnrNode(orgnr: String, fnr: String) = Node.organisasjonsnummer(orgnr, fnr)

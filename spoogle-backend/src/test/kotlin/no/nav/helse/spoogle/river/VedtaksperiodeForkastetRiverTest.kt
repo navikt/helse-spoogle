@@ -4,7 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
-import no.nav.helse.spoogle.TreeService
+import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -15,19 +15,19 @@ import java.util.*
 
 internal class VedtaksperiodeForkastetRiverTest: AbstractDatabaseTest() {
     private val testRapid = TestRapid()
-    private val treeService = TreeService(dataSource)
+    private val treService = TreService(dataSource)
     private val vedtaksperiodeId = UUID.fromString("d100e098-8f77-4985-bd6b-bb067dbaaf37")
 
     init {
-        VedtaksperiodeEndretRiver(treeService, testRapid)
-        VedtaksperiodeForkastetRiver(treeService, testRapid)
+        VedtaksperiodeEndretRiver(treService, testRapid)
+        VedtaksperiodeForkastetRiver(treService, testRapid)
     }
 
     @Test
     fun `Les inn vedtaksperiode_forkastet`() {
         testRapid.sendTestMessage(vedtaksperiodeEndret)
         testRapid.sendTestMessage(vedtaksperiodeForkastet)
-        val tree = treeService.finnTre(vedtaksperiodeId.toString())
+        val tree = treService.finnTre(vedtaksperiodeId.toString())
         assertNotNull(tree)
 
         val ugyldigFra = finnUgyldigFra("987654321+12345678910", vedtaksperiodeId.toString())

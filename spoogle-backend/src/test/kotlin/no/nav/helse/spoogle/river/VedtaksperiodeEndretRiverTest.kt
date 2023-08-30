@@ -2,7 +2,7 @@ package no.nav.helse.spoogle.river
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
-import no.nav.helse.spoogle.TreeService
+import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.*
@@ -11,17 +11,17 @@ import java.util.*
 
 internal class VedtaksperiodeEndretRiverTest: AbstractDatabaseTest() {
     private val testRapid = TestRapid()
-    private val treeService = TreeService(dataSource)
+    private val treService = TreService(dataSource)
     private val vedtaksperiodeId = UUID.fromString("d100e098-8f77-4985-bd6b-bb067dbaaf37")
 
     init {
-        VedtaksperiodeEndretRiver(treeService, testRapid)
+        VedtaksperiodeEndretRiver(treService, testRapid)
     }
 
     @Test
     fun `Les inn vedtaksperiode_endret`() {
         testRapid.sendTestMessage(vedtaksperiodeEndret)
-        val tree = treeService.finnTre(vedtaksperiodeId.toString())
+        val tree = treService.finnTre(vedtaksperiodeId.toString())
         assertNotNull(tree)
 
         val json = tree?.let { jacksonObjectMapper().readTree(it.toJson()) }

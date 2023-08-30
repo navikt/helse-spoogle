@@ -2,13 +2,13 @@ package no.nav.helse.spoogle.db
 
 import kotliquery.queryOf
 import kotliquery.sessionOf
-import no.nav.helse.spoogle.tree.NodeDto
+import no.nav.helse.spoogle.tre.NodeDto
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-internal class TreeDaoTest: AbstractDatabaseTest() {
-    private val dao = TreeDao(dataSource)
+internal class TreDaoTest: AbstractDatabaseTest() {
+    private val dao = TreDao(dataSource)
 
     @Test
     fun `opprett node`() {
@@ -28,7 +28,7 @@ internal class TreeDaoTest: AbstractDatabaseTest() {
     fun `opprett edge`() {
         dao.nyNode(nodeDto("A"))
         dao.nyNode(nodeDto("B"))
-        dao.nyEdge(nodeDto("A"), nodeDto("B"))
+        dao.nyKant(nodeDto("A"), nodeDto("B"))
         assertEdge("A", "B")
     }
 
@@ -36,9 +36,9 @@ internal class TreeDaoTest: AbstractDatabaseTest() {
     fun `forsøk å opprette samme edge to ganger`() {
         dao.nyNode(nodeDto("A"))
         dao.nyNode(nodeDto("B"))
-        dao.nyEdge(nodeDto("A"), nodeDto("B"))
+        dao.nyKant(nodeDto("A"), nodeDto("B"))
         assertDoesNotThrow {
-            dao.nyEdge(nodeDto("B"), nodeDto("A"))
+            dao.nyKant(nodeDto("B"), nodeDto("A"))
         }
         assertEdge("A", "B")
     }
@@ -48,8 +48,8 @@ internal class TreeDaoTest: AbstractDatabaseTest() {
         dao.nyNode(nodeDto("A"))
         dao.nyNode(nodeDto("B"))
         dao.nyNode(nodeDto("C"))
-        dao.nyEdge(nodeDto("A"), nodeDto("B"))
-        dao.nyEdge(nodeDto("B"), nodeDto("C"))
+        dao.nyKant(nodeDto("A"), nodeDto("B"))
+        dao.nyKant(nodeDto("B"), nodeDto("C"))
         dao.invaliderRelasjonerFor(nodeDto("B"))
         assertUgyldig("A", "B")
         assertUgyldig("B", "C")

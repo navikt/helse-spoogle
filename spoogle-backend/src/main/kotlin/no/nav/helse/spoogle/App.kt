@@ -17,7 +17,7 @@ import no.nav.helse.spoogle.plugins.configureUtilities
 import no.nav.helse.spoogle.plugins.statusPages
 import no.nav.helse.spoogle.river.*
 import no.nav.helse.spoogle.routes.brukerRoutes
-import no.nav.helse.spoogle.routes.treeRoutes
+import no.nav.helse.spoogle.routes.treRoutes
 
 fun main() {
     RapidApp(System.getenv()).start()
@@ -44,7 +44,7 @@ internal class App(
 ) : RapidsConnection.StatusListener {
     private val rapidsConnection: RapidsConnection by lazy { rapidsConnection() }
     private val dataSourceBuilder = DataSourceBuilder(env)
-    private val service = TreeService(dataSourceBuilder.getDataSource())
+    private val service = TreService(dataSourceBuilder.getDataSource())
     private val azureAD = AzureAD.fromEnv(env)
 
     internal fun ktorApp(application: Application) = application.app(env, service, azureAD)
@@ -82,7 +82,7 @@ internal fun Application.app(
                 react("spoogle-frontend/dist")
                 ignoreFiles { it.endsWith(".txt") }
             }
-            treeRoutes(service)
+            treRoutes(service)
             brukerRoutes(azureAD.issuer())
         }
     }

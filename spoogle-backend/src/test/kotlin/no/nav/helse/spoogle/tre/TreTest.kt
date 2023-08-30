@@ -1,11 +1,11 @@
-package no.nav.helse.spoogle.tree
+package no.nav.helse.spoogle.tre
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-internal class TreeTest {
+internal class TreTest {
 
     @Test
     fun `to json`() {
@@ -20,8 +20,8 @@ internal class TreeTest {
         childNode1 forelderAv grandChildNode1
         childNode2 forelderAv grandChildNode2
 
-        val tree = Tree.buildTree(rootNode)
-        val json = jacksonObjectMapper().readTree(tree.toJson())
+        val tre = Tre.byggTre(rootNode)
+        val json = jacksonObjectMapper().readTree(tre.toJson())
         val expectedJson = jacksonObjectMapper().readTree(expectedJson)
 
         assertEquals(expectedJson, json)
@@ -40,10 +40,10 @@ internal class TreeTest {
         childNode1 forelderAv grandChildNode1
         childNode2 forelderAv grandChildNode2
 
-        val tree = Tree.buildTree(rootNode)
-        val path1 = tree.pathTo("periode2")
-        val path2 = tree.pathTo("periode1")
-        val path3 = tree.pathTo("orgnr1")
+        val tre = Tre.byggTre(rootNode)
+        val path1 = tre.pathTo("periode2")
+        val path2 = tre.pathTo("periode1")
+        val path3 = tre.pathTo("orgnr1")
         assertEquals(listOf("fnr", "orgnr2", "periode2"), path1)
         assertEquals(listOf("fnr", "orgnr1", "periode1"), path2)
         assertEquals(listOf("fnr", "orgnr1"), path3)
@@ -70,13 +70,13 @@ internal class TreeTest {
         orgnrNode3 forelderAv periodeNode3
         orgnrNode3 forelderAv periodeNode4
 
-        val tree1 = Tree.buildTree(fnrNode1)
-        val path1 = tree1.pathTo("periode2")
-        val path2 = tree1.pathTo("periode1")
-        val path3 = tree1.pathTo("orgnr1")
+        val tre1 = Tre.byggTre(fnrNode1)
+        val path1 = tre1.pathTo("periode2")
+        val path2 = tre1.pathTo("periode1")
+        val path3 = tre1.pathTo("orgnr1")
 
-        val tree2 = Tree.buildTree(fnrNode2)
-        val path4 = tree2.pathTo("periode4")
+        val tre2 = Tre.byggTre(fnrNode2)
+        val path4 = tre2.pathTo("periode4")
         assertEquals(listOf("fnr1", "orgnr2", "periode2"), path1)
         assertEquals(listOf("fnr1", "orgnr1", "periode1"), path2)
         assertEquals(listOf("fnr1", "orgnr1"), path3)

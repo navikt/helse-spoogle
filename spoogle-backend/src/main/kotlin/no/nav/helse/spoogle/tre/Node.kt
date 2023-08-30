@@ -1,6 +1,6 @@
-package no.nav.helse.spoogle.tree
+package no.nav.helse.spoogle.tre
 
-import no.nav.helse.spoogle.tree.Identifikatortype.*
+import no.nav.helse.spoogle.tre.Identifikatortype.*
 import org.intellij.lang.annotations.Language
 import java.time.LocalDateTime
 

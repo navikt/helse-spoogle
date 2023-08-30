@@ -4,13 +4,13 @@ import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
-import no.nav.helse.spoogle.TreeService
+import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.asUUID
-import no.nav.helse.spoogle.tree.Node
-import no.nav.helse.spoogle.tree.Tree
+import no.nav.helse.spoogle.tre.Node
+import no.nav.helse.spoogle.tre.Tre
 
 internal class VedtaksperiodeEndretRiver(
-    private val treeService: TreeService,
+    private val treService: TreService,
     rapidsConnection: RapidsConnection
 ): River.PacketListener {
 
@@ -38,7 +38,7 @@ internal class VedtaksperiodeEndretRiver(
         fødselsnummerNode forelderAv organisasjonsnummerNode
         organisasjonsnummerNode forelderAv vedtaksperiodeIdNode
 
-        val tre = Tree.buildTree(fødselsnummerNode)
-        treeService.nyGren(tre)
+        val tre = Tre.byggTre(fødselsnummerNode)
+        treService.nyGren(tre)
     }
 }
