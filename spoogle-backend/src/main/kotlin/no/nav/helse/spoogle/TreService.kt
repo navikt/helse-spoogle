@@ -37,7 +37,7 @@ internal class TreService(dataSource: DataSource): ITreeService {
     private fun nyRelasjon(forelder: NodeDto, barn: NodeDto) {
         dao.nyNode(forelder)
         dao.nyNode(barn)
-        dao.nyKant(forelder, barn)
+        dao.nySti(forelder, barn)
         barn.barn.forEach {
             nyRelasjon(barn, it)
         }

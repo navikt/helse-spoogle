@@ -39,14 +39,14 @@ internal class VedtaksperiodeForkastetRiverTest: AbstractDatabaseTest() {
         assertEquals(expectedJson, json)
     }
 
-    private fun finnUgyldigFra(parentId: String, childId: String): LocalDateTime? {
+    private fun finnUgyldigFra(forelderId: String, barnId: String): LocalDateTime? {
         @Language("PostgreSQL")
         val query = """
-           SELECT ugyldig FROM edge WHERE node_a = (SELECT node_id FROM node WHERE id = ?) AND node_b = (SELECT node_id FROM node WHERE id = ?) 
+           SELECT ugyldig FROM sti WHERE forelder = (SELECT node_id FROM node WHERE id = ?) AND barn = (SELECT node_id FROM node WHERE id = ?) 
         """
 
-        return sessionOf(dataSource).use {
-            it.run(queryOf(query, parentId, childId).map { it.localDateTimeOrNull("ugyldig") }.asSingle)
+        return sessionOf(dataSource).use { session ->
+            session.run(queryOf(query, forelderId, barnId).map { it.localDateTimeOrNull("ugyldig") }.asSingle)
         }
     }
 

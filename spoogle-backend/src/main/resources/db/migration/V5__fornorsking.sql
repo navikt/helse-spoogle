@@ -1,0 +1,3 @@
+ALTER TABLE edge RENAME COLUMN node_A TO forelder;
+ALTER TABLE edge RENAME COLUMN node_B TO barn;
+ALTER TABLE edge RENAME TO sti;
