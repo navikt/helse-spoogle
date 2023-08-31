@@ -24,6 +24,10 @@ const App = () => {
         console.log(event.data)
     }
 
+    ws.onerror = (err) => {
+        console.log(err)
+    }
+
     const [response] = useRecoilState(søkState);
 
     return (
