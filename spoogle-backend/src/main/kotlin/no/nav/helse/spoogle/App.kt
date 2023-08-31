@@ -21,6 +21,7 @@ import no.nav.helse.spoogle.plugins.statusPages
 import no.nav.helse.spoogle.river.*
 import no.nav.helse.spoogle.routes.brukerRoutes
 import no.nav.helse.spoogle.routes.treRoutes
+import org.slf4j.LoggerFactory
 
 fun main() {
     RapidApp(System.getenv()).start()
@@ -67,6 +68,8 @@ internal class App(
     }
 }
 
+private val logg = LoggerFactory.getLogger(App::class.java)
+
 internal fun Application.app(
     env: Map<String, String>,
     service: ITreeService,
@@ -89,6 +92,7 @@ internal fun Application.app(
             brukerRoutes(azureAD.issuer())
             webSocket("/echo") {
                 while (true) {
+                    logg.debug("Forsøker å sende frame over websocket")
                     send(Frame.Text("Websocket ping"))
                     delay(1000L)
                 }
