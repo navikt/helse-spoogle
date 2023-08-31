@@ -28,6 +28,16 @@ const App = () => {
         console.log(err)
     }
 
+    const sseSource = new EventSource("/sse");
+
+    sseSource.addEventListener('open', (event) => {
+        console.log("Sse connection opened")
+    })
+
+    sseSource.addEventListener('message', (event) => {
+        console.log(event)
+    })
+
     const [response] = useRecoilState(søkState);
 
     return (
