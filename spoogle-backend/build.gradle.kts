@@ -2,14 +2,14 @@ import java.nio.file.Paths
 
 private val mainClass = "no.nav.helse.spoogle.AppKt"
 
-private val rapidsAndRiversVersion = "2023050308441683096263.f5a276d7bd28"
+private val rapidsAndRiversVersion = "2024010209171704183456.6d035b91ffb4"
 private val junitVersion = "5.9.0"
 private val flywayVersion = "9.3.0"
 private val hikariVersion = "5.0.1"
 private val kotliqueryVersion = "1.9.0"
 private val postgresqlVersion = "42.5.1"
 private val testcontainersPostgresqlVersion = "1.17.3"
-private val ktorVersion = "2.3.3"
+private val ktorVersion = "2.3.7"
 private val micrometerVersion = "1.9.4"
 
 
@@ -51,7 +51,7 @@ dependencies {
     implementation("io.ktor:ktor-client-apache-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-websockets-jvm:$ktorVersion")
 
-    testImplementation("no.nav.security:mock-oauth2-server:0.5.8")
+    testImplementation("no.nav.security:mock-oauth2-server:2.1.1")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.testcontainers:postgresql:$testcontainersPostgresqlVersion")
@@ -64,11 +64,11 @@ tasks {
     }
 
     compileKotlin {
-        kotlinOptions.jvmTarget = "17"
+        kotlinOptions.jvmTarget = "21"
     }
 
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "17"
+        kotlinOptions.jvmTarget = "21"
     }
 
     jar {
