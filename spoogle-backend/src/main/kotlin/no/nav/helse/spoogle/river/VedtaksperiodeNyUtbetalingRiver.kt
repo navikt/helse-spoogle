@@ -4,15 +4,13 @@ import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
-import no.nav.helse.spoogle.TreeService
+import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.asUUID
-import no.nav.helse.spoogle.tree.Identifikatortype.UTBETALING_ID
-import no.nav.helse.spoogle.tree.Identifikatortype.VEDTAKSPERIODE_ID
-import no.nav.helse.spoogle.tree.Node
-import no.nav.helse.spoogle.tree.Tree
+import no.nav.helse.spoogle.tre.Node
+import no.nav.helse.spoogle.tre.Tre
 
 internal class VedtaksperiodeNyUtbetalingRiver(
-    private val treeService: TreeService,
+    private val treService: TreService,
     rapidsConnection: RapidsConnection
 ): River.PacketListener {
     init {
@@ -28,12 +26,12 @@ internal class VedtaksperiodeNyUtbetalingRiver(
         val utbetalingId = packet["utbetalingId"].asUUID()
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
 
-        val vedtaksperiodeIdNode = Node(vedtaksperiodeId.toString(), VEDTAKSPERIODE_ID)
-        val utbetalingIdNode = Node(utbetalingId.toString(), UTBETALING_ID)
+        val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())
+        val utbetalingIdNode = Node.utbetalingId(utbetalingId.toString())
 
-        vedtaksperiodeIdNode parentOf utbetalingIdNode
+        utbetalingIdNode barnAv vedtaksperiodeIdNode
 
-        val tre = Tree.buildTree(vedtaksperiodeIdNode)
-        treeService.nyGren(tre)
+        val tre = Tre.byggTre(vedtaksperiodeIdNode)
+        treService.nyGren(tre)
     }
 }

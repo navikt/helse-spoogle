@@ -4,14 +4,13 @@ import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
-import no.nav.helse.spoogle.TreeService
+import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.asUUID
-import no.nav.helse.spoogle.tree.Identifikatortype.*
-import no.nav.helse.spoogle.tree.Node
-import no.nav.helse.spoogle.tree.Tree
+import no.nav.helse.spoogle.tre.Node
+import no.nav.helse.spoogle.tre.Tre
 
 internal class VedtaksperiodeEndretRiver(
-    private val treeService: TreeService,
+    private val treService: TreService,
     rapidsConnection: RapidsConnection
 ): River.PacketListener {
 
@@ -30,16 +29,16 @@ internal class VedtaksperiodeEndretRiver(
         val organisasjonsnummer = packet["organisasjonsnummer"].asText()
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
 
-        val fødselsnummerNode = Node(fødselsnummer, FØDSELSNUMMER)
-        val aktørIdNode = Node(aktørId, AKTØR_ID)
-        val organisasjonsnummerNode = Node(organisasjonsnummer, ORGANISASJONSNUMMER)
-        val vedtaksperiodeIdNode = Node(vedtaksperiodeId.toString(), VEDTAKSPERIODE_ID)
+        val fødselsnummerNode = Node.fødselsnummer(fødselsnummer)
+        val aktørIdNode = Node.aktørId(aktørId)
+        val organisasjonsnummerNode = Node.organisasjonsnummer(organisasjonsnummer, fødselsnummer)
+        val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())
 
-        fødselsnummerNode parentOf aktørIdNode
-        fødselsnummerNode parentOf organisasjonsnummerNode
-        organisasjonsnummerNode parentOf vedtaksperiodeIdNode
+        aktørIdNode barnAv fødselsnummerNode
+        organisasjonsnummerNode barnAv fødselsnummerNode
+        vedtaksperiodeIdNode barnAv organisasjonsnummerNode
 
-        val tre = Tree.buildTree(fødselsnummerNode)
-        treeService.nyGren(tre)
+        val tre = Tre.byggTre(fødselsnummerNode)
+        treService.nyGren(tre)
     }
 }

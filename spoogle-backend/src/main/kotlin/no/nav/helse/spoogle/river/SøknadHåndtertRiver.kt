@@ -4,15 +4,13 @@ import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
-import no.nav.helse.spoogle.TreeService
+import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.asUUID
-import no.nav.helse.spoogle.tree.Identifikatortype.SØKNAD_ID
-import no.nav.helse.spoogle.tree.Identifikatortype.VEDTAKSPERIODE_ID
-import no.nav.helse.spoogle.tree.Node
-import no.nav.helse.spoogle.tree.Tree
+import no.nav.helse.spoogle.tre.Node
+import no.nav.helse.spoogle.tre.Tre
 
 internal class SøknadHåndtertRiver(
-    private val treeService: TreeService,
+    private val treService: TreService,
     rapidsConnection: RapidsConnection
 ): River.PacketListener {
     init {
@@ -27,11 +25,11 @@ internal class SøknadHåndtertRiver(
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
         val søknadId = packet["søknadId"].asUUID()
-        val vedtaksperiodeIdNode = Node(vedtaksperiodeId.toString(), VEDTAKSPERIODE_ID)
-        val søknadIdNode = Node(søknadId.toString(), SØKNAD_ID)
+        val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())
+        val søknadIdNode = Node.søknadId(søknadId.toString())
 
-        vedtaksperiodeIdNode parentOf søknadIdNode
+        søknadIdNode barnAv vedtaksperiodeIdNode
 
-        treeService.nyGren(Tree.buildTree(vedtaksperiodeIdNode))
+        treService.nyGren(Tre.byggTre(vedtaksperiodeIdNode))
     }
 }

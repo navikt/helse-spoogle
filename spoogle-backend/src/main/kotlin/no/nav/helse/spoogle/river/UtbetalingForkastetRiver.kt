@@ -4,13 +4,12 @@ import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
-import no.nav.helse.spoogle.TreeService
+import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.asUUID
-import no.nav.helse.spoogle.tree.Identifikatortype.UTBETALING_ID
-import no.nav.helse.spoogle.tree.Node
+import no.nav.helse.spoogle.tre.Node
 
 internal class UtbetalingForkastetRiver(
-    private val treeService: TreeService,
+    private val treService: TreService,
     rapidsConnection: RapidsConnection
 ): River.PacketListener {
     init {
@@ -25,8 +24,8 @@ internal class UtbetalingForkastetRiver(
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         val utbetalingId = packet["utbetalingId"].asUUID()
-        val utbetalingIdNode = Node(utbetalingId.toString(), UTBETALING_ID)
+        val utbetalingIdNode = Node.utbetalingId(utbetalingId.toString())
 
-        treeService.invaliderRelasjonerFor(utbetalingIdNode)
+        treService.invaliderRelasjonerFor(utbetalingIdNode)
     }
 }

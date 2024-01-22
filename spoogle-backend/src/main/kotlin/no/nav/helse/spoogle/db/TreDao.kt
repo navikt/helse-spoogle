@@ -2,12 +2,15 @@ package no.nav.helse.spoogle.db
 
 import kotliquery.queryOf
 import kotliquery.sessionOf
-import no.nav.helse.spoogle.tree.*
+import no.nav.helse.spoogle.tre.Identifikatortype
+import no.nav.helse.spoogle.tre.Identifikatortype.*
+import no.nav.helse.spoogle.tre.Node
+import no.nav.helse.spoogle.tre.NodeDto
 import org.intellij.lang.annotations.Language
 import java.time.LocalDateTime
 import javax.sql.DataSource
 
-internal class TreeDao(private val dataSource: DataSource) {
+internal class TreDao(private val dataSource: DataSource) {
 
     internal fun nyNode(node: NodeDto) {
         @Language("PostgreSQL")
@@ -17,11 +20,11 @@ internal class TreeDao(private val dataSource: DataSource) {
         }
     }
 
-    internal fun nyEdge(nodeA: NodeDto, nodeB: NodeDto) {
+    internal fun nySti(forelder: NodeDto, barn: NodeDto) {
         @Language("PostgreSQL")
         val query =
             """
-                INSERT INTO edge (node_A, node_B) 
+                INSERT INTO sti (forelder, barn) 
                 VALUES (
                     (SELECT node_id FROM node WHERE id = :nodeAId), 
                     (SELECT node_id FROM node WHERE id = :nodeBId)
@@ -29,17 +32,17 @@ internal class TreeDao(private val dataSource: DataSource) {
                 ON CONFLICT DO NOTHING
             """
         sessionOf(dataSource).use {
-            it.run(queryOf(query, mapOf("nodeAId" to nodeA.id, "nodeBId" to nodeB.id)).asUpdate)
+            it.run(queryOf(query, mapOf("nodeAId" to forelder.id, "nodeBId" to barn.id)).asUpdate)
         }
     }
 
     internal fun invaliderRelasjonerFor(node: NodeDto) {
         @Language("PostgreSQL")
         val query = """
-           UPDATE edge
+           UPDATE sti
            SET ugyldig = now()
-           WHERE edge.node_a = (SELECT node_id FROM node WHERE id = :node AND id_type = :node_type) OR
-           edge.node_b = (SELECT node_id FROM node WHERE id = :node AND id_type = :node_type)
+           WHERE forelder = (SELECT node_id FROM node WHERE id = :node AND id_type = :node_type) OR
+           barn = (SELECT node_id FROM node WHERE id = :node AND id_type = :node_type)
         """
 
         sessionOf(dataSource).use {
@@ -60,7 +63,7 @@ internal class TreeDao(private val dataSource: DataSource) {
 
         @Language("PostgreSQL")
         val query = """
-            WITH RECURSIVE traverse(parent_id, parent_type, child_node_id, child_id, child_type, ugyldig_fra) AS (
+            WITH RECURSIVE traverse(forelder_id, forelder_type, barn_node_id, barn_id, barn_type, ugyldig_fra) AS (
                 SELECT
                     null::varchar, null::varchar, node_id, id, id_type, null::timestamp
                 FROM
@@ -69,21 +72,21 @@ internal class TreeDao(private val dataSource: DataSource) {
                         node.id = :fodselsnummer AND id_type = 'FØDSELSNUMMER'
                 UNION ALL
                 SELECT
-                    traverse.child_id,
-                    traverse.child_type,
+                    traverse.barn_id,
+                    traverse.barn_type,
                     node.node_id,
                     node.id,
                     node.id_type,
-                    edge.ugyldig
+                    sti.ugyldig
                 FROM traverse
-                    JOIN edge ON traverse.child_node_id = node_a
-                    JOIN node ON node_b = node.node_id
+                    JOIN sti ON traverse.barn_node_id = sti.forelder
+                    JOIN node ON sti.barn = node.node_id
             )
             SELECT
-                traverse.parent_id, traverse.parent_type, traverse.child_id, traverse.child_type, traverse.ugyldig_fra
+                traverse.forelder_id, traverse.forelder_type, traverse.barn_id, traverse.barn_type, traverse.ugyldig_fra
             FROM traverse
-            GROUP BY traverse.parent_id, traverse.parent_type, traverse.child_id, traverse.child_type, traverse.child_node_id, traverse.ugyldig_fra
-            ORDER BY traverse.child_node_id ASC;
+            GROUP BY traverse.forelder_id, traverse.forelder_type, traverse.barn_id, traverse.barn_type, traverse.barn_node_id, traverse.ugyldig_fra
+            ORDER BY traverse.barn_node_id ASC;
         """
 
         val uniqueNodes = mutableMapOf<Pair<String, String>, Node>()
@@ -91,18 +94,29 @@ internal class TreeDao(private val dataSource: DataSource) {
         return sessionOf(dataSource).use { session ->
             session.run(
                 queryOf(query, mapOf("fodselsnummer" to fødselsnummer)).map<Triple<Node, Node, LocalDateTime?>?> {
-                    val parentId = it.stringOrNull("parent_id") ?: return@map null
-                    val parentType = it.stringOrNull("parent_type") ?: return@map null
-                    val childId = it.string("child_id")
-                    val childType = it.string("child_type")
+                    val parentId = it.stringOrNull("forelder_id") ?: return@map null
+                    val parentType = it.stringOrNull("forelder_type") ?: return@map null
+                    val childId = it.string("barn_id")
+                    val childType = it.string("barn_type")
                     val ugyldigFra = it.localDateTimeOrNull("ugyldig_fra")
-                    val parentNode = uniqueNodes.getOrPut(parentId to parentType) { Node(parentId, enumValueOf(parentType)) }
-                    val childNode = uniqueNodes.getOrPut(childId to childType) { Node(childId, enumValueOf(childType)) }
+                    val parentNode = uniqueNodes.getOrPut(parentId to parentType) { toNode(parentId, parentType, fødselsnummer) }
+                    val childNode = uniqueNodes.getOrPut(childId to childType) { toNode(childId, childType, fødselsnummer) }
                     Triple(parentNode, childNode, ugyldigFra)
                 }.asList
             ).filterNotNull()
         }
     }
+
+    private fun toNode(id: String, type: String, fødselsnummer: String) =
+        when (enumValueOf<Identifikatortype>(type)) {
+            ORGANISASJONSNUMMER -> Node.organisasjonsnummer(id.split("+").first(), fødselsnummer)
+            FØDSELSNUMMER -> Node.fødselsnummer(id)
+            AKTØR_ID -> Node.aktørId(id)
+            VEDTAKSPERIODE_ID -> Node.vedtaksperiodeId(id)
+            UTBETALING_ID -> Node.utbetalingId(id)
+            SØKNAD_ID -> Node.søknadId(id)
+            INNTEKTSMELDING_ID -> Node.inntektsmeldingId(id)
+        }
 
     private fun finnFødselsnummer(id: String): String? {
         @Language("PostgreSQL")
@@ -123,8 +137,8 @@ internal class TreeDao(private val dataSource: DataSource) {
                         node.id_type
                     FROM
                         node
-                            JOIN edge ON node_a = node_id
-                            INNER JOIN find_root_node ON find_root_node.node_id = edge.node_b
+                            JOIN sti ON sti.forelder = node_id
+                            INNER JOIN find_root_node ON find_root_node.node_id = sti.barn
                 )
                 SELECT id FROM find_root_node WHERE id_type = 'FØDSELSNUMMER'
             )

@@ -11,9 +11,8 @@ import io.ktor.server.testing.testApplication
 import no.nav.helse.spoogle.ITreeService
 import no.nav.helse.spoogle.app
 import no.nav.helse.spoogle.microsoft.AzureAD
-import no.nav.helse.spoogle.tree.Identifikatortype
-import no.nav.helse.spoogle.tree.Node
-import no.nav.helse.spoogle.tree.Tree
+import no.nav.helse.spoogle.tre.Node
+import no.nav.helse.spoogle.tre.Tre
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import no.nav.security.mock.oauth2.http.objectMapper
 import no.nav.security.mock.oauth2.token.DefaultOAuth2TokenCallback
@@ -146,8 +145,13 @@ internal class RoutingTest {
     }
 
     @Language("JSON")
-    private val expectedJson = """
-    {
+    private val expectedJson = """{
+    "path": [
+        "123456791011",
+        "987654321",
+        "$vedtaksperiodeId"
+    ],
+    "tree": {
         "id": "123456791011",
         "type": "FØDSELSNUMMER",
         "children": [
@@ -174,6 +178,7 @@ internal class RoutingTest {
         ],
         "ugyldig_fra": null
     }
+}
     """
 
     private companion object {
@@ -197,24 +202,24 @@ internal class RoutingTest {
 
         private fun repository() = object : ITreeService {
 
-            private val tree = let {
+            private val tre = let {
                 val fnrNode = fnrNode("123456791011")
-                val orgnrNode = orgnrNode("987654321")
+                val orgnrNode = orgnrNode("987654321", "123456791011")
                 val periodeNode = periodeNode("$vedtaksperiodeId")
                 val utbetalingNode = utbetalingNode("$utbetalingId")
 
-                fnrNode parentOf orgnrNode
-                orgnrNode parentOf periodeNode
-                periodeNode parentOf utbetalingNode
-                Tree.buildTree(fnrNode)
+                orgnrNode barnAv fnrNode
+                periodeNode barnAv orgnrNode
+                utbetalingNode barnAv periodeNode
+                Tre.byggTre(fnrNode)
             }
 
-            override fun finnTre(id: String): Tree = tree
+            override fun finnTre(id: String): Tre = tre
 
-            private fun fnrNode(fnr: String) = Node(fnr, Identifikatortype.FØDSELSNUMMER)
-            private fun orgnrNode(orgnr: String) = Node(orgnr, Identifikatortype.ORGANISASJONSNUMMER)
-            private fun periodeNode(id: String) = Node(id, Identifikatortype.VEDTAKSPERIODE_ID)
-            private fun utbetalingNode(id: String) = Node(id, Identifikatortype.UTBETALING_ID)
+            private fun fnrNode(fnr: String) = Node.fødselsnummer(fnr)
+            private fun orgnrNode(orgnr: String, fnr: String) = Node.organisasjonsnummer(orgnr, fnr)
+            private fun periodeNode(id: String) = Node.vedtaksperiodeId(id)
+            private fun utbetalingNode(id: String) = Node.utbetalingId(id)
         }
 
         @BeforeAll

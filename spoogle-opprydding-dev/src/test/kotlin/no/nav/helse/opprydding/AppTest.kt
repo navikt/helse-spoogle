@@ -68,7 +68,7 @@ internal class AppTest: AbstractDatabaseTest() {
 
     private fun assertEdgeAntall(nodeId: Long?, forventetAntall: Int) {
         @Language("PostgreSQL")
-        val query = """SELECT COUNT(1) FROM edge WHERE node_a = ?"""
+        val query = """SELECT COUNT(1) FROM sti WHERE forelder = ?"""
         val antall = sessionOf(dataSource).use { session ->
             session.run(queryOf(query, nodeId).map { it.int(1) }.asSingle)
         }

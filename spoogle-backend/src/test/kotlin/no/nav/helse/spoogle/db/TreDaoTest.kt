@@ -2,13 +2,13 @@ package no.nav.helse.spoogle.db
 
 import kotliquery.queryOf
 import kotliquery.sessionOf
-import no.nav.helse.spoogle.tree.NodeDto
+import no.nav.helse.spoogle.tre.NodeDto
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-internal class TreeDaoTest: AbstractDatabaseTest() {
-    private val dao = TreeDao(dataSource)
+internal class TreDaoTest: AbstractDatabaseTest() {
+    private val dao = TreDao(dataSource)
 
     @Test
     fun `opprett node`() {
@@ -28,19 +28,19 @@ internal class TreeDaoTest: AbstractDatabaseTest() {
     fun `opprett edge`() {
         dao.nyNode(nodeDto("A"))
         dao.nyNode(nodeDto("B"))
-        dao.nyEdge(nodeDto("A"), nodeDto("B"))
-        assertEdge("A", "B")
+        dao.nySti(nodeDto("A"), nodeDto("B"))
+        assertSti("A", "B")
     }
 
     @Test
     fun `forsøk å opprette samme edge to ganger`() {
         dao.nyNode(nodeDto("A"))
         dao.nyNode(nodeDto("B"))
-        dao.nyEdge(nodeDto("A"), nodeDto("B"))
+        dao.nySti(nodeDto("A"), nodeDto("B"))
         assertDoesNotThrow {
-            dao.nyEdge(nodeDto("B"), nodeDto("A"))
+            dao.nySti(nodeDto("B"), nodeDto("A"))
         }
-        assertEdge("A", "B")
+        assertSti("A", "B")
     }
 
     @Test
@@ -48,24 +48,24 @@ internal class TreeDaoTest: AbstractDatabaseTest() {
         dao.nyNode(nodeDto("A"))
         dao.nyNode(nodeDto("B"))
         dao.nyNode(nodeDto("C"))
-        dao.nyEdge(nodeDto("A"), nodeDto("B"))
-        dao.nyEdge(nodeDto("B"), nodeDto("C"))
+        dao.nySti(nodeDto("A"), nodeDto("B"))
+        dao.nySti(nodeDto("B"), nodeDto("C"))
         dao.invaliderRelasjonerFor(nodeDto("B"))
         assertUgyldig("A", "B")
         assertUgyldig("B", "C")
     }
 
-    private fun assertUgyldig(idNodeA: String, idNodeB: String) {
+    private fun assertUgyldig(forelderId: String, barnId: String) {
         @Language("PostgreSQL")
         val query = """
-             SELECT ugyldig FROM edge 
+             SELECT ugyldig FROM sti 
              WHERE 
-                node_a = (SELECT node_id FROM node WHERE id = ?) AND
-                node_b = (SELECT node_id FROM node WHERE id = ?)
+                forelder = (SELECT node_id FROM node WHERE id = ?) AND
+                barn = (SELECT node_id FROM node WHERE id = ?)
         """
 
         val ugyldig = sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, idNodeA, idNodeB).map { it.localDateTimeOrNull("ugyldig") }.asSingle)
+            session.run(queryOf(query, forelderId, barnId).map { it.localDateTimeOrNull("ugyldig") }.asSingle)
         }
 
         assertNotNull(ugyldig)
@@ -80,11 +80,11 @@ internal class TreeDaoTest: AbstractDatabaseTest() {
         assertEquals(1, antall)
     }
 
-    private fun assertEdge(idNodeA: String, idNodeB: String) {
+    private fun assertSti(forelderId: String, barnId: String) {
         @Language("PostgreSQL")
-        val query = "SELECT COUNT(1) FROM edge WHERE node_A = (SELECT node_id FROM node WHERE id = ?) AND node_B = (SELECT node_id FROM node WHERE id = ?)"
+        val query = "SELECT COUNT(1) FROM sti WHERE forelder = (SELECT node_id FROM node WHERE id = ?) AND barn = (SELECT node_id FROM node WHERE id = ?)"
         val antall = sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, idNodeA, idNodeB).map { it.int(1) }.asSingle)
+            session.run(queryOf(query, forelderId, barnId).map { it.int(1) }.asSingle)
         }
         assertEquals(1, antall)
     }

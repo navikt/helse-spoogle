@@ -1,4 +1,4 @@
-package no.nav.helse.spoogle.tree
+package no.nav.helse.spoogle.tre
 
 enum class Identifikatortype {
     FØDSELSNUMMER,

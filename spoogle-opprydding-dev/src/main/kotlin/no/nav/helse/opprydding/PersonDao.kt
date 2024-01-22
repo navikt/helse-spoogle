@@ -8,13 +8,13 @@ import javax.sql.DataSource
 internal class PersonDao(private val dataSource: DataSource) {
     internal fun slett(fødselsnummer: String) {
         val nodeId = finnNodeId(fødselsnummer) ?: return
-        slettEdge(nodeId)
+        slettSti(nodeId)
         slettNode(nodeId)
     }
 
-    private fun slettEdge(nodeId: Long) {
+    private fun slettSti(nodeId: Long) {
         @Language("PostgreSQL")
-        val query = """ DELETE FROM edge WHERE node_a = ? """
+        val query = """ DELETE FROM sti WHERE forelder = ? """
         sessionOf(dataSource).use {
             it.run(queryOf(query, nodeId).asExecute)
         }

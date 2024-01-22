@@ -4,32 +4,33 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotliquery.queryOf
 import kotliquery.sessionOf
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
-import no.nav.helse.spoogle.TreeService
+import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*
 
 internal class VedtaksperiodeForkastetRiverTest: AbstractDatabaseTest() {
     private val testRapid = TestRapid()
-    private val treeService = TreeService(dataSource)
+    private val treService = TreService(dataSource)
     private val vedtaksperiodeId = UUID.fromString("d100e098-8f77-4985-bd6b-bb067dbaaf37")
 
     init {
-        VedtaksperiodeEndretRiver(treeService, testRapid)
-        VedtaksperiodeForkastetRiver(treeService, testRapid)
+        VedtaksperiodeEndretRiver(treService, testRapid)
+        VedtaksperiodeForkastetRiver(treService, testRapid)
     }
 
     @Test
     fun `Les inn vedtaksperiode_forkastet`() {
         testRapid.sendTestMessage(vedtaksperiodeEndret)
         testRapid.sendTestMessage(vedtaksperiodeForkastet)
-        val tree = treeService.finnTre(vedtaksperiodeId.toString())
+        val tree = treService.finnTre(vedtaksperiodeId.toString())
         assertNotNull(tree)
 
-        val ugyldigFra = finnUgyldigFra("987654321", vedtaksperiodeId.toString())
+        val ugyldigFra = finnUgyldigFra("987654321+12345678910", vedtaksperiodeId.toString())
         assertNotNull(ugyldigFra)
 
         val json = tree?.let { jacksonObjectMapper().readTree(it.toJson()) }
@@ -38,14 +39,14 @@ internal class VedtaksperiodeForkastetRiverTest: AbstractDatabaseTest() {
         assertEquals(expectedJson, json)
     }
 
-    private fun finnUgyldigFra(parentId: String, childId: String): LocalDateTime? {
+    private fun finnUgyldigFra(forelderId: String, barnId: String): LocalDateTime? {
         @Language("PostgreSQL")
         val query = """
-           SELECT ugyldig FROM edge WHERE node_a = (SELECT node_id FROM node WHERE id = ?) AND node_b = (SELECT node_id FROM node WHERE id = ?) 
+           SELECT ugyldig FROM sti WHERE forelder = (SELECT node_id FROM node WHERE id = ?) AND barn = (SELECT node_id FROM node WHERE id = ?) 
         """
 
-        return sessionOf(dataSource).use {
-            it.run(queryOf(query, parentId, childId).map { it.localDateTimeOrNull("ugyldig") }.asSingle)
+        return sessionOf(dataSource).use { session ->
+            session.run(queryOf(query, forelderId, barnId).map { it.localDateTimeOrNull("ugyldig") }.asSingle)
         }
     }
 

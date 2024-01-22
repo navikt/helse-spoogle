@@ -1,17 +1,17 @@
 import { Bruker, Node } from './types';
 
-export const søk = (id: string) =>
+export interface TreeResponse {
+    path: string[];
+    tree: Node;
+}
+export const søk = (id: string): Promise<TreeResponse | null> =>
     fetch(`/api/sok/${id}`)
         .then(async (response) => {
-            return response.json();
+            if (!response.ok) return null
+            return await response.json();
         })
-        .then((data) => !isObjectEmpty(data) ? data as Node : undefined)
-        .catch(() => undefined)
-
-const isObjectEmpty = (objectName: any) => {
-    return Object.keys(objectName).length === 0
-}
-
+        .then((data) => data as TreeResponse)
+        .catch(() => null)
 export const fetchBruker = () =>
     fetch('/api/bruker', {})
         .then((response) => response.json())
