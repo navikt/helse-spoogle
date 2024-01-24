@@ -60,8 +60,8 @@ internal class TreDaoTest: AbstractDatabaseTest() {
         val query = """
              SELECT ugyldig FROM sti 
              WHERE 
-                forelder = (SELECT node_id FROM node WHERE id = ?) AND
-                barn = (SELECT node_id FROM node WHERE id = ?)
+                forelder = (SELECT key FROM node WHERE id = ?) AND
+                barn = (SELECT key FROM node WHERE id = ?)
         """
 
         val ugyldig = sessionOf(dataSource).use { session ->
@@ -82,7 +82,7 @@ internal class TreDaoTest: AbstractDatabaseTest() {
 
     private fun assertSti(forelderId: String, barnId: String) {
         @Language("PostgreSQL")
-        val query = "SELECT COUNT(1) FROM sti WHERE forelder = (SELECT node_id FROM node WHERE id = ?) AND barn = (SELECT node_id FROM node WHERE id = ?)"
+        val query = "SELECT COUNT(1) FROM sti WHERE forelder = (SELECT key FROM node WHERE id = ?) AND barn = (SELECT key FROM node WHERE id = ?)"
         val antall = sessionOf(dataSource).use { session ->
             session.run(queryOf(query, forelderId, barnId).map { it.int(1) }.asSingle)
         }

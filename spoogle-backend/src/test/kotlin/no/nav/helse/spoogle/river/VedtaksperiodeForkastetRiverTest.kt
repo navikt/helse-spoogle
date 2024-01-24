@@ -42,7 +42,7 @@ internal class VedtaksperiodeForkastetRiverTest: AbstractDatabaseTest() {
     private fun finnUgyldigFra(forelderId: String, barnId: String): LocalDateTime? {
         @Language("PostgreSQL")
         val query = """
-           SELECT ugyldig FROM sti WHERE forelder = (SELECT node_id FROM node WHERE id = ?) AND barn = (SELECT node_id FROM node WHERE id = ?) 
+           SELECT ugyldig FROM sti WHERE forelder = (SELECT key FROM node WHERE id = ?) AND barn = (SELECT key FROM node WHERE id = ?) 
         """
 
         return sessionOf(dataSource).use { session ->

@@ -6,6 +6,7 @@ import no.nav.helse.spoogle.tre.Identifikatortype
 import no.nav.helse.spoogle.tre.Identifikatortype.*
 import no.nav.helse.spoogle.tre.Node
 import no.nav.helse.spoogle.tre.NodeDto
+import no.nav.helse.spoogle.tre.Relasjon
 import org.intellij.lang.annotations.Language
 import java.time.LocalDateTime
 import javax.sql.DataSource
@@ -26,8 +27,8 @@ internal class TreDao(private val dataSource: DataSource) {
             """
                 INSERT INTO sti (forelder, barn) 
                 VALUES (
-                    (SELECT node_id FROM node WHERE id = :nodeAId), 
-                    (SELECT node_id FROM node WHERE id = :nodeBId)
+                    (SELECT key FROM node WHERE id = :nodeAId), 
+                    (SELECT key FROM node WHERE id = :nodeBId)
                 ) 
                 ON CONFLICT DO NOTHING
             """
@@ -41,8 +42,8 @@ internal class TreDao(private val dataSource: DataSource) {
         val query = """
            UPDATE sti
            SET ugyldig = now()
-           WHERE forelder = (SELECT node_id FROM node WHERE id = :node AND id_type = :node_type) OR
-           barn = (SELECT node_id FROM node WHERE id = :node AND id_type = :node_type)
+           WHERE forelder = (SELECT key FROM node WHERE id = :id AND id_type = :node_type) OR
+           barn = (SELECT key FROM node WHERE id = :id AND id_type = :node_type)
         """
 
         sessionOf(dataSource).use {
@@ -50,7 +51,7 @@ internal class TreDao(private val dataSource: DataSource) {
                 queryOf(
                     query,
                     mapOf(
-                        "node" to node.id,
+                        "id" to node.id,
                         "node_type" to node.type,
                     )
                 ).asUpdate
@@ -58,50 +59,50 @@ internal class TreDao(private val dataSource: DataSource) {
         }
     }
 
-    internal fun finnTre(id: String): List<Triple<Node, Node, LocalDateTime?>> {
+    internal fun finnTre(id: String): List<Relasjon> {
         val fødselsnummer = finnFødselsnummer(id) ?: return emptyList()
 
         @Language("PostgreSQL")
         val query = """
-            WITH RECURSIVE traverse(forelder_id, forelder_type, barn_node_id, barn_id, barn_type, ugyldig_fra) AS (
+            WITH RECURSIVE alle_noder(forelder_key, forelder_type, barn_key, barn_id, barn_type, ugyldig_fra) AS (
                 SELECT
-                    null::varchar, null::varchar, node_id, id, id_type, null::timestamp
+                    null::varchar, null::varchar, key, id, id_type, null::timestamp
                 FROM
                     node
                 WHERE
                         node.id = :fodselsnummer AND id_type = 'FØDSELSNUMMER'
                 UNION ALL
                 SELECT
-                    traverse.barn_id,
-                    traverse.barn_type,
-                    node.node_id,
+                    alle_noder.barn_id,
+                    alle_noder.barn_type,
+                    node.key,
                     node.id,
                     node.id_type,
                     sti.ugyldig
-                FROM traverse
-                    JOIN sti ON traverse.barn_node_id = sti.forelder
-                    JOIN node ON sti.barn = node.node_id
+                FROM alle_noder
+                    JOIN sti ON alle_noder.barn_key = sti.forelder
+                    JOIN node ON sti.barn = node.key
             )
             SELECT
-                traverse.forelder_id, traverse.forelder_type, traverse.barn_id, traverse.barn_type, traverse.ugyldig_fra
-            FROM traverse
-            GROUP BY traverse.forelder_id, traverse.forelder_type, traverse.barn_id, traverse.barn_type, traverse.barn_node_id, traverse.ugyldig_fra
-            ORDER BY traverse.barn_node_id ASC;
+                alle_noder.forelder_key, alle_noder.forelder_type, alle_noder.barn_id, alle_noder.barn_type, alle_noder.ugyldig_fra
+            FROM alle_noder
+            GROUP BY alle_noder.forelder_key, alle_noder.forelder_type, alle_noder.barn_id, alle_noder.barn_type, alle_noder.barn_key, alle_noder.ugyldig_fra
+            ORDER BY alle_noder.barn_key ASC;
         """
 
         val uniqueNodes = mutableMapOf<Pair<String, String>, Node>()
 
         return sessionOf(dataSource).use { session ->
             session.run(
-                queryOf(query, mapOf("fodselsnummer" to fødselsnummer)).map<Triple<Node, Node, LocalDateTime?>?> {
-                    val parentId = it.stringOrNull("forelder_id") ?: return@map null
+                queryOf(query, mapOf("fodselsnummer" to fødselsnummer)).map<Relasjon?> {
+                    val parentId = it.stringOrNull("forelder_key") ?: return@map null
                     val parentType = it.stringOrNull("forelder_type") ?: return@map null
                     val childId = it.string("barn_id")
                     val childType = it.string("barn_type")
                     val ugyldigFra = it.localDateTimeOrNull("ugyldig_fra")
                     val parentNode = uniqueNodes.getOrPut(parentId to parentType) { toNode(parentId, parentType, fødselsnummer) }
                     val childNode = uniqueNodes.getOrPut(childId to childType) { toNode(childId, childType, fødselsnummer) }
-                    Triple(parentNode, childNode, ugyldigFra)
+                    Relasjon(parentNode, childNode, ugyldigFra)
                 }.asList
             ).filterNotNull()
         }
@@ -124,7 +125,7 @@ internal class TreDao(private val dataSource: DataSource) {
             WITH fødselsnummer(fødselsnummer) AS (
                 WITH RECURSIVE find_root_node(node_id, id, id_type) AS (
                     SELECT
-                        node_id,
+                        key,
                         id,
                         id_type
                     FROM
@@ -132,12 +133,12 @@ internal class TreDao(private val dataSource: DataSource) {
                     WHERE node.id = :id
                     UNION
                     SELECT
-                        node.node_id,
+                        node.key,
                         node.id,
                         node.id_type
                     FROM
                         node
-                            JOIN sti ON sti.forelder = node_id
+                            JOIN sti ON sti.forelder = key
                             INNER JOIN find_root_node ON find_root_node.node_id = sti.barn
                 )
                 SELECT id FROM find_root_node WHERE id_type = 'FØDSELSNUMMER'

@@ -4,6 +4,7 @@ import no.nav.helse.spoogle.db.TreDao
 import no.nav.helse.spoogle.tre.Node
 import no.nav.helse.spoogle.tre.Tre
 import no.nav.helse.spoogle.tre.NodeDto
+import no.nav.helse.spoogle.tre.Relasjon.Companion.byggTre
 import javax.sql.DataSource
 
 internal interface ITreeService {
@@ -14,13 +15,8 @@ internal class TreService(dataSource: DataSource): ITreeService {
     private val dao = TreDao(dataSource)
 
     override fun finnTre(id: String): Tre? {
-        val noder = dao.finnTre(id)
-        noder.forEach { (forelder, barn, ugyldigFra) ->
-            barn barnAv forelder
-            if (ugyldigFra != null) forelder.ugyldigRelasjon(barn, ugyldigFra)
-        }
-        val (rotnode, _) = noder.find { !it.first.harForelder() } ?: return null
-        return Tre.byggTre(rotnode)
+        val relasjoner = dao.finnTre(id)
+        return relasjoner.byggTre()
     }
 
     internal fun nyGren(tre: Tre) {

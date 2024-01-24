@@ -3,7 +3,7 @@ INSERT INTO node(id, id_type) VALUES ('${organisasjonsnummer}', 'ORGANISASJONSNU
 
 INSERT INTO sti(forelder, barn, ugyldig)
 VALUES (
-        (SELECT node_id FROM node WHERE id = '${fødselsnummer}'),
-        (SELECT node_id FROM node WHERE id = '${organisasjonsnummer}'),
+        (SELECT key FROM node WHERE id = '${fødselsnummer}'),
+        (SELECT key FROM node WHERE id = '${organisasjonsnummer}'),
         null
 );

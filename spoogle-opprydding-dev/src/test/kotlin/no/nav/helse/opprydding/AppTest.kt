@@ -19,9 +19,11 @@ internal class AppTest: AbstractDatabaseTest() {
     @Test
     fun `slettemelding medfører at person slettes fra databasen`() {
         opprettTre("12345678910", "987654321")
-        val nodeId = finnNodeId("12345678910")
+        val fnrNodeKey = finnNodeKey("12345678910")
+        val orgnrNodeKey = finnNodeKey("987654321")
         testRapid.sendTestMessage(slettemelding("12345678910"))
-        assertFinnesIkke(nodeId)
+        assertFinnesIkke(fnrNodeKey)
+        assertFinnesIkke(orgnrNodeKey)
     }
 
     @Test
@@ -30,8 +32,8 @@ internal class AppTest: AbstractDatabaseTest() {
         val fnr2 = "99999999999"
         opprettTre(fnr1, "987654321")
         opprettTre(fnr2, "999999999")
-        val nodeId1 = finnNodeId(fnr1)
-        val nodeId2 = finnNodeId(fnr2)
+        val nodeId1 = finnNodeKey(fnr1)
+        val nodeId2 = finnNodeKey(fnr2)
         testRapid.sendTestMessage(slettemelding(fnr1))
         assertFinnesIkke(nodeId1)
         assertFinnes(nodeId2)
@@ -49,24 +51,24 @@ internal class AppTest: AbstractDatabaseTest() {
 
     private fun assertFinnesIkke(nodeId: Long?) {
         assertNodeAntall(nodeId, 0)
-        assertEdgeAntall(nodeId, 0)
+        assertStiAntall(nodeId, 0)
     }
 
     private fun assertFinnes(nodeId: Long?) {
         assertNodeAntall(nodeId, 1)
-        assertEdgeAntall(nodeId, 1)
+        assertStiAntall(nodeId, 1)
     }
 
     private fun assertNodeAntall(nodeId: Long?, forventetAntall: Int) {
         @Language("PostgreSQL")
-        val query = """SELECT COUNT(1) FROM node WHERE node_id = ?"""
+        val query = """SELECT COUNT(1) FROM node WHERE key = ?"""
         val antall = sessionOf(dataSource).use { session ->
             session.run(queryOf(query, nodeId).map { it.int(1) }.asSingle)
         }
         assertEquals(forventetAntall, antall)
     }
 
-    private fun assertEdgeAntall(nodeId: Long?, forventetAntall: Int) {
+    private fun assertStiAntall(nodeId: Long?, forventetAntall: Int) {
         @Language("PostgreSQL")
         val query = """SELECT COUNT(1) FROM sti WHERE forelder = ?"""
         val antall = sessionOf(dataSource).use { session ->
@@ -75,13 +77,13 @@ internal class AppTest: AbstractDatabaseTest() {
         assertEquals(forventetAntall, antall)
     }
 
-    private fun finnNodeId(fødselsnummer: String): Long? {
+    private fun finnNodeKey(fødselsnummer: String): Long? {
         @Language("PostgreSQL")
         val query = """
-           SELECT node_id FROM node WHERE id = ? AND id_type = 'FØDSELSNUMMER'
+           SELECT key FROM node WHERE id = ? AND id_type = 'FØDSELSNUMMER'
         """
         return sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, fødselsnummer).map { it.long("node_id") }.asSingle)
+            session.run(queryOf(query, fødselsnummer).map { it.long("key") }.asSingle)
         }
     }
 }

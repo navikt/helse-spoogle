@@ -92,7 +92,7 @@ internal class TreServiceTest: AbstractDatabaseTest() {
 
     private fun assertEdge(idNodeA: String, idNodeB: String) {
         @Language("PostgreSQL")
-        val query = "SELECT COUNT(1) FROM sti WHERE forelder = (SELECT node_id FROM node WHERE id = ?) AND barn = (SELECT node_id FROM node WHERE id = ?)"
+        val query = "SELECT COUNT(1) FROM sti WHERE forelder = (SELECT key FROM node WHERE id = ?) AND barn = (SELECT key FROM node WHERE id = ?)"
         val antall = sessionOf(dataSource).use { session ->
             session.run(queryOf(query, idNodeA, idNodeB).map { it.int(1) }.asSingle)
         }

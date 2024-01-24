@@ -7,34 +7,32 @@ import javax.sql.DataSource
 
 internal class PersonDao(private val dataSource: DataSource) {
     internal fun slett(fødselsnummer: String) {
-        val nodeId = finnNodeId(fødselsnummer) ?: return
-        slettSti(nodeId)
-        slettNode(nodeId)
-    }
-
-    private fun slettSti(nodeId: Long) {
-        @Language("PostgreSQL")
-        val query = """ DELETE FROM sti WHERE forelder = ? """
-        sessionOf(dataSource).use {
-            it.run(queryOf(query, nodeId).asExecute)
-        }
-    }
-
-    private fun slettNode(nodeId: Long) {
-        @Language("PostgreSQL")
-        val query = """ DELETE FROM node WHERE node_id = ? """
-        sessionOf(dataSource).use {
-            it.run(queryOf(query, nodeId).asExecute)
-        }
-    }
-
-    private fun finnNodeId(fødselsnummer: String): Long? {
         @Language("PostgreSQL")
         val query = """
-           SELECT node_id FROM node WHERE id = ? AND id_type = 'FØDSELSNUMMER'
-        """
-        return sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, fødselsnummer).map { it.long("node_id") }.asSingle)
+            WITH RECURSIVE alle_noder(forelder_key, forelder_id_type, barn_key, barn_id, barn_id_type, ugyldig_fra) AS (
+                SELECT
+                    null::varchar, null::varchar, key, id, id_type, null::timestamp
+                FROM
+                    node
+                WHERE
+                        node.id = :fodselsnummer AND id_type = 'FØDSELSNUMMER'
+                UNION ALL
+                SELECT
+                    alle_noder.barn_id,
+                    alle_noder.barn_id_type,
+                    node.key,
+                    node.id,
+                    node.id_type,
+                    sti.ugyldig
+                FROM alle_noder
+                    JOIN sti ON alle_noder.barn_key = sti.forelder
+                    JOIN node ON sti.barn = node.key
+            )
+            DELETE FROM node WHERE node.key IN (SELECT alle_noder.barn_key FROM alle_noder);
+        """.trimIndent()
+
+        sessionOf(dataSource).use {
+            it.run(queryOf(query, mapOf("fodselsnummer" to fødselsnummer)).asUpdate)
         }
     }
 }
