@@ -43,13 +43,11 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
-    implementation("io.ktor:ktor-server-websockets:$ktorVersion")
     implementation("no.nav.security:token-validation-ktor-v2:3.1.0")
 
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
     implementation("io.ktor:ktor-client-apache-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-server-websockets-jvm:$ktorVersion")
 
     testImplementation("no.nav.security:mock-oauth2-server:2.1.1")
     testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
@@ -82,15 +80,14 @@ tasks {
             }
         }
 
-        from({ Paths.get(project(":spoogle-frontend").buildDir.path) }) {
+        from({ Paths.get(project(":spoogle-frontend").layout.buildDirectory.get().toString()) }) {
             into("spoogle-frontend/dist")
         }
 
         doLast {
             configurations.runtimeClasspath.get().forEach {
-                val file = File("$buildDir/libs/${it.name}")
-                if (!file.exists())
-                    it.copyTo(file)
+                val file = File("${layout.buildDirectory.get()}/libs/${it.name}")
+                if (!file.exists()) it.copyTo(file)
             }
         }
     }

@@ -11,4 +11,4 @@ tasks.check {
     dependsOn("npm_run_test")
 }
 
-project.buildDir = File("dist")
+project.layout.buildDirectory = File("dist")
