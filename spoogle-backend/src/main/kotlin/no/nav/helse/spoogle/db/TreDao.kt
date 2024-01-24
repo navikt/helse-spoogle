@@ -8,7 +8,6 @@ import no.nav.helse.spoogle.tre.Node
 import no.nav.helse.spoogle.tre.NodeDto
 import no.nav.helse.spoogle.tre.Relasjon
 import org.intellij.lang.annotations.Language
-import java.time.LocalDateTime
 import javax.sql.DataSource
 
 internal class TreDao(private val dataSource: DataSource) {
