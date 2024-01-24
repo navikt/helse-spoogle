@@ -70,9 +70,9 @@ internal fun Application.app(
     azureAD: AzureAD,
 ) {
     val isLocalDevelopment = env["LOCAL_DEVELOPMENT"]?.toBooleanStrict() ?: false
-    statusPages()
     configureUtilities()
     configureServerContentNegotiation()
+    statusPages()
     configureAuthentication(azureAD)
 
     routing {

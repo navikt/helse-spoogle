@@ -15,7 +15,7 @@ private val micrometerVersion = "1.9.4"
 
 plugins {
     kotlin("jvm") apply true
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.21" apply true
 }
 
 dependencies {
