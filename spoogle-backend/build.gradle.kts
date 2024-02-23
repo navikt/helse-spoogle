@@ -10,7 +10,7 @@ private val kotliqueryVersion = "1.9.0"
 private val postgresqlVersion = "42.7.2"
 private val testcontainersPostgresqlVersion = "1.19.5"
 private val ktorVersion = "2.3.7"
-private val micrometerVersion = "1.9.4"
+private val micrometerVersion = "1.12.3"
 
 
 plugins {
