@@ -11,7 +11,7 @@ private val postgresqlVersion = "42.7.2"
 private val testcontainersPostgresqlVersion = "1.19.5"
 private val ktorVersion = "2.3.7"
 private val micrometerVersion = "1.12.3"
-
+private val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
     kotlin("jvm") apply true
@@ -25,6 +25,10 @@ dependencies {
     implementation("com.github.seratch:kotliquery:$kotliqueryVersion")
     implementation("org.postgresql:postgresql:$postgresqlVersion")
     implementation("org.flywaydb:flyway-core:$flywayVersion")
+
+    implementation("com.papertrailapp:logback-syslog4j:$logbackSyslog4jVersion") {
+        exclude(group = "ch.qos.logback")
+    }
 
     implementation("io.micrometer:micrometer-registry-prometheus:$micrometerVersion")
     implementation("io.micrometer:micrometer-core:$micrometerVersion")
