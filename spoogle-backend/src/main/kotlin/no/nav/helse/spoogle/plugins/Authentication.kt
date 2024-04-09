@@ -41,17 +41,17 @@ internal fun Application.configureAuthentication(azureAD: AzureAD) {
                         kv("harGyldigeGrupper", hasValidGroup),
                     )
                     sikkerlogg.info(
-                        "Har følgende grupper: ${groups.joinToString()}"
+                        "Har følgende grupper: ${groups.joinToString()}",
                     )
                     sikkerlogg.info(
-                        "Har følgende appId: $appId"
+                        "Har følgende appId: $appId",
                     )
                     return@tokenValidationSupport false
                 }
 
                 sikkerlogg.info("Vellykket validering av token")
                 true
-            }
+            },
         )
     }
 }

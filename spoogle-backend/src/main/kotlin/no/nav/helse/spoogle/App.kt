@@ -28,15 +28,15 @@ private class RapidApp(env: Map<String, String>) {
     private val app = App(env) { rapidsConnection }
 
     init {
-        rapidsConnection = Builder(RapidApplication.RapidApplicationConfig.fromEnv(env))
-            .withKtorModule {
-                app.ktorApp(this)
-            }.build()
+        rapidsConnection =
+            Builder(RapidApplication.RapidApplicationConfig.fromEnv(env))
+                .withKtorModule {
+                    app.ktorApp(this)
+                }.build()
     }
 
     fun start() = app.start()
 }
-
 
 internal class App(
     private val env: Map<String, String>,
@@ -48,6 +48,7 @@ internal class App(
     private val azureAD = AzureAD.fromEnv(env)
 
     internal fun ktorApp(application: Application) = application.app(env, service, azureAD)
+
     internal fun start() {
         VedtaksperiodeEndretRiver(service, rapidsConnection)
         VedtaksperiodeForkastetRiver(service, rapidsConnection)
@@ -82,7 +83,7 @@ internal fun Application.app(
                 react("spoogle-frontend/dist")
                 ignoreFiles { it.endsWith(".txt") }
             }
-            treRoutes(service)
+            treRoutes(service, azureAD.issuer())
             brukerRoutes(azureAD.issuer())
         }
     }

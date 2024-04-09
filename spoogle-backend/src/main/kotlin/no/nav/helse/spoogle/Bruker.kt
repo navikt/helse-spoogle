@@ -1,4 +1,5 @@
 @file:UseSerializers(UUIDSerializer::class)
+
 package no.nav.helse.spoogle
 
 import io.ktor.http.HttpStatusCode
@@ -14,19 +15,27 @@ class Bruker(
     private val epostadresse: String,
     private val navn: String,
     private val ident: String,
-    private val oid: UUID
+    private val oid: UUID,
 ) {
+    internal fun ident() = ident
+
     internal companion object {
-        internal fun fromCall(issuer: String, call: ApplicationCall): Bruker {
+        internal fun fromCall(
+            issuer: String,
+            call: ApplicationCall,
+        ): Bruker {
             return Bruker(
                 epostadresse = call.getClaim(issuer, "preferred_username") ?: throw BrukerException.ManglerEpostadresse(),
                 navn = call.getClaim(issuer, "name") ?: throw BrukerException.ManglerNavn(),
                 ident = call.getClaim(issuer, "NAVident") ?: throw BrukerException.ManglerIdent(),
-                oid = call.getClaim(issuer, "oid")?.let(UUID::fromString) ?: throw BrukerException.ManglerOid()
+                oid = call.getClaim(issuer, "oid")?.let(UUID::fromString) ?: throw BrukerException.ManglerOid(),
             )
         }
 
-        private fun ApplicationCall.getClaim(issuer: String, name: String): String? =
+        private fun ApplicationCall.getClaim(
+            issuer: String,
+            name: String,
+        ): String? =
             this.authentication.principal<TokenValidationContextPrincipal>()
                 ?.context
                 ?.getClaims(issuer)
@@ -37,13 +46,14 @@ class Bruker(
         return navn
     }
 
-    override fun equals(other: Any?) = this === other || (
-        other is Bruker &&
-            javaClass == other.javaClass &&
-            epostadresse == other.epostadresse &&
-            navn == other.navn &&
-            ident == other.ident &&
-            oid == other.oid
+    override fun equals(other: Any?) =
+        this === other || (
+            other is Bruker &&
+                javaClass == other.javaClass &&
+                epostadresse == other.epostadresse &&
+                navn == other.navn &&
+                ident == other.ident &&
+                oid == other.oid
         )
 
     override fun hashCode(): Int {
@@ -55,25 +65,25 @@ class Bruker(
     }
 }
 
-internal sealed class BrukerException(message: String): Exception(message) {
+internal sealed class BrukerException(message: String) : Exception(message) {
     internal abstract val httpStatusCode: HttpStatusCode
 
-    internal class ManglerEpostadresse:
+    internal class ManglerEpostadresse :
         BrukerException("Token mangler epostadresse (claim: preferred_username)") {
         override val httpStatusCode: HttpStatusCode = HttpStatusCode.BadRequest
     }
 
-    internal class ManglerNavn:
+    internal class ManglerNavn :
         BrukerException("Token mangler navn (claim: name)") {
         override val httpStatusCode: HttpStatusCode = HttpStatusCode.BadRequest
     }
 
-    internal class ManglerIdent:
+    internal class ManglerIdent :
         BrukerException("Token mangler ident (claim: NAVident)") {
         override val httpStatusCode: HttpStatusCode = HttpStatusCode.BadRequest
     }
 
-    internal class ManglerOid:
+    internal class ManglerOid :
         BrukerException("Token mangler oid (claim: oid)") {
         override val httpStatusCode: HttpStatusCode = HttpStatusCode.BadRequest
     }
