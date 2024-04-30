@@ -1,4 +1,4 @@
-private val testcontainersVersion = "1.19.5"
+private val testcontainersVersion = "1.19.7"
 private val cloudSqlVersion = "1.15.2"
 private val postgresqlVersion = "42.7.2"
 private val hikariVersion = "5.0.1"
@@ -41,16 +41,18 @@ tasks {
 
         manifest {
             attributes["Main-Class"] = mainClass
-            attributes["Class-Path"] = configurations.runtimeClasspath.get().joinToString(separator = " ") {
-                it.name
-            }
+            attributes["Class-Path"] =
+                configurations.runtimeClasspath.get().joinToString(separator = " ") {
+                    it.name
+                }
         }
 
         doLast {
             configurations.runtimeClasspath.get().forEach {
                 val file = File("$buildDir/libs/${it.name}")
-                if (!file.exists())
+                if (!file.exists()) {
                     it.copyTo(file)
+                }
             }
         }
     }

@@ -8,8 +8,8 @@ private val flywayVersion = "9.3.0"
 private val hikariVersion = "5.0.1"
 private val kotliqueryVersion = "1.9.0"
 private val postgresqlVersion = "42.7.2"
-private val testcontainersPostgresqlVersion = "1.19.5"
-private val ktorVersion = "2.3.7"
+private val testcontainersPostgresqlVersion = "1.19.7"
+private val ktorVersion = "2.3.10"
 private val micrometerVersion = "1.12.3"
 private val logbackSyslog4jVersion = "1.0.0"
 
@@ -79,9 +79,10 @@ tasks {
 
         manifest {
             attributes["Main-Class"] = mainClass
-            attributes["Class-Path"] = configurations.runtimeClasspath.get().joinToString(separator = " ") {
-                it.name
-            }
+            attributes["Class-Path"] =
+                configurations.runtimeClasspath.get().joinToString(separator = " ") {
+                    it.name
+                }
         }
 
         from({ Paths.get(project(":spoogle-frontend").layout.buildDirectory.get().toString()) }) {
