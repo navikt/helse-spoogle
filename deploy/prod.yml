@@ -52,7 +52,7 @@ spec:
       allowAllUsers: false
   gcp:
     sqlInstances:
-      - type: POSTGRES_14
+      - type: POSTGRES_15
         diskAutoresize: true
         databases:
           - name: spoogle
