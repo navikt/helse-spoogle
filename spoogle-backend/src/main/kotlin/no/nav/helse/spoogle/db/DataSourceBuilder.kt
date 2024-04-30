@@ -11,7 +11,7 @@ import java.time.Duration
 import javax.sql.DataSource
 
 internal class DataSourceBuilder(env: Map<String, String>) {
-    private val dbUrl = requireNotNull(env["NAIS_DATABASE_SPOOGLE_SPOOGLE_JDBC_URL"]) { "JDBC url må være satt" }
+    private val dbUrl = requireNotNull(env["DATABASE_JDBC_URL"]) { "JDBC url må være satt" }
 
     private val hikariConfig =
         HikariConfig().apply {
