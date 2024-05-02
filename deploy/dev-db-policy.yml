@@ -7,7 +7,7 @@ spec:
   egress:
     - to:
         - ipBlock:
-            cidr: 34.88.10.57/32
+            cidr: 35.228.171.189/32
   podSelector:
     matchLabels:
       db_policy_user: spooglebruker
