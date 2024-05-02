@@ -54,7 +54,7 @@ spec:
     sqlInstances:
       - type: POSTGRES_15
         diskAutoresize: true
-        name: spoogle2
+        name: spoogle
         databases:
           - name: spoogle
             envVarPrefix: DATABASE
