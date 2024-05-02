@@ -32,6 +32,9 @@ open class Node private constructor(
         internal fun vedtaksperiodeId(vedtaksperiodeId: String): Node {
             return Node(vedtaksperiodeId, VEDTAKSPERIODE_ID)
         }
+        internal fun behandlingId(behandlingId: String): Node {
+            return Node(behandlingId, BEHANDLING_ID)
+        }
         internal fun utbetalingId(utbetalingId: String): Node {
             return Node(utbetalingId, UTBETALING_ID)
         }

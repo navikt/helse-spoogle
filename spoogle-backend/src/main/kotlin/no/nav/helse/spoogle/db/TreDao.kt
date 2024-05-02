@@ -113,6 +113,7 @@ internal class TreDao(private val dataSource: DataSource) {
             FØDSELSNUMMER -> Node.fødselsnummer(id)
             AKTØR_ID -> Node.aktørId(id)
             VEDTAKSPERIODE_ID -> Node.vedtaksperiodeId(id)
+            BEHANDLING_ID -> Node.behandlingId(id)
             UTBETALING_ID -> Node.utbetalingId(id)
             SØKNAD_ID -> Node.søknadId(id)
             INNTEKTSMELDING_ID -> Node.inntektsmeldingId(id)
