@@ -11,7 +11,6 @@ import org.intellij.lang.annotations.Language
 import javax.sql.DataSource
 
 internal class TreDao(private val dataSource: DataSource) {
-
     internal fun nyNode(node: NodeDto) {
         @Language("PostgreSQL")
         val query = "INSERT INTO node (id, id_type) VALUES (:id, :idType) ON CONFLICT DO NOTHING"
@@ -20,7 +19,10 @@ internal class TreDao(private val dataSource: DataSource) {
         }
     }
 
-    internal fun nySti(forelder: NodeDto, barn: NodeDto) {
+    internal fun nySti(
+        forelder: NodeDto,
+        barn: NodeDto,
+    ) {
         @Language("PostgreSQL")
         val query =
             """
@@ -52,8 +54,8 @@ internal class TreDao(private val dataSource: DataSource) {
                     mapOf(
                         "id" to node.id,
                         "node_type" to node.type,
-                    )
-                ).asUpdate
+                    ),
+                ).asUpdate,
             )
         }
     }
@@ -102,22 +104,26 @@ internal class TreDao(private val dataSource: DataSource) {
                     val parentNode = uniqueNodes.getOrPut(parentId to parentType) { toNode(parentId, parentType, fødselsnummer) }
                     val childNode = uniqueNodes.getOrPut(childId to childType) { toNode(childId, childType, fødselsnummer) }
                     Relasjon(parentNode, childNode, ugyldigFra)
-                }.asList
+                }.asList,
             ).filterNotNull()
         }
     }
 
-    private fun toNode(id: String, type: String, fødselsnummer: String) =
-        when (enumValueOf<Identifikatortype>(type)) {
-            ORGANISASJONSNUMMER -> Node.organisasjonsnummer(id.split("+").first(), fødselsnummer)
-            FØDSELSNUMMER -> Node.fødselsnummer(id)
-            AKTØR_ID -> Node.aktørId(id)
-            VEDTAKSPERIODE_ID -> Node.vedtaksperiodeId(id)
-            BEHANDLING_ID -> Node.behandlingId(id)
-            UTBETALING_ID -> Node.utbetalingId(id)
-            SØKNAD_ID -> Node.søknadId(id)
-            INNTEKTSMELDING_ID -> Node.inntektsmeldingId(id)
-        }
+    private fun toNode(
+        id: String,
+        type: String,
+        fødselsnummer: String,
+    ) = when (enumValueOf<Identifikatortype>(type)) {
+        ORGANISASJONSNUMMER -> Node.organisasjonsnummer(id.split("+").first(), fødselsnummer)
+        FØDSELSNUMMER -> Node.fødselsnummer(id)
+        AKTØR_ID -> Node.aktørId(id)
+        VEDTAKSPERIODE_ID -> Node.vedtaksperiodeId(id)
+        BEHANDLING_ID -> Node.behandlingId(id)
+        UTBETALING_ID -> Node.utbetalingId(id)
+        SØKNAD_ID -> Node.søknadId(id)
+        INNTEKTSMELDING_ID -> Node.inntektsmeldingId(id)
+        OPPGAVE_ID -> Node.oppgaveId(id)
+    }
 
     private fun finnFødselsnummer(id: String): String? {
         @Language("PostgreSQL")
@@ -150,5 +156,4 @@ internal class TreDao(private val dataSource: DataSource) {
             session.run(queryOf(query, mapOf("id" to id)).map { it.string("fødselsnummer") }.asSingle)
         }
     }
-
 }

@@ -57,6 +57,7 @@ internal class App(
         UtbetalingForkastetRiver(service, rapidsConnection)
         SøknadHåndtertRiver(service, rapidsConnection)
         InntektsmeldingHåndtertRiver(service, rapidsConnection)
+        OppgaveEndretRiver(service, rapidsConnection)
         rapidsConnection.register(this)
         rapidsConnection.start()
     }
