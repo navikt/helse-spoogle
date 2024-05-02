@@ -27,7 +27,7 @@ spec:
       memory: 128Mi
   replicas:
     min: 1
-    max: 12
+    max: 24
     cpuThresholdPercentage: 90
   prometheus:
     enabled: true
@@ -54,9 +54,13 @@ spec:
     sqlInstances:
       - type: POSTGRES_15
         diskAutoresize: true
+        tier: db-custom-64-65536
         databases:
           - name: spoogle
             envVarPrefix: DATABASE
+        flags:
+          - name: max_connections
+            value: "100"
   env:
     - name: KAFKA_RAPID_TOPIC
       value: tbd.rapid.v1
