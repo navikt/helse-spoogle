@@ -52,6 +52,7 @@ internal class App(
     internal fun start() {
         VedtaksperiodeEndretRiver(service, rapidsConnection)
         VedtaksperiodeForkastetRiver(service, rapidsConnection)
+        BehandlingOpprettetRiver(service, rapidsConnection)
         VedtaksperiodeNyUtbetalingRiver(service, rapidsConnection)
         UtbetalingForkastetRiver(service, rapidsConnection)
         SøknadHåndtertRiver(service, rapidsConnection)
