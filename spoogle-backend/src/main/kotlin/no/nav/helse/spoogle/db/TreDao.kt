@@ -41,13 +41,13 @@ internal class TreDao(private val dataSource: DataSource) {
     internal fun invaliderRelasjonerFor(node: NodeDto) {
         @Language("PostgreSQL")
         val query = """
+            WITH keys AS (
+                SELECT key FROM node WHERE id = :id AND id_type = :node_type
+            )
            UPDATE sti
            SET ugyldig = now()
-           FROM (
-            SELECT key FROM node WHERE id = :id AND id_type = :node_type
-           ) AS keys
-           WHERE forelder = keys.key OR
-           barn = keys.key
+           WHERE forelder IN (SELECT key FROM keys) OR
+           barn IN (SELECT key FROM keys)
         """
 
         sessionOf(dataSource).use {
