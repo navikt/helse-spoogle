@@ -43,8 +43,11 @@ internal class TreDao(private val dataSource: DataSource) {
         val query = """
            UPDATE sti
            SET ugyldig = now()
-           WHERE forelder = (SELECT key FROM node WHERE id = :id AND id_type = :node_type) OR
-           barn = (SELECT key FROM node WHERE id = :id AND id_type = :node_type)
+           FROM (
+            SELECT key FROM node WHERE id = :id AND id_type = :node_type
+           ) AS keys
+           WHERE forelder = keys.key OR
+           barn = keys.key
         """
 
         sessionOf(dataSource).use {
