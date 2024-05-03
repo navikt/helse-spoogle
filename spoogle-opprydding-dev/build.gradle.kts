@@ -3,7 +3,7 @@ private val cloudSqlVersion = "1.15.2"
 private val postgresqlVersion = "42.7.2"
 private val hikariVersion = "5.0.1"
 private val kotliqueryVersion = "1.9.0"
-private val flywayVersion = "9.3.0"
+private val flywayVersion = "10.12.0"
 private val junitVersion = "5.10.2"
 private val rapidsAndRiversVersion = "2024010209171704183456.6d035b91ffb4"
 
@@ -23,6 +23,7 @@ dependencies {
 
     testImplementation(project(":spoogle-backend")) // for å få  tilgang på db/migrations-filene
     testImplementation("org.flywaydb:flyway-core:$flywayVersion")
+    testImplementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
     testImplementation("org.testcontainers:postgresql:$testcontainersVersion") {
         exclude("com.fasterxml.jackson.core")
     }
@@ -49,7 +50,7 @@ tasks {
 
         doLast {
             configurations.runtimeClasspath.get().forEach {
-                val file = File("$buildDir/libs/${it.name}")
+                val file = File("${layout.buildDirectory}/libs/${it.name}")
                 if (!file.exists()) {
                     it.copyTo(file)
                 }

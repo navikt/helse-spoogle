@@ -11,31 +11,33 @@ import org.testcontainers.containers.PostgreSQLContainer
 import javax.sql.DataSource
 
 internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = true) {
-
     companion object {
         internal val port: String
         internal const val hostAddress: String = "localhost"
         internal const val database: String = "test"
-        private val postgres = PostgreSQLContainer<Nothing>("postgres:14").apply {
-            withReuse(true)
-            withLabel("app-navn", "spoogle")
-            start()
-            port = firstMappedPort.toString()
-            println("Database: jdbc:postgresql://${hostAddress}:$firstMappedPort/test startet opp, credentials: test og test")
-        }
+        private val postgres =
+            PostgreSQLContainer<Nothing>("postgres:15.5").apply {
+                withReuse(true)
+                withLabel("app-navn", "spoogle")
+                start()
+                port = firstMappedPort.toString()
+                println("Database: jdbc:postgresql://$hostAddress:$firstMappedPort/test startet opp, credentials: test og test")
+            }
 
         val dataSource =
-            HikariDataSource(HikariConfig().apply {
-                jdbcUrl = postgres.jdbcUrl
-                username = postgres.username
-                password = postgres.password
-                maximumPoolSize = 5
-                minimumIdle = 1
-                idleTimeout = 500001
-                connectionTimeout = 10000
-                maxLifetime = 600001
-                initializationFailTimeout = 5000
-            })
+            HikariDataSource(
+                HikariConfig().apply {
+                    jdbcUrl = postgres.jdbcUrl
+                    username = postgres.username
+                    password = postgres.password
+                    maximumPoolSize = 5
+                    minimumIdle = 1
+                    idleTimeout = 500001
+                    connectionTimeout = 10000
+                    maxLifetime = 600001
+                    initializationFailTimeout = 5000
+                },
+            )
 
         init {
             Flyway.configure()
@@ -53,7 +55,7 @@ internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = t
     @BeforeEach
     fun resetDatabase() {
         if (doTruncate) {
-            sessionOf(dataSource).use  {
+            sessionOf(dataSource).use {
                 it.run(queryOf("SELECT truncate_tables()").asExecute)
             }
         }
@@ -61,7 +63,7 @@ internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = t
 }
 
 private fun createTruncateFunction(dataSource: DataSource) {
-    sessionOf(dataSource).use  {
+    sessionOf(dataSource).use {
         @Language("PostgreSQL")
         val query = """
             CREATE OR REPLACE FUNCTION truncate_tables() RETURNS void AS $$

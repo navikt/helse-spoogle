@@ -4,7 +4,7 @@ private val mainClass = "no.nav.helse.spoogle.AppKt"
 
 private val rapidsAndRiversVersion = "2024010209171704183456.6d035b91ffb4"
 private val junitVersion = "5.10.2"
-private val flywayVersion = "9.3.0"
+private val flywayVersion = "10.12.0"
 private val hikariVersion = "5.0.1"
 private val kotliqueryVersion = "1.9.0"
 private val postgresqlVersion = "42.7.2"
@@ -25,6 +25,7 @@ dependencies {
     implementation("com.github.seratch:kotliquery:$kotliqueryVersion")
     implementation("org.postgresql:postgresql:$postgresqlVersion")
     implementation("org.flywaydb:flyway-core:$flywayVersion")
+    implementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
 
     implementation("com.papertrailapp:logback-syslog4j:$logbackSyslog4jVersion") {
         exclude(group = "ch.qos.logback")

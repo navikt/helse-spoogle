@@ -11,30 +11,32 @@ import org.testcontainers.containers.PostgreSQLContainer
 import javax.sql.DataSource
 
 internal abstract class AbstractDatabaseTest {
-
     protected val personDao = PersonDao(dataSource)
 
     protected companion object {
-        private val postgres = PostgreSQLContainer<Nothing>("postgres:14").apply {
-            withReuse(false)
-            withLabel("app-navn", "spoogle-opprydding")
-            start()
+        private val postgres =
+            PostgreSQLContainer<Nothing>("postgres:15.5").apply {
+                withReuse(false)
+                withLabel("app-navn", "spoogle-opprydding")
+                start()
 
-            println("Database: jdbc:postgresql://localhost:$firstMappedPort/test startet opp, credentials: test og test")
-        }
+                println("Database: jdbc:postgresql://localhost:$firstMappedPort/test startet opp, credentials: test og test")
+            }
 
         val dataSource =
-            HikariDataSource(HikariConfig().apply {
-                jdbcUrl = postgres.jdbcUrl
-                username = postgres.username
-                password = postgres.password
-                maximumPoolSize = 5
-                minimumIdle = 1
-                idleTimeout = 500001
-                connectionTimeout = 10000
-                maxLifetime = 600001
-                initializationFailTimeout = 5000
-            })
+            HikariDataSource(
+                HikariConfig().apply {
+                    jdbcUrl = postgres.jdbcUrl
+                    username = postgres.username
+                    password = postgres.password
+                    maximumPoolSize = 5
+                    minimumIdle = 1
+                    idleTimeout = 500001
+                    connectionTimeout = 10000
+                    maxLifetime = 600001
+                    initializationFailTimeout = 5000
+                },
+            )
 
         private fun createTruncateFunction(dataSource: DataSource) {
             sessionOf(dataSource).use {
@@ -69,14 +71,19 @@ internal abstract class AbstractDatabaseTest {
         }
     }
 
-    protected fun opprettTre(fødselsnummer: String, organisasjonsnummer: String) {
+    protected fun opprettTre(
+        fødselsnummer: String,
+        organisasjonsnummer: String,
+    ) {
         Flyway
             .configure()
             .dataSource(dataSource)
-            .placeholders(mapOf(
-                "fødselsnummer" to fødselsnummer,
-                "organisasjonsnummer" to organisasjonsnummer
-            ))
+            .placeholders(
+                mapOf(
+                    "fødselsnummer" to fødselsnummer,
+                    "organisasjonsnummer" to organisasjonsnummer,
+                ),
+            )
             .locations("classpath:db/testperson")
             .load()
             .migrate()
