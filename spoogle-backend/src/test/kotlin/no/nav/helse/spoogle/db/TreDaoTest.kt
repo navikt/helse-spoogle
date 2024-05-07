@@ -7,87 +7,68 @@ import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-internal class TreDaoTest: AbstractDatabaseTest() {
+internal class TreDaoTest : AbstractDatabaseTest() {
     private val dao = TreDao(dataSource)
 
     @Test
-    fun `opprett node`() {
-        dao.nyNode(nodeDto("A"))
-        assertNode("A")
-    }
-
-    @Test
-    fun `forsøk å opprette samme node to ganger`() {
-        dao.nyNode(nodeDto("A"))
-        assertDoesNotThrow {
-            dao.nyNode(nodeDto("A"))
-        }
-    }
-
-    @Test
     fun `opprett edge`() {
-        dao.nyNode(nodeDto("A"))
-        dao.nyNode(nodeDto("B"))
-        dao.nySti(nodeDto("A"), nodeDto("B"))
-        assertSti("A", "B")
+        dao.nyRelasjon(nodeDto("A"), null) // Oppretter rotnode
+        dao.nyRelasjon(nodeDto("B"), nodeDto("A"))
+        assertRelasjon("A", "B")
     }
 
     @Test
     fun `forsøk å opprette samme edge to ganger`() {
-        dao.nyNode(nodeDto("A"))
-        dao.nyNode(nodeDto("B"))
-        dao.nySti(nodeDto("A"), nodeDto("B"))
+        dao.nyRelasjon(nodeDto("A"), null) // Oppretter rotnode
+        dao.nyRelasjon(nodeDto("B"), nodeDto("A"))
         assertDoesNotThrow {
-            dao.nySti(nodeDto("B"), nodeDto("A"))
+            dao.nyRelasjon(nodeDto("B"), nodeDto("A"))
         }
-        assertSti("A", "B")
+        assertRelasjon("A", "B")
     }
 
     @Test
     fun `invalider relasjon for node`() {
-        dao.nyNode(nodeDto("A"))
-        dao.nyNode(nodeDto("B"))
-        dao.nyNode(nodeDto("C"))
-        dao.nySti(nodeDto("A"), nodeDto("B"))
-        dao.nySti(nodeDto("B"), nodeDto("C"))
+        dao.nyRelasjon(nodeDto("A"), null) // Oppretter rotnode
+        dao.nyRelasjon(nodeDto("B"), nodeDto("A"))
+        dao.nyRelasjon(nodeDto("C"), nodeDto("B"))
         dao.invaliderRelasjonerFor(nodeDto("B"))
         assertUgyldig("A", "B")
         assertUgyldig("B", "C")
     }
 
-    private fun assertUgyldig(forelderId: String, barnId: String) {
+    private fun assertUgyldig(
+        forelderId: String,
+        barnId: String,
+    ) {
         @Language("PostgreSQL")
         val query = """
-             SELECT ugyldig FROM sti 
+             SELECT ugyldig FROM relasjon 
              WHERE 
-                forelder = (SELECT key FROM node WHERE id = ?) AND
-                barn = (SELECT key FROM node WHERE id = ?)
+                forelder = ? AND
+                node = ?
         """
 
-        val ugyldig = sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, forelderId, barnId).map { it.localDateTimeOrNull("ugyldig") }.asSingle)
-        }
+        val ugyldig =
+            sessionOf(dataSource).use { session ->
+                session.run(queryOf(query, forelderId, barnId).map { it.localDateTimeOrNull("ugyldig") }.asSingle)
+            }
 
         assertNotNull(ugyldig)
     }
 
-    private fun assertNode(id: String) {
+    private fun assertRelasjon(
+        forelderId: String,
+        barnId: String,
+    ) {
         @Language("PostgreSQL")
-        val query = "SELECT COUNT(1) FROM node WHERE id = ?"
-        val antall = sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, id).map { it.int(1) }.asSingle)
-        }
+        val query = "SELECT COUNT(1) FROM relasjon WHERE forelder = ? AND node = ?"
+        val antall =
+            sessionOf(dataSource).use { session ->
+                session.run(queryOf(query, forelderId, barnId).map { it.int(1) }.asSingle)
+            }
         assertEquals(1, antall)
     }
 
-    private fun assertSti(forelderId: String, barnId: String) {
-        @Language("PostgreSQL")
-        val query = "SELECT COUNT(1) FROM sti WHERE forelder = (SELECT key FROM node WHERE id = ?) AND barn = (SELECT key FROM node WHERE id = ?)"
-        val antall = sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, forelderId, barnId).map { it.int(1) }.asSingle)
-        }
-        assertEquals(1, antall)
-    }
-
-    private fun nodeDto(id: String) = NodeDto(id, "type", emptyList(), emptyList())
+    private fun nodeDto(id: String) = NodeDto(id, "FØDSELSNUMMER", emptyList(), emptyList())
 }

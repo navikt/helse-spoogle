@@ -27,7 +27,7 @@ spec:
       memory: 128Mi
   replicas:
     min: 1
-    max: 12
+    max: 24
     cpuThresholdPercentage: 90
   prometheus:
     enabled: true
@@ -54,7 +54,7 @@ spec:
     sqlInstances:
       - type: POSTGRES_15
         diskAutoresize: true
-        tier: db-custom-4-16384
+        tier: db-custom-96-98304
         databases:
           - name: spoogle
             envVarPrefix: DATABASE
@@ -62,7 +62,7 @@ spec:
     - name: KAFKA_RAPID_TOPIC
       value: tbd.rapid.v1
     - name: KAFKA_CONSUMER_GROUP_ID
-      value: tbd-spoogle-v2
+      value: tbd-spoogle-v3
     - name: KAFKA_RESET_POLICY
       value: earliest
     - name: AZURE_VALID_GROUP_ID

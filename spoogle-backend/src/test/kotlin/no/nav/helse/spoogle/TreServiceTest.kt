@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 
-internal class TreServiceTest: AbstractDatabaseTest() {
+internal class TreServiceTest : AbstractDatabaseTest() {
     private val service = TreService(dataSource)
 
     @Test
@@ -82,25 +82,37 @@ internal class TreServiceTest: AbstractDatabaseTest() {
 
     private fun assertNodes(vararg ider: String) {
         val questionMarks = ider.joinToString { "?" }
+
         @Language("PostgreSQL")
-        val query = "SELECT COUNT(1) FROM node WHERE id IN ($questionMarks)"
-        val antall = sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, *ider).map { it.int(1) }.asSingle)
-        }
+        val query = "SELECT COUNT(1) FROM relasjon WHERE node IN ($questionMarks)"
+        val antall =
+            sessionOf(dataSource).use { session ->
+                session.run(queryOf(query, *ider).map { it.int(1) }.asSingle)
+            }
         assertEquals(ider.size, antall)
     }
 
-    private fun assertEdge(idNodeA: String, idNodeB: String) {
+    private fun assertEdge(
+        idNodeA: String,
+        idNodeB: String,
+    ) {
         @Language("PostgreSQL")
-        val query = "SELECT COUNT(1) FROM sti WHERE forelder = (SELECT key FROM node WHERE id = ?) AND barn = (SELECT key FROM node WHERE id = ?)"
-        val antall = sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, idNodeA, idNodeB).map { it.int(1) }.asSingle)
-        }
+        val query = "SELECT COUNT(1) FROM relasjon WHERE forelder = ? AND node = ?"
+        val antall =
+            sessionOf(dataSource).use { session ->
+                session.run(queryOf(query, idNodeA, idNodeB).map { it.int(1) }.asSingle)
+            }
         assertEquals(1, antall)
     }
 
     private fun fnrNode(fnr: String) = Node.fødselsnummer(fnr)
-    private fun orgnrNode(orgnr: String, fødselsnummer: String) = Node.organisasjonsnummer(orgnr, fødselsnummer)
+
+    private fun orgnrNode(
+        orgnr: String,
+        fødselsnummer: String,
+    ) = Node.organisasjonsnummer(orgnr, fødselsnummer)
+
     private fun periodeNode(id: String) = Node.vedtaksperiodeId(id)
+
     private fun utbetalingNode(id: String) = Node.utbetalingId(id)
 }

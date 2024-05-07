@@ -8,43 +8,43 @@ import no.nav.helse.spoogle.tre.Node
 import no.nav.helse.spoogle.tre.NodeDto
 import no.nav.helse.spoogle.tre.Relasjon
 import org.intellij.lang.annotations.Language
+import java.time.LocalDateTime
 import javax.sql.DataSource
 
 internal class TreDao(private val dataSource: DataSource) {
-    internal fun nyNode(node: NodeDto) {
-        @Language("PostgreSQL")
-        val query = "INSERT INTO node (id, id_type) VALUES (:id, :idType) ON CONFLICT DO NOTHING"
-        sessionOf(dataSource).use {
-            it.run(queryOf(query, mapOf("id" to node.id, "idType" to node.type)).asUpdate)
-        }
-    }
-
-    internal fun nySti(
-        forelder: NodeDto,
+    internal fun nyRelasjon(
         barn: NodeDto,
+        forelder: NodeDto?,
     ) {
         @Language("PostgreSQL")
         val query =
             """
-                INSERT INTO sti (forelder, barn) 
-                VALUES (
-                    (SELECT key FROM node WHERE id = :nodeAId), 
-                    (SELECT key FROM node WHERE id = :nodeBId)
-                ) 
-                ON CONFLICT DO NOTHING
+                INSERT INTO relasjon (node, forelder, type, opprettet) 
+                VALUES (:node_id, :forelder_id, :node_id_type::id_type, :now) 
+                ON CONFLICT(node) DO UPDATE SET forelder = excluded.forelder WHERE relasjon.forelder IS NULL;
             """
         sessionOf(dataSource).use {
-            it.run(queryOf(query, mapOf("nodeAId" to forelder.id, "nodeBId" to barn.id)).asUpdate)
+            it.run(
+                queryOf(
+                    query,
+                    mapOf(
+                        "node_id" to barn.id,
+                        "forelder_id" to forelder?.id,
+                        "node_id_type" to barn.type,
+                        "now" to LocalDateTime.now(),
+                    ),
+                ).asUpdate,
+            )
         }
     }
 
     internal fun invaliderRelasjonerFor(node: NodeDto) {
         @Language("PostgreSQL")
         val query = """
-           UPDATE sti
+           UPDATE relasjon
            SET ugyldig = now()
-           WHERE forelder = (SELECT key FROM node WHERE id = :id AND id_type = :node_type) OR
-           barn = (SELECT key FROM node WHERE id = :id AND id_type = :node_type)
+           WHERE forelder = :node_id OR
+           node = :node_id
         """
 
         sessionOf(dataSource).use {
@@ -52,8 +52,7 @@ internal class TreDao(private val dataSource: DataSource) {
                 queryOf(
                     query,
                     mapOf(
-                        "id" to node.id,
-                        "node_type" to node.type,
+                        "node_id" to node.id,
                     ),
                 ).asUpdate,
             )
@@ -65,30 +64,28 @@ internal class TreDao(private val dataSource: DataSource) {
 
         @Language("PostgreSQL")
         val query = """
-            WITH RECURSIVE alle_noder(forelder_key, forelder_type, barn_key, barn_id, barn_type, ugyldig_fra) AS (
+            WITH RECURSIVE alle_noder(forelder_id, forelder_type, barn_id, barn_type, ugyldig_fra) AS (
                 SELECT
-                    null::varchar, null::varchar, key, id, id_type, null::timestamp
+                    null::varchar, null::id_type, node, type, null::timestamp
                 FROM
-                    node
+                    relasjon
                 WHERE
-                        node.id = :fodselsnummer AND id_type = 'FØDSELSNUMMER'
+                        node = :fodselsnummer AND type = 'FØDSELSNUMMER'
                 UNION ALL
                 SELECT
                     alle_noder.barn_id,
                     alle_noder.barn_type,
-                    node.key,
-                    node.id,
-                    node.id_type,
-                    sti.ugyldig
+                    node,
+                    type,
+                    ugyldig
                 FROM alle_noder
-                    JOIN sti ON alle_noder.barn_key = sti.forelder
-                    JOIN node ON sti.barn = node.key
+                    JOIN relasjon ON alle_noder.barn_id = relasjon.forelder
             )
             SELECT
-                alle_noder.forelder_key, alle_noder.forelder_type, alle_noder.barn_id, alle_noder.barn_type, alle_noder.ugyldig_fra
+                alle_noder.forelder_id, alle_noder.forelder_type, alle_noder.barn_id, alle_noder.barn_type, alle_noder.ugyldig_fra
             FROM alle_noder
-            GROUP BY alle_noder.forelder_key, alle_noder.forelder_type, alle_noder.barn_id, alle_noder.barn_type, alle_noder.barn_key, alle_noder.ugyldig_fra
-            ORDER BY alle_noder.barn_key ASC;
+            GROUP BY alle_noder.forelder_id, alle_noder.forelder_type, alle_noder.barn_id, alle_noder.barn_type, alle_noder.ugyldig_fra
+            ORDER BY alle_noder.barn_id ASC
         """
 
         val uniqueNodes = mutableMapOf<Pair<String, String>, Node>()
@@ -96,7 +93,7 @@ internal class TreDao(private val dataSource: DataSource) {
         return sessionOf(dataSource).use { session ->
             session.run(
                 queryOf(query, mapOf("fodselsnummer" to fødselsnummer)).map<Relasjon?> {
-                    val parentId = it.stringOrNull("forelder_key") ?: return@map null
+                    val parentId = it.stringOrNull("forelder_id") ?: return@map null
                     val parentType = it.stringOrNull("forelder_type") ?: return@map null
                     val childId = it.string("barn_id")
                     val childType = it.string("barn_type")
@@ -128,32 +125,23 @@ internal class TreDao(private val dataSource: DataSource) {
     private fun finnFødselsnummer(id: String): String? {
         @Language("PostgreSQL")
         val query = """
-            WITH fødselsnummer(fødselsnummer) AS (
-                WITH RECURSIVE find_root_node(node_id, id, id_type) AS (
-                    SELECT
-                        key,
-                        id,
-                        id_type
-                    FROM
-                        node
-                    WHERE node.id = :id
+                WITH RECURSIVE find_root_node(id, id_type) AS (
+                    SELECT node, type FROM relasjon
+                    WHERE node = :id
                     UNION
-                    SELECT
-                        node.key,
-                        node.id,
-                        node.id_type
-                    FROM
-                        node
-                            JOIN sti ON sti.forelder = key
-                            INNER JOIN find_root_node ON find_root_node.node_id = sti.barn
+                    SELECT 
+                        forelder,
+                        (SELECT type FROM relasjon r2 WHERE node = relasjon.forelder)
+                    FROM find_root_node 
+                        JOIN relasjon ON relasjon.node = find_root_node.id
                 )
-                SELECT id FROM find_root_node WHERE id_type = 'FØDSELSNUMMER'
-            )
-            SELECT fødselsnummer FROM fødselsnummer;
+                SELECT id
+                FROM find_root_node
+                WHERE id_type = 'FØDSELSNUMMER'
         """
 
         return sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, mapOf("id" to id)).map { it.string("fødselsnummer") }.asSingle)
+            session.run(queryOf(query, mapOf("id" to id)).map { it.string("id") }.asSingle)
         }
     }
 }

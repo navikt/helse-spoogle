@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*
 
-internal class VedtaksperiodeForkastetRiverTest: AbstractDatabaseTest() {
+internal class VedtaksperiodeForkastetRiverTest : AbstractDatabaseTest() {
     private val testRapid = TestRapid()
     private val treService = TreService(dataSource)
     private val vedtaksperiodeId = UUID.fromString("d100e098-8f77-4985-bd6b-bb067dbaaf37")
@@ -39,10 +39,13 @@ internal class VedtaksperiodeForkastetRiverTest: AbstractDatabaseTest() {
         assertEquals(expectedJson, json)
     }
 
-    private fun finnUgyldigFra(forelderId: String, barnId: String): LocalDateTime? {
+    private fun finnUgyldigFra(
+        forelderId: String,
+        barnId: String,
+    ): LocalDateTime? {
         @Language("PostgreSQL")
         val query = """
-           SELECT ugyldig FROM sti WHERE forelder = (SELECT key FROM node WHERE id = ?) AND barn = (SELECT key FROM node WHERE id = ?) 
+           SELECT ugyldig FROM relasjon WHERE forelder = ? AND node = ? 
         """
 
         return sessionOf(dataSource).use { session ->
@@ -51,7 +54,8 @@ internal class VedtaksperiodeForkastetRiverTest: AbstractDatabaseTest() {
     }
 
     @Language("JSON")
-    private fun expectedJson(ugyldigFra: LocalDateTime? = null) = """
+    private fun expectedJson(ugyldigFra: LocalDateTime? = null) =
+        """
        {
             "id": "12345678910",
             "type": "FØDSELSNUMMER",
@@ -123,4 +127,3 @@ internal class VedtaksperiodeForkastetRiverTest: AbstractDatabaseTest() {
 }
     """
 }
-

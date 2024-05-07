@@ -2,16 +2,16 @@ package no.nav.helse.spoogle
 
 import no.nav.helse.spoogle.db.TreDao
 import no.nav.helse.spoogle.tre.Node
-import no.nav.helse.spoogle.tre.Tre
 import no.nav.helse.spoogle.tre.NodeDto
 import no.nav.helse.spoogle.tre.Relasjon.Companion.byggTre
+import no.nav.helse.spoogle.tre.Tre
 import javax.sql.DataSource
 
 internal interface ITreeService {
     fun finnTre(id: String): Tre?
 }
 
-internal class TreService(dataSource: DataSource): ITreeService {
+internal class TreService(dataSource: DataSource) : ITreeService {
     private val dao = TreDao(dataSource)
 
     override fun finnTre(id: String): Tre? {
@@ -20,9 +20,10 @@ internal class TreService(dataSource: DataSource): ITreeService {
     }
 
     internal fun nyGren(tre: Tre) {
-        val dto = tre.toDto()
-        dto.rotnode.barn.forEach {
-            nyRelasjon(dto.rotnode, it)
+        val rotnode = tre.toDto().rotnode
+        dao.nyRelasjon(rotnode, null)
+        rotnode.barn.forEach { direkteEtterkommer ->
+            nyRelasjon(direkteEtterkommer, rotnode)
         }
     }
 
@@ -30,12 +31,13 @@ internal class TreService(dataSource: DataSource): ITreeService {
         dao.invaliderRelasjonerFor(node.toDto())
     }
 
-    private fun nyRelasjon(forelder: NodeDto, barn: NodeDto) {
-        dao.nyNode(forelder)
-        dao.nyNode(barn)
-        dao.nySti(forelder, barn)
-        barn.barn.forEach {
-            nyRelasjon(barn, it)
+    private fun nyRelasjon(
+        barn: NodeDto,
+        forelder: NodeDto,
+    ) {
+        dao.nyRelasjon(barn, forelder)
+        barn.barn.forEach { barnebarn ->
+            nyRelasjon(barnebarn, barn)
         }
     }
 }
