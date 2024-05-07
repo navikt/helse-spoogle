@@ -12,6 +12,10 @@ spec:
     - https://spoogle.intern.nav.no
   strategy:
     type: Recreate
+  observability:
+    autoInstrumentation:
+      enabled: true
+      runtime: java
   liveness:
     path: isalive
     initialDelay: 5
