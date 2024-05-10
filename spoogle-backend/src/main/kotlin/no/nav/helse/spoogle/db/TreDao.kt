@@ -125,16 +125,16 @@ internal class TreDao(private val dataSource: DataSource) {
     private fun finnFødselsnummer(id: String): String? {
         @Language("PostgreSQL")
         val query = """
-                WITH RECURSIVE find_root_node(id, id_type) AS (
-                    SELECT node, type FROM relasjon
-                    WHERE node = :id
-                    UNION
-                    SELECT 
-                        forelder,
-                        (SELECT type FROM relasjon r2 WHERE node = relasjon.forelder)
-                    FROM find_root_node 
-                        JOIN relasjon ON relasjon.node = find_root_node.id
-                )
+            WITH RECURSIVE find_root_node(id, id_type) AS (
+                SELECT node, type FROM relasjon
+                WHERE node = :id
+                UNION
+                SELECT 
+                    forelder,
+                    (SELECT type FROM relasjon r2 WHERE node = relasjon.forelder)
+                FROM find_root_node 
+                    JOIN relasjon ON relasjon.node = find_root_node.id
+            )
                 SELECT id
                 FROM find_root_node
                 WHERE id_type = 'FØDSELSNUMMER'
