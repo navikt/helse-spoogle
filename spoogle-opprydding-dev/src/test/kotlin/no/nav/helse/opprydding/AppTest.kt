@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.util.*
 
-internal class AppTest: AbstractDatabaseTest() {
+internal class AppTest : AbstractDatabaseTest() {
     private val testRapid = TestRapid()
 
     init {
@@ -40,50 +40,44 @@ internal class AppTest: AbstractDatabaseTest() {
     }
 
     @Language("JSON")
-    private fun slettemelding(fødselsnummer: String) = """
+    private fun slettemelding(fødselsnummer: String) =
+        """
         {
           "@event_name": "slett_person",
           "@id": "${UUID.randomUUID()}",
           "opprettet": "${LocalDateTime.now()}",
           "fødselsnummer": "$fødselsnummer"
         }
-    """.trimIndent()
+        """.trimIndent()
 
-    private fun assertFinnesIkke(nodeId: Long?) {
-        assertNodeAntall(nodeId, 0)
-        assertStiAntall(nodeId, 0)
+    private fun assertFinnesIkke(node: String?) {
+        assertRelasjonAntall(node, 0)
     }
 
-    private fun assertFinnes(nodeId: Long?) {
-        assertNodeAntall(nodeId, 1)
-        assertStiAntall(nodeId, 1)
+    private fun assertFinnes(node: String?) {
+        assertRelasjonAntall(node, 1)
     }
 
-    private fun assertNodeAntall(nodeId: Long?, forventetAntall: Int) {
+    private fun assertRelasjonAntall(
+        node: String?,
+        forventetAntall: Int,
+    ) {
         @Language("PostgreSQL")
-        val query = """SELECT COUNT(1) FROM node WHERE key = ?"""
-        val antall = sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, nodeId).map { it.int(1) }.asSingle)
-        }
+        val query = """SELECT COUNT(1) FROM relasjon WHERE node = ?"""
+        val antall =
+            sessionOf(dataSource).use { session ->
+                session.run(queryOf(query, node).map { it.int(1) }.asSingle)
+            }
         assertEquals(forventetAntall, antall)
     }
 
-    private fun assertStiAntall(nodeId: Long?, forventetAntall: Int) {
-        @Language("PostgreSQL")
-        val query = """SELECT COUNT(1) FROM sti WHERE forelder = ?"""
-        val antall = sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, nodeId).map { it.int(1) }.asSingle)
-        }
-        assertEquals(forventetAntall, antall)
-    }
-
-    private fun finnNodeKey(fødselsnummer: String): Long? {
+    private fun finnNodeKey(fødselsnummer: String): String? {
         @Language("PostgreSQL")
         val query = """
-           SELECT key FROM node WHERE id = ? AND id_type = 'FØDSELSNUMMER'
+           SELECT node FROM relasjon WHERE node = ? AND type = 'FØDSELSNUMMER'
         """
         return sessionOf(dataSource).use { session ->
-            session.run(queryOf(query, fødselsnummer).map { it.long("key") }.asSingle)
+            session.run(queryOf(query, fødselsnummer).map { it.string("node") }.asSingle)
         }
     }
 }
