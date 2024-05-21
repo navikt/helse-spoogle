@@ -54,7 +54,7 @@ spec:
     sqlInstances:
       - type: POSTGRES_15
         diskAutoresize: true
-        tier: db-custom-96-98304
+        tier: db-custom-4-4096
         databases:
           - name: spoogle
             envVarPrefix: DATABASE
