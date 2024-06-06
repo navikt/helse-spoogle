@@ -22,7 +22,10 @@ internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = t
                 start()
                 port = firstMappedPort.toString()
                 println("Database: jdbc:postgresql://$hostAddress:$firstMappedPort/test startet opp, credentials: test og test")
+                println(jdbcUrl)
             }
+
+        internal val jdbcUrl = postgres.jdbcUrl + "&user=${postgres.username}&password=${postgres.password}"
 
         val dataSource =
             HikariDataSource(
@@ -40,6 +43,7 @@ internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = t
             )
 
         init {
+            println(jdbcUrl)
             Flyway.configure()
                 .dataSource(dataSource)
                 .failOnMissingLocations(true)

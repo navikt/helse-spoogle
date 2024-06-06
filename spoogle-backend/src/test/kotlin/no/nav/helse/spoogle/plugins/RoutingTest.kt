@@ -25,111 +25,127 @@ import org.junit.jupiter.api.Test
 import java.util.*
 
 internal class RoutingTest {
-
     private lateinit var client: HttpClient
 
     @BeforeEach
     fun beforeEach() {
-        client = HttpClient {
-            install(HttpCookies)
-            configureClientContentNegotiation()
-        }
+        client =
+            HttpClient {
+                install(HttpCookies)
+                configureClientContentNegotiation()
+            }
     }
 
     @Test
-    fun `finn tre med gyldig token`() = withTestApplication {
-        val response = client.get("/api/sok/$vedtaksperiodeId") {
-            header("Authorization", "Bearer ${accessToken()}")
+    fun `finn tre med gyldig token`() =
+        withTestApplication {
+            val response =
+                client.get("/api/sok/$vedtaksperiodeId") {
+                    header("Authorization", "Bearer ${accessToken()}")
+                }
+            assertEquals(HttpStatusCode.OK, response.status)
+            val body = response.body<String>()
+            val expected = objectMapper.readTree(expectedJson)
+            val actual = objectMapper.readTree(body)
+            assertEquals(expected, actual)
         }
-        assertEquals(HttpStatusCode.OK, response.status)
-        val body = response.body<String>()
-        val expected = objectMapper.readTree(expectedJson)
-        val actual = objectMapper.readTree(body)
-        assertEquals(expected, actual)
-    }
 
     @Test
-    fun `finn tre med gyldig token med flere grupperider`() = withTestApplication {
-        val response = client.get("/api/sok/$vedtaksperiodeId") {
-            header(
-                "Authorization",
-                "Bearer ${accessToken(grupper = listOf(groupId.toString(), "${UUID.randomUUID()}"))}"
-            )
+    fun `finn tre med gyldig token med flere grupperider`() =
+        withTestApplication {
+            val response =
+                client.get("/api/sok/$vedtaksperiodeId") {
+                    header(
+                        "Authorization",
+                        "Bearer ${accessToken(grupper = listOf(groupId.toString(), "${UUID.randomUUID()}"))}",
+                    )
+                }
+            assertEquals(HttpStatusCode.OK, response.status)
+            val body = response.body<String>()
+            val expected = objectMapper.readTree(expectedJson)
+            val actual = objectMapper.readTree(body)
+            assertEquals(expected, actual)
         }
-        assertEquals(HttpStatusCode.OK, response.status)
-        val body = response.body<String>()
-        val expected = objectMapper.readTree(expectedJson)
-        val actual = objectMapper.readTree(body)
-        assertEquals(expected, actual)
-    }
 
     @Test
-    fun `finn tre med gyldig token med flere scopes`() = withTestApplication {
-        val response = client.get("/api/sok/$vedtaksperiodeId") {
-            header("Authorization", "Bearer ${accessToken()}")
+    fun `finn tre med gyldig token med flere scopes`() =
+        withTestApplication {
+            val response =
+                client.get("/api/sok/$vedtaksperiodeId") {
+                    header("Authorization", "Bearer ${accessToken()}")
+                }
+            assertEquals(HttpStatusCode.OK, response.status)
+            val body = response.body<String>()
+            val expected = objectMapper.readTree(expectedJson)
+            val actual = objectMapper.readTree(body)
+            assertEquals(expected, actual)
         }
-        assertEquals(HttpStatusCode.OK, response.status)
-        val body = response.body<String>()
-        val expected = objectMapper.readTree(expectedJson)
-        val actual = objectMapper.readTree(body)
-        assertEquals(expected, actual)
-    }
 
     @Test
-    fun `finn tre med gyldig token med andre claims i tillegg`() = withTestApplication {
-        val response = client.get("/api/sok/$vedtaksperiodeId") {
-            header("Authorization", "Bearer ${accessToken(andreClaims = mapOf("Some other claim" to "some value"))}")
+    fun `finn tre med gyldig token med andre claims i tillegg`() =
+        withTestApplication {
+            val response =
+                client.get("/api/sok/$vedtaksperiodeId") {
+                    header("Authorization", "Bearer ${accessToken(andreClaims = mapOf("Some other claim" to "some value"))}")
+                }
+            assertEquals(HttpStatusCode.OK, response.status)
+            val body = response.body<String>()
+            val expected = objectMapper.readTree(expectedJson)
+            val actual = objectMapper.readTree(body)
+            assertEquals(expected, actual)
         }
-        assertEquals(HttpStatusCode.OK, response.status)
-        val body = response.body<String>()
-        val expected = objectMapper.readTree(expectedJson)
-        val actual = objectMapper.readTree(body)
-        assertEquals(expected, actual)
-    }
 
     @Test
-    fun `finn tre uten gyldige groups`() = withTestApplication {
-        val response = client.get("/api/sok/$vedtaksperiodeId") {
-            header("Authorization", "Bearer ${accessToken(grupper = listOf("${UUID.randomUUID()}"))}")
+    fun `finn tre uten gyldige groups`() =
+        withTestApplication {
+            val response =
+                client.get("/api/sok/$vedtaksperiodeId") {
+                    header("Authorization", "Bearer ${accessToken(grupper = listOf("${UUID.randomUUID()}"))}")
+                }
+            assertEquals(HttpStatusCode.Unauthorized, response.status)
         }
-        assertEquals(HttpStatusCode.Unauthorized, response.status)
-    }
 
     @Test
-    fun `finn tre uten NAVident`() = withTestApplication {
-        val response = client.get("/api/sok/$vedtaksperiodeId") {
-            header("Authorization", "Bearer ${accessToken(harNavIdent = false)}")
+    fun `finn tre uten NAVident`() =
+        withTestApplication {
+            val response =
+                client.get("/api/sok/$vedtaksperiodeId") {
+                    header("Authorization", "Bearer ${accessToken(harNavIdent = false)}")
+                }
+            assertEquals(HttpStatusCode.Unauthorized, response.status)
         }
-        assertEquals(HttpStatusCode.Unauthorized, response.status)
-    }
 
     private fun accessToken(
         harNavIdent: Boolean = true,
         grupper: List<String> = listOf("$groupId"),
         andreClaims: Map<String, String> = emptyMap(),
-        oid: UUID = UUID.randomUUID()
+        oid: UUID = UUID.randomUUID(),
     ): String {
-        val claims: Map<String, Any> = mutableMapOf<String, Any>(
-            "groups" to grupper
-        ).apply {
-            if (harNavIdent) putAll(
-                mapOf(
-                    "NAVident" to "EN_IDENT",
-                    "preferred_username" to "some_username",
-                    "name" to "some name",
-                    "oid" to "$oid"
-                )
-            )
-            putAll(andreClaims)
-        }
+        val claims: Map<String, Any> =
+            mutableMapOf<String, Any>(
+                "groups" to grupper,
+            ).apply {
+                if (harNavIdent) {
+                    putAll(
+                        mapOf(
+                            "NAVident" to "EN_IDENT",
+                            "preferred_username" to "some_username",
+                            "name" to "some name",
+                            "oid" to "$oid",
+                        ),
+                    )
+                }
+                putAll(andreClaims)
+            }
         return oauthMock.issueToken(
             issuerId = issuerId.toString(),
             clientId = clientId.toString(),
-            tokenCallback = DefaultOAuth2TokenCallback(
-                issuerId = issuerId.toString(),
-                audience = listOf(clientId.toString()),
-                claims = claims,
-            )
+            tokenCallback =
+                DefaultOAuth2TokenCallback(
+                    issuerId = issuerId.toString(),
+                    audience = listOf(clientId.toString()),
+                    claims = claims,
+                ),
         ).serialize()
     }
 
@@ -182,9 +198,10 @@ internal class RoutingTest {
     """
 
     private companion object {
-        private val oauthMock = MockOAuth2Server().also {
-            it.start()
-        }
+        private val oauthMock =
+            MockOAuth2Server().also {
+                it.start()
+            }
         private val issuerId = UUID.randomUUID()
         private val groupId = UUID.randomUUID()
         private val clientId = UUID.randomUUID()
@@ -192,35 +209,43 @@ internal class RoutingTest {
         private val vedtaksperiodeId = UUID.randomUUID()
         private val utbetalingId = UUID.randomUUID()
 
-        private val env = mapOf(
-            "AZURE_APP_WELL_KNOWN_URL" to oauthMock.wellKnownUrl(issuerId.toString()).toString(),
-            "AZURE_APP_CLIENT_ID" to "$clientId",
-            "LOCAL_DEVELOPMENT" to "true",
-            "AZURE_VALID_GROUP_ID" to "$groupId",
-            "AZURE_APP_JWK" to "some_jwk"
-        )
+        private val env =
+            mapOf(
+                "AZURE_APP_WELL_KNOWN_URL" to oauthMock.wellKnownUrl(issuerId.toString()).toString(),
+                "AZURE_APP_CLIENT_ID" to "$clientId",
+                "LOCAL_DEVELOPMENT" to "true",
+                "AZURE_VALID_GROUP_IDS" to "$groupId",
+                "AZURE_APP_JWK" to "some_jwk",
+            )
 
-        private fun repository() = object : ITreeService {
+        private fun repository() =
+            object : ITreeService {
+                private val tre =
+                    let {
+                        val fnrNode = fnrNode("123456791011")
+                        val orgnrNode = orgnrNode("987654321", "123456791011")
+                        val periodeNode = periodeNode("$vedtaksperiodeId")
+                        val utbetalingNode = utbetalingNode("$utbetalingId")
 
-            private val tre = let {
-                val fnrNode = fnrNode("123456791011")
-                val orgnrNode = orgnrNode("987654321", "123456791011")
-                val periodeNode = periodeNode("$vedtaksperiodeId")
-                val utbetalingNode = utbetalingNode("$utbetalingId")
+                        orgnrNode barnAv fnrNode
+                        periodeNode barnAv orgnrNode
+                        utbetalingNode barnAv periodeNode
+                        Tre.byggTre(fnrNode)
+                    }
 
-                orgnrNode barnAv fnrNode
-                periodeNode barnAv orgnrNode
-                utbetalingNode barnAv periodeNode
-                Tre.byggTre(fnrNode)
+                override fun finnTre(id: String): Tre = tre
+
+                private fun fnrNode(fnr: String) = Node.fødselsnummer(fnr)
+
+                private fun orgnrNode(
+                    orgnr: String,
+                    fnr: String,
+                ) = Node.organisasjonsnummer(orgnr, fnr)
+
+                private fun periodeNode(id: String) = Node.vedtaksperiodeId(id)
+
+                private fun utbetalingNode(id: String) = Node.utbetalingId(id)
             }
-
-            override fun finnTre(id: String): Tre = tre
-
-            private fun fnrNode(fnr: String) = Node.fødselsnummer(fnr)
-            private fun orgnrNode(orgnr: String, fnr: String) = Node.organisasjonsnummer(orgnr, fnr)
-            private fun periodeNode(id: String) = Node.vedtaksperiodeId(id)
-            private fun utbetalingNode(id: String) = Node.utbetalingId(id)
-        }
 
         @BeforeAll
         @JvmStatic

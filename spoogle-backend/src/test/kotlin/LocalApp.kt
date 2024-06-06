@@ -10,7 +10,7 @@ import no.nav.security.mock.oauth2.token.DefaultOAuth2TokenCallback
 import org.intellij.lang.annotations.Language
 import java.io.File
 
-internal class LocalApp: AbstractDatabaseTest(doTruncate = false) {
+internal class LocalApp : AbstractDatabaseTest(doTruncate = false) {
     private companion object {
         private const val fødselsnummer1 = "12345678910"
         private const val fødselsnummer2 = "99999999999"
@@ -24,31 +24,33 @@ internal class LocalApp: AbstractDatabaseTest(doTruncate = false) {
         private val vedtaksperiodeId4 = "6e0b087e-9c57-4b0a-86b6-1b6beb753cc3"
         private val utbetalingId1 = "a26a03df-ef7d-4a76-aa2c-fb97e3655747"
     }
+
     private val oauthMock = OauthMock
-    private val environmentVariables: Map<String, String> = mutableMapOf(
-        "DATABASE_HOST" to hostAddress,
-        "DATABASE_PORT" to port,
-        "DATABASE_DATABASE" to database,
-        "DATABASE_USERNAME" to "test",
-        "DATABASE_PASSWORD" to "test",
-        "LOCAL_DEVELOPMENT" to "true",
-    ).apply {
-        putAll(oauthMock.oauthConfig)
-    }.toMap()
+    private val environmentVariables: Map<String, String> =
+        mutableMapOf(
+            "DATABASE_JDBC_URL" to jdbcUrl,
+            "LOCAL_DEVELOPMENT" to "true",
+        ).apply {
+            putAll(oauthMock.oauthConfig)
+        }.toMap()
 
     private val testRapid = TestRapid()
 
     private val app: App by lazy { App(environmentVariables) { testRapid } }
 
     internal fun start() {
-        val server = embeddedServer(Netty, applicationEngineEnvironment {
-            module {
-                app.ktorApp(this)
-            }
-            connector {
-                port = 8080
-            }
-        })
+        val server =
+            embeddedServer(
+                Netty,
+                applicationEngineEnvironment {
+                    module {
+                        app.ktorApp(this)
+                    }
+                    connector {
+                        port = 8080
+                    }
+                },
+            )
 
         app.start()
         server.start(wait = false)
@@ -68,7 +70,7 @@ internal class LocalApp: AbstractDatabaseTest(doTruncate = false) {
         fødselsnummer: String,
         aktørId: String,
         organisasjonsnummer: String,
-        vedtaksperiodeId: String
+        vedtaksperiodeId: String,
     ) = """{
     "@event_name": "vedtaksperiode_endret",
     "organisasjonsnummer": "$organisasjonsnummer",
@@ -91,7 +93,7 @@ internal class LocalApp: AbstractDatabaseTest(doTruncate = false) {
     @Language("JSON")
     private fun vedtaksperiodeNyUtbetaling(
         utbetalingId: String,
-        vedtaksperiodeId: String
+        vedtaksperiodeId: String,
     ) = """{
     "@event_name": "vedtaksperiode_ny_utbetaling",
     "vedtaksperiodeId": "$vedtaksperiodeId",
@@ -118,43 +120,49 @@ private object OauthMock {
     private const val issuerId = "00000000-0000-0000-0000-000000000000"
     private const val clientId = "00000000-0000-0000-0000-000000000000"
     private const val oid = "00000000-0000-0000-0000-000000000000"
-    private val server = MockOAuth2Server().also {
-        it.start(0)
-    }
-    val oauthConfig = mapOf(
-        "AZURE_APP_WELL_KNOWN_URL" to server.wellKnownUrl(issuerId).toString(),
-        "AZURE_APP_CLIENT_ID" to clientId,
-        "AZURE_VALID_GROUP_ID" to acceptedGroupId,
-        "AZURE_APP_JWK" to "some_jwk"
-    )
+    private val server =
+        MockOAuth2Server().also {
+            it.start(0)
+        }
+    val oauthConfig =
+        mapOf(
+            "AZURE_APP_WELL_KNOWN_URL" to server.wellKnownUrl(issuerId).toString(),
+            "AZURE_APP_CLIENT_ID" to clientId,
+            "AZURE_VALID_GROUP_IDS" to acceptedGroupId,
+            "AZURE_APP_JWK" to "some_jwk",
+        )
 
     fun accessToken(
         harNavIdent: Boolean = true,
         grupper: List<String> = listOf(acceptedGroupId),
-        andreClaims: Map<String, String> = emptyMap()
+        andreClaims: Map<String, String> = emptyMap(),
     ): String {
-        val claims: Map<String, Any> = mutableMapOf<String, Any>(
-            "groups" to grupper
-        ).apply {
-            if (harNavIdent) putAll(
-                mapOf(
-                    "NAVident" to "X999999",
-                    "preferred_username" to "saksbehandler@nav.no",
-                    "name" to "En Saksbehandler",
-                    "oid" to oid
-                )
-            )
-            putAll(andreClaims)
-        }
+        val claims: Map<String, Any> =
+            mutableMapOf<String, Any>(
+                "groups" to grupper,
+            ).apply {
+                if (harNavIdent) {
+                    putAll(
+                        mapOf(
+                            "NAVident" to "X999999",
+                            "preferred_username" to "saksbehandler@nav.no",
+                            "name" to "En Saksbehandler",
+                            "oid" to oid,
+                        ),
+                    )
+                }
+                putAll(andreClaims)
+            }
         return server.issueToken(
             issuerId = issuerId,
             clientId = clientId,
-            tokenCallback = DefaultOAuth2TokenCallback(
-                issuerId = issuerId,
-                audience = listOf(clientId),
-                claims = claims,
-                expiry = 604800 // en uke
-            )
+            tokenCallback =
+                DefaultOAuth2TokenCallback(
+                    issuerId = issuerId,
+                    audience = listOf(clientId),
+                    claims = claims,
+                    expiry = 604800, // en uke
+                ),
         ).serialize()
     }
 }
