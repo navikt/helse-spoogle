@@ -9,6 +9,7 @@ on:
       - 'spoogle-frontend/**'
       - 'build.gradle.kts'
       - '.github/workflows/**'
+      - '!.github/workflows/spoogle-opprydding-dev.yml'
       - 'Dockerfile'
     branches:
       - main
