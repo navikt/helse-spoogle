@@ -15,7 +15,7 @@ private val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
     kotlin("jvm") apply true
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.21" apply true
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21" apply true
 }
 
 dependencies {
@@ -61,17 +61,15 @@ dependencies {
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
 
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+
 tasks {
     test {
         useJUnitPlatform()
-    }
-
-    compileKotlin {
-        kotlinOptions.jvmTarget = "21"
-    }
-
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "21"
     }
 
     jar {
