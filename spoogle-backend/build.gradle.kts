@@ -2,15 +2,14 @@ import java.nio.file.Paths
 
 private val mainClass = "no.nav.helse.spoogle.AppKt"
 
-private val rapidsAndRiversVersion = "2024010209171704183456.6d035b91ffb4"
+private val rapidsAndRiversVersion = "2024082313161724411773.1db923f4402d"
 private val junitVersion = "5.10.2"
 private val flywayVersion = "10.12.0"
 private val hikariVersion = "5.0.1"
 private val kotliqueryVersion = "1.9.0"
 private val postgresqlVersion = "42.7.2"
 private val testcontainersPostgresqlVersion = "1.19.7"
-private val ktorVersion = "2.3.10"
-private val micrometerVersion = "1.12.3"
+private val ktorVersion = "2.3.12"
 private val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
@@ -31,8 +30,6 @@ dependencies {
         exclude(group = "ch.qos.logback")
     }
 
-    implementation("io.micrometer:micrometer-registry-prometheus:$micrometerVersion")
-    implementation("io.micrometer:micrometer-core:$micrometerVersion")
     implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")

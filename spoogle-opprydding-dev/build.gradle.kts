@@ -5,7 +5,7 @@ private val hikariVersion = "5.0.1"
 private val kotliqueryVersion = "1.9.0"
 private val flywayVersion = "10.12.0"
 private val junitVersion = "5.10.2"
-private val rapidsAndRiversVersion = "2024010209171704183456.6d035b91ffb4"
+private val rapidsAndRiversVersion = "2024082313161724411773.1db923f4402d"
 
 val mainClass = "no.nav.helse.opprydding.AppKt"
 

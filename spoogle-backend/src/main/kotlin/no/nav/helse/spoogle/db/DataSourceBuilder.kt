@@ -3,9 +3,9 @@ package no.nav.helse.spoogle.db
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.micrometer.core.instrument.Clock
-import io.micrometer.prometheus.PrometheusConfig
-import io.micrometer.prometheus.PrometheusMeterRegistry
-import io.prometheus.client.CollectorRegistry
+import io.micrometer.prometheusmetrics.PrometheusConfig
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
+import io.prometheus.metrics.model.registry.PrometheusRegistry
 import org.flywaydb.core.Flyway
 import java.time.Duration
 import javax.sql.DataSource
@@ -22,12 +22,7 @@ internal class DataSourceBuilder(env: Map<String, String>) {
             connectionTimeout = Duration.ofSeconds(30).toMillis()
             minimumIdle = 1
             maximumPoolSize = 10
-            metricRegistry =
-                PrometheusMeterRegistry(
-                    PrometheusConfig.DEFAULT,
-                    CollectorRegistry.defaultRegistry,
-                    Clock.SYSTEM,
-                )
+            metricRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT, PrometheusRegistry.defaultRegistry, Clock.SYSTEM)
         }
 
     private val hikariMigrationConfig =
