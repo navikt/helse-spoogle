@@ -17,8 +17,8 @@ internal class UtbetalingForkastetRiver(
         River(rapidsConnection).apply {
             validate {
                 it.demandValue("@event_name", eventName())
+                it.demandValue("gjeldendeStatus", "FORKASTET")
                 it.requireKey("utbetalingId")
-                it.requireValue("gjeldendeStatus", "FORKASTET")
             }
         }.register(this)
     }
