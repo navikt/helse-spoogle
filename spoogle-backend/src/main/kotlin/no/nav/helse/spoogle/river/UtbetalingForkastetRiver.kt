@@ -11,11 +11,12 @@ import no.nav.helse.spoogle.tre.Node
 internal class UtbetalingForkastetRiver(
     private val treService: TreService,
     rapidsConnection: RapidsConnection
-): River.PacketListener {
+): SpoogleRiver() {
+    override fun eventName(): String = "utbetaling_endret"
     init {
         River(rapidsConnection).apply {
             validate {
-                it.demandValue("@event_name", "utbetaling_endret")
+                it.demandValue("@event_name", eventName())
                 it.requireKey("utbetalingId")
                 it.requireValue("gjeldendeStatus", "FORKASTET")
             }

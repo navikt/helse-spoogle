@@ -12,11 +12,12 @@ import no.nav.helse.spoogle.tre.Tre
 internal class VedtaksperiodeNyUtbetalingRiver(
     private val treService: TreService,
     rapidsConnection: RapidsConnection
-): River.PacketListener {
+): SpoogleRiver() {
+    override fun eventName(): String = "vedtaksperiode_ny_utbetaling"
     init {
         River(rapidsConnection).apply {
             validate {
-                it.demandValue("@event_name", "vedtaksperiode_ny_utbetaling")
+                it.demandValue("@event_name", eventName())
                 it.requireKey("utbetalingId", "vedtaksperiodeId")
             }
         }.register(this)

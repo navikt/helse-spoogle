@@ -11,12 +11,13 @@ import no.nav.helse.spoogle.tre.Tre
 internal class OppgaveEndretRiver(
     private val treService: TreService,
     rapidsConnection: RapidsConnection,
-) : River.PacketListener {
+) : SpoogleRiver() {
+    override fun eventName(): String  = "oppgave_opprettet"
     init {
         River(rapidsConnection).apply {
             validate {
-                it.demandAny("@event_name", listOf("oppgave_opprettet", "oppgave_oppdatert"))
-                it.requireKey("fødselsnummer", "oppgaveId")
+                it.demandAny("@event_name", listOf(eventName(), "oppgave_oppdatert"))
+                it.requireKey("oppgaveId", "behandlingId")
             }
         }.register(this)
     }
@@ -25,15 +26,15 @@ internal class OppgaveEndretRiver(
         packet: JsonMessage,
         context: MessageContext,
     ) {
-        val fødselsnummer = packet["fødselsnummer"].asText()
         val oppgaveId = packet["oppgaveId"].asText()
+        val behandlingId = packet["behandlingId"].asText()
 
-        val fødselsnummerNode = Node.fødselsnummer(fødselsnummer)
-        val oppgaveIdNode = Node.oppgaveId(oppgaveId.toString())
+        val oppgaveIdNode = Node.oppgaveId(oppgaveId)
+        val behandlingIdNode = Node.behandlingId(behandlingId)
 
-        oppgaveIdNode barnAv fødselsnummerNode
+        oppgaveIdNode barnAv behandlingIdNode
 
-        val tre = Tre.byggTre(fødselsnummerNode)
+        val tre = Tre.byggTre(behandlingIdNode)
         treService.nyGren(tre)
     }
 }

@@ -12,31 +12,30 @@ import no.nav.helse.spoogle.tre.Tre
 internal class BehandlingOpprettetRiver(
     private val treService: TreService,
     rapidsConnection: RapidsConnection
-): River.PacketListener {
+): SpoogleRiver() {
+
+    override fun eventName(): String = "behandling_opprettet"
 
     init {
         River(rapidsConnection).apply {
             validate {
-                it.demandValue("@event_name", "behandling_opprettet")
-                it.requireKey("fødselsnummer", "aktørId", "organisasjonsnummer", "vedtaksperiodeId", "behandlingId")
+                it.demandValue("@event_name", eventName())
+                it.requireKey("fødselsnummer", "organisasjonsnummer", "vedtaksperiodeId", "behandlingId")
             }
         }.register(this)
     }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
         val fødselsnummer = packet["fødselsnummer"].asText()
-        val aktørId = packet["aktørId"].asText()
         val organisasjonsnummer = packet["organisasjonsnummer"].asText()
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
         val behandlingId = packet["behandlingId"].asUUID()
 
         val fødselsnummerNode = Node.fødselsnummer(fødselsnummer)
-        val aktørIdNode = Node.aktørId(aktørId)
         val organisasjonsnummerNode = Node.organisasjonsnummer(organisasjonsnummer, fødselsnummer)
         val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())
         val behandlingIdNode = Node.behandlingId(behandlingId.toString())
 
-        aktørIdNode barnAv fødselsnummerNode
         organisasjonsnummerNode barnAv fødselsnummerNode
         vedtaksperiodeIdNode barnAv organisasjonsnummerNode
         behandlingIdNode barnAv vedtaksperiodeIdNode

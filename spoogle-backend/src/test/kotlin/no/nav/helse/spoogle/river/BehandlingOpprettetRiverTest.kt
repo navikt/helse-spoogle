@@ -1,11 +1,10 @@
 package no.nav.helse.spoogle.river
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
 import org.intellij.lang.annotations.Language
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import java.util.*
 
@@ -21,14 +20,10 @@ internal class BehandlingOpprettetRiverTest: AbstractDatabaseTest() {
 
     @Test
     fun `Les inn behandling_opprettet`() {
-        testRapid.sendTestMessage(behandlingOpprettet)
+        testRapid.sendTestMessage(behandlingOpprettet(vedtaksperiodeId, behandlingId))
         val tree = treService.finnTre(vedtaksperiodeId.toString())
         assertNotNull(tree)
-
-        val json = tree?.let { jacksonObjectMapper().readTree(it.toJson()) }
-        val expectedJson = jacksonObjectMapper().readTree(expectedJson)
-
-        assertEquals(expectedJson, json)
+        assertJson(expectedJson, tree)
     }
 
     @Language("JSON")
@@ -37,12 +32,6 @@ internal class BehandlingOpprettetRiverTest: AbstractDatabaseTest() {
             "id": "12345678910",
             "type": "FØDSELSNUMMER",
             "children": [
-            {
-                "id": "1234567891011",
-                "type": "AKTØR_ID",
-                "children": [],
-                "ugyldig_fra": null
-            },
             {
                 "id": "987654321",
                 "type": "ORGANISASJONSNUMMER",
@@ -66,18 +55,5 @@ internal class BehandlingOpprettetRiverTest: AbstractDatabaseTest() {
             ],
             "ugyldig_fra": null
        } 
-    """
-
-    @Language("JSON")
-    private val behandlingOpprettet = """{
-    "@event_name": "behandling_opprettet",
-    "organisasjonsnummer": "987654321",
-    "vedtaksperiodeId": "$vedtaksperiodeId",
-    "behandlingId": "$behandlingId",
-    "@id": "4c443e35-e993-49d3-a5c1-e230fa32f5e0",
-    "@opprettet": "2018-01-01T00:00:00.000",
-    "aktørId": "1234567891011",
-    "fødselsnummer": "12345678910"
-}
     """
 }
