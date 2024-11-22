@@ -56,6 +56,11 @@ spec:
         diskAutoresize: true
         tier: db-f1-micro
         name: spoogle
+        flags:
+          - name: cloudsql.logical_decoding
+            value: true
+          - name: cloudsql.enable_pglogical
+            value: true
         databases:
           - name: spoogle
             envVarPrefix: DATABASE
