@@ -58,9 +58,9 @@ spec:
         name: spoogle
         flags:
           - name: cloudsql.logical_decoding
-            value: true
+            value: "true"
           - name: cloudsql.enable_pglogical
-            value: true
+            value: "true"
         databases:
           - name: spoogle
             envVarPrefix: DATABASE
