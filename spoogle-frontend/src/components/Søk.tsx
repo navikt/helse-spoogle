@@ -22,6 +22,7 @@ export const Søk = () => {
                     htmlSize={50}
                     label="header søk"
                     variant={'secondary'}
+                    autoFocus={true}
                     placeholder="Søk etter en id"
                     onChange={(value) => {setSøkestreng(value)}}>
                     <Search.Button type={"submit"} loading={loading}/>

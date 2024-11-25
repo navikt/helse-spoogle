@@ -32,6 +32,7 @@
         }
     },
     "rules": {
-        "react/prop-types": "off"
+        "react/prop-types": "off",
+        "jsx-a11y/no-autofocus": "off"
     }
 }
