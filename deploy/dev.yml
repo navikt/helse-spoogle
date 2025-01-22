@@ -61,6 +61,10 @@ spec:
             value: "true"
           - name: cloudsql.enable_pglogical
             value: "true"
+          - name: cloudsql.enable_pgaudit
+            value: "true"
+          - name: pgaudit.log
+            value: 'all'
         databases:
           - name: spoogle
             envVarPrefix: DATABASE

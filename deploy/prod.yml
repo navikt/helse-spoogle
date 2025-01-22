@@ -55,6 +55,11 @@ spec:
       - type: POSTGRES_15
         diskAutoresize: true
         tier: db-custom-4-4096
+        flags:
+          - name: cloudsql.enable_pgaudit
+            value: "true"
+          - name: pgaudit.log
+            value: 'all'
         databases:
           - name: spoogle
             envVarPrefix: DATABASE
