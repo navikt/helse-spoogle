@@ -59,7 +59,7 @@ spec:
           - name: cloudsql.enable_pgaudit
             value: "true"
           - name: pgaudit.log
-            value: 'all'
+            value: 'none'
         databases:
           - name: spoogle
             envVarPrefix: DATABASE
