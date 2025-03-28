@@ -18,8 +18,10 @@ internal class SøknadHåndtertRiver(
     override fun eventName(): String = "søknad_håndtert"
     init {
         River(rapidsConnection).apply {
+            precondition {
+                it.requireValue("@event_name", eventName())
+            }
             validate {
-                it.demandValue("@event_name", eventName())
                 it.requireKey("søknadId", "vedtaksperiodeId")
             }
         }.register(this)

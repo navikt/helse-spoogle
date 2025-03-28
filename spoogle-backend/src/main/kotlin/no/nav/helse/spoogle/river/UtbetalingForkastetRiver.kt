@@ -17,9 +17,11 @@ internal class UtbetalingForkastetRiver(
     override fun eventName(): String = "utbetaling_endret"
     init {
         River(rapidsConnection).apply {
+            precondition {
+                it.requireValue("@event_name", eventName())
+                it.requireValue("gjeldendeStatus", "FORKASTET")
+            }
             validate {
-                it.demandValue("@event_name", eventName())
-                it.demandValue("gjeldendeStatus", "FORKASTET")
                 it.requireKey("utbetalingId")
             }
         }.register(this)

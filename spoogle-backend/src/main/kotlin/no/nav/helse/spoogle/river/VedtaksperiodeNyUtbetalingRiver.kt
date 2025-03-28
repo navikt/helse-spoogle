@@ -18,8 +18,10 @@ internal class VedtaksperiodeNyUtbetalingRiver(
     override fun eventName(): String = "vedtaksperiode_ny_utbetaling"
     init {
         River(rapidsConnection).apply {
+            precondition {
+                it.requireValue("@event_name", eventName())
+            }
             validate {
-                it.demandValue("@event_name", eventName())
                 it.requireKey("utbetalingId", "vedtaksperiodeId")
             }
         }.register(this)

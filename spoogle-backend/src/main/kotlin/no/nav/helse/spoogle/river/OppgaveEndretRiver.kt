@@ -18,8 +18,10 @@ internal class OppgaveEndretRiver(
 
     init {
         River(rapidsConnection).apply {
+            precondition {
+                it.requireAny("@event_name", listOf(eventName(), "oppgave_oppdatert"))
+            }
             validate {
-                it.demandAny("@event_name", listOf(eventName(), "oppgave_oppdatert"))
                 it.requireKey("oppgaveId", "behandlingId")
             }
         }.register(this)

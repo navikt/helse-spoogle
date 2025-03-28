@@ -20,8 +20,10 @@ internal class BehandlingOpprettetRiver(
 
     init {
         River(rapidsConnection).apply {
+            precondition {
+                it.requireValue("@event_name", eventName())
+            }
             validate {
-                it.demandValue("@event_name", eventName())
                 it.requireKey("fødselsnummer", "organisasjonsnummer", "vedtaksperiodeId", "behandlingId")
             }
         }.register(this)

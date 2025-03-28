@@ -19,8 +19,10 @@ internal class VedtaksperiodeForkastetRiver(
 
     init {
         River(rapidsConnection).apply {
+            precondition {
+                it.requireValue("@event_name", eventName())
+            }
             validate {
-                it.demandValue("@event_name", eventName())
                 it.requireKey("vedtaksperiodeId")
             }
         }.register(this)
