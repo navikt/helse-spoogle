@@ -29,8 +29,9 @@ dependencies {
     testImplementation("org.testcontainers:postgresql:$testcontainersPostgresqlVersion") {
         exclude("com.fasterxml.jackson.core")
     }
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 kotlin {
@@ -43,6 +44,11 @@ tasks {
 
     test {
         useJUnitPlatform()
+        testLogging {
+            events("skipped", "failed")
+            showStackTraces = true
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        }
     }
 
     named<Jar>("jar") {
