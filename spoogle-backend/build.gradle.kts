@@ -2,14 +2,15 @@ import java.nio.file.Paths
 
 private val mainClass = "no.nav.helse.spoogle.AppKt"
 
-private val rapidsAndRiversVersion = "2024082313161724411773.1db923f4402d"
-private val junitVersion = "5.10.2"
-private val flywayVersion = "10.12.0"
-private val hikariVersion = "5.0.1"
-private val kotliqueryVersion = "1.9.0"
-private val postgresqlVersion = "42.7.2"
-private val testcontainersPostgresqlVersion = "1.19.7"
-private val ktorVersion = "2.3.12"
+private val rapidsAndRiversVersion = "2025030709111741335066.dc4411f7bc29"
+private val tbdLibsVersion = "2025.03.10-19.50-d556269c"
+private val junitVersion = "5.12.1"
+private val flywayVersion = "11.4.0"
+private val hikariVersion = "6.2.1"
+private val kotliqueryVersion = "1.9.1"
+private val postgresqlVersion = "42.7.5"
+private val testcontainersPostgresqlVersion = "1.20.6"
+private val ktorVersion = "3.1.1"
 private val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
@@ -45,17 +46,18 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
-    implementation("no.nav.security:token-validation-ktor-v2:3.1.0")
+    implementation("no.nav.security:token-validation-ktor-v3:5.0.21")
 
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
     implementation("io.ktor:ktor-client-apache-jvm:$ktorVersion")
 
-    testImplementation("no.nav.security:mock-oauth2-server:2.1.1")
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktorVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:$tbdLibsVersion")
+    testImplementation("no.nav.security:mock-oauth2-server:2.1.10")
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.testcontainers:postgresql:$testcontainersPostgresqlVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
 
 kotlin {

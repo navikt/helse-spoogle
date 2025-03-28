@@ -1,6 +1,6 @@
 package no.nav.helse.spoogle.microsoft
 
-import no.nav.security.token.support.v2.IssuerConfig
+import no.nav.security.token.support.v3.IssuerConfig
 
 class AzureAD private constructor(private val config: Config) {
     internal fun issuer(): String = "AAD"

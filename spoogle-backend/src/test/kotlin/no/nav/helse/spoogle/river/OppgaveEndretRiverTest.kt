@@ -1,6 +1,6 @@
 package no.nav.helse.spoogle.river
 
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
 import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
 import org.intellij.lang.annotations.Language

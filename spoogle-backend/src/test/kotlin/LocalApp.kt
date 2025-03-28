@@ -1,11 +1,9 @@
-import io.ktor.server.engine.applicationEngineEnvironment
-import io.ktor.server.engine.connector
-import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.helse.spoogle.App
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
 import no.nav.security.mock.oauth2.MockOAuth2Server
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
+import io.ktor.server.engine.*
 import no.nav.security.mock.oauth2.token.DefaultOAuth2TokenCallback
 import org.intellij.lang.annotations.Language
 import java.io.File
@@ -39,18 +37,13 @@ internal class LocalApp : AbstractDatabaseTest(doTruncate = false) {
     private val app: App by lazy { App(environmentVariables) { testRapid } }
 
     internal fun start() {
-        val server =
-            embeddedServer(
-                Netty,
-                applicationEngineEnvironment {
-                    module {
-                        app.ktorApp(this)
-                    }
-                    connector {
-                        port = 8080
-                    }
-                },
-            )
+        val server = embeddedServer(
+            Netty, applicationEnvironment {}, configure = {
+                connector {
+                    port = 8080
+                }
+            }
+        ) { app.ktorApp(this) }
 
         app.start()
         server.start(wait = false)
@@ -108,8 +101,7 @@ internal fun main() {
     val tokenFile = File("testtoken.json")
 
     @Language("JSON")
-    val json = """ { "token": "${OauthMock.accessToken()}" } 
-    """
+    val json = """ { "token": "${OauthMock.accessToken()}" } """
     tokenFile.writeText(json)
 
     LocalApp().start()

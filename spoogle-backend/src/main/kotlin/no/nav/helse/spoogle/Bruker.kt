@@ -7,7 +7,7 @@ import io.ktor.server.application.ApplicationCall
 import io.ktor.server.auth.authentication
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import no.nav.security.token.support.v2.TokenValidationContextPrincipal
+import no.nav.security.token.support.v3.TokenValidationContextPrincipal
 import java.util.*
 
 @Serializable

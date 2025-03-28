@@ -1,8 +1,8 @@
 package no.nav.helse.spoogle.river
 
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
 import kotliquery.queryOf
 import kotliquery.sessionOf
-import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
 import org.intellij.lang.annotations.Language

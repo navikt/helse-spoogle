@@ -151,10 +151,8 @@ internal class RoutingTest {
 
     private fun withTestApplication(block: suspend ApplicationTestBuilder.() -> Unit) {
         testApplication {
-            environment {
-                module {
-                    app(env, repository(), AzureAD.fromEnv(env))
-                }
+            application {
+                app(env, repository(), AzureAD.fromEnv(env))
             }
             block(this)
         }

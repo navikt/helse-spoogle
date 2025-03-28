@@ -1,21 +1,28 @@
 package no.nav.helse.spoogle
 
-import io.ktor.server.application.Application
-import io.ktor.server.auth.authenticate
-import io.ktor.server.http.content.ignoreFiles
-import io.ktor.server.http.content.react
-import io.ktor.server.http.content.singlePageApplication
-import io.ktor.server.routing.routing
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.http.content.*
+import io.ktor.server.routing.*
+import io.micrometer.core.instrument.Metrics
+import io.micrometer.prometheusmetrics.PrometheusConfig
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import no.nav.helse.rapids_rivers.RapidApplication
-import no.nav.helse.rapids_rivers.RapidApplication.Builder
-import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.spoogle.db.DataSourceBuilder
 import no.nav.helse.spoogle.microsoft.AzureAD
 import no.nav.helse.spoogle.plugins.configureAuthentication
 import no.nav.helse.spoogle.plugins.configureServerContentNegotiation
 import no.nav.helse.spoogle.plugins.configureUtilities
 import no.nav.helse.spoogle.plugins.statusPages
-import no.nav.helse.spoogle.river.*
+import no.nav.helse.spoogle.river.BehandlingOpprettetRiver
+import no.nav.helse.spoogle.river.InntektsmeldingHåndtertRiver
+import no.nav.helse.spoogle.river.OppgaveEndretRiver
+import no.nav.helse.spoogle.river.SøknadHåndtertRiver
+import no.nav.helse.spoogle.river.UtbetalingForkastetRiver
+import no.nav.helse.spoogle.river.VedtaksperiodeEndretRiver
+import no.nav.helse.spoogle.river.VedtaksperiodeForkastetRiver
+import no.nav.helse.spoogle.river.VedtaksperiodeNyUtbetalingRiver
 import no.nav.helse.spoogle.routes.brukerRoutes
 import no.nav.helse.spoogle.routes.treRoutes
 
@@ -28,11 +35,14 @@ private class RapidApp(env: Map<String, String>) {
     private val app = App(env) { rapidsConnection }
 
     init {
-        rapidsConnection =
-            Builder(RapidApplication.RapidApplicationConfig.fromEnv(env))
-                .withKtorModule {
+        rapidsConnection = RapidApplication.create(
+            env = env,
+            meterRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT).also(Metrics.globalRegistry::add),
+            builder = {
+                withKtorModule {
                     app.ktorApp(this)
-                }.build()
+                }
+            })
     }
 
     fun start() = app.start()

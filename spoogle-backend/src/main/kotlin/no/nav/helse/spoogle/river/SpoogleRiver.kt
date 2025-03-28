@@ -1,8 +1,9 @@
 package no.nav.helse.spoogle.river
 
-import no.nav.helse.rapids_rivers.MessageContext
-import no.nav.helse.rapids_rivers.MessageProblems
-import no.nav.helse.rapids_rivers.River
+import com.github.navikt.tbd_libs.rapids_and_rivers.River
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageMetadata
+import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageProblems
 import org.slf4j.LoggerFactory
 
 sealed class SpoogleRiver: River.PacketListener {
@@ -12,7 +13,7 @@ sealed class SpoogleRiver: River.PacketListener {
         private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
     }
 
-    final override fun onError(problems: MessageProblems, context: MessageContext) {
+    final override fun onError(problems: MessageProblems, context: MessageContext, metadata: MessageMetadata) {
         logg.error("Klart ikke lese melding ${eventName()}")
         sikkerlogg.error("Klart ikke lese melding ${eventName()}: ${problems.toExtendedReport()}")
         throw RuntimeException("Klart ikke lese melding ${eventName()}")

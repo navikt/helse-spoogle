@@ -5,8 +5,8 @@ import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
 import net.logstash.logback.argument.StructuredArguments.kv
 import no.nav.helse.spoogle.microsoft.AzureAD
-import no.nav.security.token.support.v2.TokenSupportConfig
-import no.nav.security.token.support.v2.tokenValidationSupport
+import no.nav.security.token.support.v3.TokenSupportConfig
+import no.nav.security.token.support.v3.tokenValidationSupport
 import org.slf4j.LoggerFactory
 
 private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
