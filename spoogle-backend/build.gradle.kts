@@ -2,20 +2,20 @@ import java.nio.file.Paths
 
 private val mainClass = "no.nav.helse.spoogle.AppKt"
 
-private val rapidsAndRiversVersion = "2025030709111741335066.dc4411f7bc29"
-private val tbdLibsVersion = "2025.03.10-19.50-d556269c"
+private val rapidsAndRiversVersion = "2025033014191743337188.2f9d6b08d096"
+private val tbdLibsVersion = "2025.04.04-09.18-7cc3badf"
 private val junitVersion = "5.12.1"
-private val flywayVersion = "11.4.0"
-private val hikariVersion = "6.2.1"
+private val flywayVersion = "11.8.0"
+private val hikariVersion = "6.3.0"
 private val kotliqueryVersion = "1.9.1"
 private val postgresqlVersion = "42.7.5"
-private val testcontainersPostgresqlVersion = "1.20.6"
-private val ktorVersion = "3.1.1"
+private val testcontainersPostgresqlVersion = "1.21.0"
+private val ktorVersion = "3.1.2"
 private val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
     kotlin("jvm") apply true
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21" apply true
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.20" apply true
 }
 
 dependencies {
@@ -46,7 +46,7 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
-    implementation("no.nav.security:token-validation-ktor-v3:5.0.21")
+    implementation("no.nav.security:token-validation-ktor-v3:5.0.25")
 
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
