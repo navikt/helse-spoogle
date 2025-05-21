@@ -75,6 +75,9 @@ spec:
       value: tbd.rapid.v1
     - name: KAFKA_CONSUMER_GROUP_ID
       value: tbd-spoogle-v1
-      # Kommaseparert liste av uuider
     - name: AZURE_VALID_GROUP_IDS
       value: f787f900-6697-440d-a086-d5bb56e26a9c,c0227409-2085-4eb2-b487-c4ba270986a3
+  observability:
+    logging:
+      destinations:
+        - id: elastic
