@@ -2,7 +2,7 @@ import java.nio.file.Paths
 
 private val mainClass = "no.nav.helse.spoogle.AppKt"
 
-private val rapidsAndRiversVersion = "2025033014191743337188.2f9d6b08d096"
+private val rapidsAndRiversVersion = "2025061811051750237542.df739400e55e"
 private val tbdLibsVersion = "2025.04.04-09.18-7cc3badf"
 private val junitVersion = "5.12.1"
 private val flywayVersion = "11.8.0"
