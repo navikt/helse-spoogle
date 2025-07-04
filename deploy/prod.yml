@@ -52,7 +52,7 @@ spec:
       allowAllUsers: false
   gcp:
     sqlInstances:
-      - type: POSTGRES_15
+      - type: POSTGRES_17
         diskAutoresize: true
         tier: db-custom-1-3840
         flags:
