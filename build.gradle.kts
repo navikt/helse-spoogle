@@ -3,6 +3,12 @@ plugins {
     kotlin("jvm") version "2.0.21" apply false
 }
 
+tasks {
+    wrapper {
+        gradleVersion = "8.14.3"
+    }
+}
+
 subprojects {
     repositories {
         val githubPassword: String? by project
