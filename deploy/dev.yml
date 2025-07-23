@@ -6,7 +6,7 @@ metadata:
   labels:
     team: tbd
 spec:
-  image: {{image}}
+  image: { { image } }
   port: 8080
   ingresses:
     - https://spoogle.intern.dev.nav.no
@@ -52,7 +52,7 @@ spec:
       allowAllUsers: false
   gcp:
     sqlInstances:
-      - type: POSTGRES_15
+      - type: POSTGRES_16
         diskAutoresize: true
         tier: db-f1-micro
         name: spoogle
@@ -64,7 +64,7 @@ spec:
           - name: cloudsql.enable_pgaudit
             value: "true"
           - name: pgaudit.log
-            value: 'write'
+            value: "write"
         databases:
           - name: spoogle
             envVarPrefix: DATABASE
