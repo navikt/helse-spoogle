@@ -2,20 +2,20 @@ import java.nio.file.Paths
 
 private val mainClass = "no.nav.helse.spoogle.AppKt"
 
-private val rapidsAndRiversVersion = "2025061811051750237542.df739400e55e"
-private val tbdLibsVersion = "2025.04.04-09.18-7cc3badf"
-private val junitVersion = "5.12.1"
-private val flywayVersion = "11.8.0"
-private val hikariVersion = "6.3.0"
+private val rapidsAndRiversVersion = "2025091914191758284377.e07ac23cddbd"
+private val tbdLibsVersion = "2025.09.19-15.24-1a9c113f"
+private val junitVersion = "5.13.4"
+private val flywayVersion = "11.13.1"
+private val hikariVersion = "7.0.2"
 private val kotliqueryVersion = "1.9.1"
-private val postgresqlVersion = "42.7.5"
-private val testcontainersPostgresqlVersion = "1.21.0"
-private val ktorVersion = "3.1.2"
+private val postgresqlVersion = "42.7.8"
+private val testcontainersPostgresqlVersion = "1.21.3"
+private val ktorVersion = "3.3.0"
 private val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
     kotlin("jvm") apply true
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.20" apply true
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20" apply true
 }
 
 dependencies {
@@ -46,14 +46,14 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
-    implementation("no.nav.security:token-validation-ktor-v3:5.0.25")
+    implementation("no.nav.security:token-validation-ktor-v3:5.0.37")
 
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
     implementation("io.ktor:ktor-client-apache-jvm:$ktorVersion")
 
     testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:$tbdLibsVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:2.1.10")
+    testImplementation("no.nav.security:mock-oauth2-server:3.0.0")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter")
