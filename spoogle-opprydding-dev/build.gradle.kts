@@ -1,5 +1,5 @@
 private val testcontainersPostgresqlVersion = "1.21.3"
-private val cloudSqlVersion = "1.25.3"
+private val cloudSqlVersion = "1.26.1"
 private val postgresqlVersion = "42.7.8"
 private val hikariVersion = "7.0.2"
 private val kotliqueryVersion = "1.9.1"
