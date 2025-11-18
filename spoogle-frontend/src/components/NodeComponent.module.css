@@ -1,12 +1,8 @@
-.RemoveExpandable > div {
+.RemoveExpandable > span > svg {
     visibility: hidden;
 }
 
 .RemoveExpandable {
     pointer-events: visible;
     cursor: default;
-}
-
-.FullWidth > span {
-    width: 100%;
 }
