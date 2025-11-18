@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Header as DSHeader} from '@navikt/ds-react-internal';
+import {InternalHeader as DSHeader} from '@navikt/ds-react';
 import {useRecoilState} from 'recoil';
 import {brukerState} from '../state/state';
 import {fetchBruker} from '../endepunkter';

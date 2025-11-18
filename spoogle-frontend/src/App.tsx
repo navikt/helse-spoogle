@@ -1,6 +1,5 @@
 import './App.css';
 import '@navikt/ds-css';
-import '@navikt/ds-css-internal';
 import React from 'react';
 import {Header} from './components/Header';
 import {Søk} from "./components/Søk";
