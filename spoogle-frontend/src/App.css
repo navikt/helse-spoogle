@@ -21,6 +21,10 @@ body {
   --ekspandert-warning-background: #fffaf3;
 }
 
+.navds-accordion__header:hover {
+    text-decoration: none !important;
+}
+
 .navds-accordion--indent > :where(.navds-accordion__item) > :where(.navds-accordion__content) {
     padding-top: 0 !important;
     padding-bottom: 0 !important;
