@@ -2,15 +2,15 @@ import java.nio.file.Paths
 
 private val mainClass = "no.nav.helse.spoogle.AppKt"
 
-private val rapidsAndRiversVersion = "2025091914191758284377.e07ac23cddbd"
-private val tbdLibsVersion = "2025.09.19-15.24-1a9c113f"
+private val rapidsAndRiversVersion = "2025110410541762250064.d7e58c3fad81"
+private val tbdLibsVersion = "2025.10.31-14.20-3733c982"
 private val junitVersion = "5.13.4"
-private val flywayVersion = "11.13.1"
+private val flywayVersion = "11.14.1"
 private val hikariVersion = "7.0.2"
 private val kotliqueryVersion = "1.9.1"
 private val postgresqlVersion = "42.7.8"
 private val testcontainersPostgresqlVersion = "1.21.3"
-private val ktorVersion = "3.3.0"
+private val ktorVersion = "3.3.1"
 private val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
