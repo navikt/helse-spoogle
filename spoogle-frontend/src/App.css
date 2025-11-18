@@ -27,3 +27,19 @@ body {
 .navds-accordion__content {
   padding-right: 0 !important;
 }
+
+.navds-accordion__icon-wrapper {
+    justify-content: start !important;
+}
+
+.navds-accordion__header:hover .navds-accordion__icon-wrapper {
+    background-color: rgba(28, 43, 68, 0) !important;
+}
+
+.navds-accordion__content {
+    padding-top: 0 !important;
+}
+
+.navds-accordion__item:last-child:where(.navds-accordion__item--open) {
+    box-shadow: none !important;
+}
