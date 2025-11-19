@@ -1,11 +1,12 @@
-import {Search} from '@navikt/ds-react';
-import React, {useState} from 'react';
-import {søkestrengState, søkState} from '../state/state';
-import {useRecoilState, useSetRecoilState} from 'recoil';
-import {søk} from "../endepunkter";
+import { Search } from '@navikt/ds-react';
+import React, { useContext, useState } from 'react';
+import { søkestrengState } from '../state/state';
+import { useRecoilState } from 'recoil';
+import { søk } from '../endepunkter';
+import { SøkContext } from '../state/providers';
 
 export const Søk = () => {
-    const setSøk = useSetRecoilState(søkState);
+    const { setSøkeresultat } = useContext(SøkContext);
     const [loading, setLoading] = useState(false)
     const [søkestreng, setSøkestreng] = useRecoilState(søkestrengState)
     return (
@@ -13,7 +14,7 @@ export const Søk = () => {
             e.preventDefault()
             setLoading(true)
             return søk(søkestreng)
-                .then((response) => setSøk(response))
+                .then((response) => setSøkeresultat(response))
                 .finally(() => setLoading(false));
 
         }}>
