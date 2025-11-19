@@ -18,7 +18,7 @@ const compat = new FlatCompat({
 });
 
 export default defineConfig([
-    globalIgnores(["**/node_modules/", "**/.prettierrc", "**/.eslintrc.json"]),
+    globalIgnores(["**/node_modules/", "**/.prettierrc", "**/.eslintrc.json", "**/dist/"]),
     {
         extends: fixupConfigRules(compat.extends(
             "eslint:recommended",

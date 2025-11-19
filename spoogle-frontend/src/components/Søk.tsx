@@ -12,9 +12,9 @@ export const Søk = () => {
         <form onSubmit={async (e) => {
             e.preventDefault()
             setLoading(true)
-            return søk(søkestreng).then((response) => {
-                response === null ? setSøk(null) : setSøk(response);
-            }).finally(() => setLoading(false));
+            return søk(søkestreng)
+                .then((response) => setSøk(response))
+                .finally(() => setLoading(false));
 
         }}>
             <div className={'flex'}>
