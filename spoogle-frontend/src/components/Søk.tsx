@@ -1,14 +1,12 @@
 import { Search } from '@navikt/ds-react';
 import React, { useContext, useState } from 'react';
-import { søkestrengState } from '../state/state';
-import { useRecoilState } from 'recoil';
 import { søk } from '../endepunkter';
 import { SøkContext } from '../state/providers';
 
 export const Søk = () => {
     const { setSøkeresultat } = useContext(SøkContext);
     const [loading, setLoading] = useState(false)
-    const [søkestreng, setSøkestreng] = useRecoilState(søkestrengState)
+    const [søkestreng, setSøkestreng] = useState<string>('')
     return (
         <form onSubmit={async (e) => {
             e.preventDefault()
