@@ -1,10 +1,10 @@
 import { Search } from '@navikt/ds-react';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { søk } from '../endepunkter';
-import { SøkContext } from '../state/providers';
+import { useSetSøkeresultat } from '../state/providers';
 
 export const Søk = () => {
-    const { setSøkeresultat } = useContext(SøkContext);
+    const setSøkeresultat = useSetSøkeresultat();
     const [loading, setLoading] = useState(false)
     const [søkestreng, setSøkestreng] = useState<string>('')
     return (
