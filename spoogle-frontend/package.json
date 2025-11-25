@@ -14,7 +14,7 @@
   "dependencies": {
     "@navikt/ds-css": "^7.33.5",
     "@navikt/ds-react": "^7.33.5",
-    "@navikt/ds-tailwind": "^7.33.5",
+    "@navikt/ds-tailwind": "^7.34.0",
     "@tailwindcss/postcss": "^4.1.17",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.19",
