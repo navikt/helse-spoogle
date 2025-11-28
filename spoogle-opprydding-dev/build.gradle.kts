@@ -1,12 +1,12 @@
 private val testcontainersPostgresqlVersion = "1.21.3"
-private val cloudSqlVersion = "1.25.3"
+private val socketFactryVersion = "1.27.0"
 private val postgresqlVersion = "42.7.8"
 private val hikariVersion = "7.0.2"
 private val kotliqueryVersion = "1.9.1"
-private val flywayVersion = "11.13.1"
-private val junitVersion = "5.13.4"
-private val rapidsAndRiversVersion = "2025091914191758284377.e07ac23cddbd"
-private val tbdLibsVersion = "2025.09.19-15.24-1a9c113f"
+private val flywayVersion = "11.18.0"
+private val junitVersion = "6.0.0"
+private val rapidsAndRiversVersion = "2025110410541762250064.d7e58c3fad81"
+private val tbdLibsVersion = "2025.11.04-10.54-c831038e"
 
 val mainClass = "no.nav.helse.opprydding.AppKt"
 
@@ -17,7 +17,7 @@ plugins {
 dependencies {
     api("com.github.navikt:rapids-and-rivers:$rapidsAndRiversVersion")
 
-    implementation("com.google.cloud.sql:postgres-socket-factory:$cloudSqlVersion")
+    implementation("com.google.cloud.sql:postgres-socket-factory:$socketFactryVersion")
     implementation("org.postgresql:postgresql:$postgresqlVersion")
     implementation("com.github.seratch:kotliquery:$kotliqueryVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
