@@ -53,7 +53,7 @@ dependencies {
     implementation("io.ktor:ktor-client-apache-jvm:$ktorVersion")
 
     testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:$tbdLibsVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:3.0.0")
+    testImplementation("no.nav.security:mock-oauth2-server:3.0.1")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter")
