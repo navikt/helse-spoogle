@@ -4,7 +4,7 @@ private val mainClass = "no.nav.helse.spoogle.AppKt"
 
 private val rapidsAndRiversVersion = "2025110410541762250064.d7e58c3fad81"
 private val tbdLibsVersion = "2025.11.04-10.54-c831038e"
-private val junitVersion = "6.0.0"
+private val junitVersion = "6.0.1"
 private val flywayVersion = "11.18.0"
 private val hikariVersion = "7.0.2"
 private val kotliqueryVersion = "1.9.1"
@@ -15,7 +15,7 @@ private val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
     kotlin("jvm") apply true
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20" apply true
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.21" apply true
 }
 
 dependencies {
@@ -46,14 +46,14 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
-    implementation("no.nav.security:token-validation-ktor-v3:5.0.37")
+    implementation("no.nav.security:token-validation-ktor-v3:6.0.0")
 
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
     implementation("io.ktor:ktor-client-apache-jvm:$ktorVersion")
 
     testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:$tbdLibsVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:3.0.0")
+    testImplementation("no.nav.security:mock-oauth2-server:3.0.1")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter")
