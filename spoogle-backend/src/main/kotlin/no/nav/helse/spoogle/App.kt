@@ -92,7 +92,7 @@ internal fun Application.app(
         authenticate("ValidToken") {
             singlePageApplication {
                 useResources = !isLocalDevelopment
-                react("spoogle-frontend/dist")
+                react("static")
                 ignoreFiles { it.endsWith(".txt") }
             }
             treRoutes(service, azureAD.issuer())

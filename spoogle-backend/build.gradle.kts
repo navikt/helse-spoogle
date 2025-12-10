@@ -86,6 +86,9 @@ tasks {
                 }
         }
 
+        from("${rootProject.projectDir}/spoogle-frontend/dist") {
+            into("static")
+        }
 
         doLast {
             configurations.runtimeClasspath.get().forEach {
