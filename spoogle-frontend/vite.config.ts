@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const tokenfile: { token: string } | undefined = await import('../testtoken.json') // eslint-disable-line import/no-unresolved
+const tokenfile: { token: string } | undefined = await import('../testtoken.json')
     .then((it) => it)
     .catch(() => {
         /* Do nothing */
