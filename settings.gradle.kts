@@ -6,4 +6,4 @@ pluginManagement {
     }
 }
 
-include("spoogle-backend", "spoogle-opprydding-dev")
+include("spoogle-frontend", "spoogle-backend", "spoogle-opprydding-dev")
