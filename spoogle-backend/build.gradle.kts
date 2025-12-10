@@ -1,5 +1,3 @@
-import java.nio.file.Paths
-
 private val mainClass = "no.nav.helse.spoogle.AppKt"
 
 private val rapidsAndRiversVersion = "2025110410541762250064.d7e58c3fad81"
@@ -78,7 +76,6 @@ tasks {
     }
 
     jar {
-        mustRunAfter(":spoogle-frontend:npm_run_build")
         archiveBaseName.set("app")
 
         manifest {
@@ -89,9 +86,6 @@ tasks {
                 }
         }
 
-        from({ Paths.get(project(":spoogle-frontend").layout.buildDirectory.get().toString()) }) {
-            into("spoogle-frontend/dist")
-        }
 
         doLast {
             configurations.runtimeClasspath.get().forEach {
