@@ -1,52 +1,52 @@
 {
-  "name": "spoogle-frontend",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "engines": {
-    "node": "24",
-    "pnpm": ">=10"
-  },
-  "packageManager": "pnpm@10.24.0",
-  "scripts": {
-    "dev": "vite",
-    "test": "",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "lint": "eslint . --ext .ts,.tsx"
-  },
-  "proxy": "http://localhost:8080",
-  "dependencies": {
-    "@navikt/ds-css": "^7.35.1",
-    "@navikt/ds-react": "^7.35.1",
-    "@navikt/ds-tailwind": "^7.35.1",
-    "@tailwindcss/postcss": "^4.1.17",
-    "classnames": "^2.5.1",
-    "dayjs": "^1.11.19",
-    "eslint": "^9.39.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react": "^7.37.5",
-    "postcss": "^8.5.6",
-    "prettier": "^3.7.4",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "react-hook-form": "^7.68.0"
-  },
-  "devDependencies": {
-    "@eslint/compat": "^2.0.0",
-    "@eslint/eslintrc": "^3.3.3",
-    "@eslint/js": "^9.39.1",
-    "@types/react": "^19.2.7",
-    "@types/react-dom": "^19.2.3",
-    "@typescript-eslint/eslint-plugin": "^8.48.1",
-    "@typescript-eslint/parser": "^8.48.1",
-    "@vitejs/plugin-react": "^5.1.1",
-    "eslint-import-resolver-typescript": "^4.4.4",
-    "globals": "^16.5.0",
-    "tailwindcss": "^4.1.17",
-    "typescript": "^5.9.3",
-    "vite": "^7.2.6"
-  }
+    "name": "spoogle-frontend",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "engines": {
+        "node": "24",
+        "pnpm": ">=10"
+    },
+    "packageManager": "pnpm@10.24.0",
+    "scripts": {
+        "dev": "vite",
+        "test": "",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "lint": "eslint . --ext .ts,.tsx"
+    },
+    "proxy": "http://localhost:8080",
+    "dependencies": {
+        "@navikt/ds-css": "^7.35.1",
+        "@navikt/ds-react": "^7.35.1",
+        "@navikt/ds-tailwind": "^7.35.1",
+        "@tailwindcss/postcss": "^4.1.17",
+        "classnames": "^2.5.1",
+        "dayjs": "^1.11.19",
+        "eslint": "^9.39.1",
+        "eslint-config-prettier": "^10.1.8",
+        "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-jsx-a11y": "^6.10.2",
+        "eslint-plugin-react": "^7.37.5",
+        "postcss": "^8.5.6",
+        "prettier": "^3.7.4",
+        "react": "^19.2.1",
+        "react-dom": "^19.2.1",
+        "react-hook-form": "^7.68.0"
+    },
+    "devDependencies": {
+        "@eslint/compat": "^2.0.0",
+        "@eslint/eslintrc": "^3.3.3",
+        "@eslint/js": "^9.39.1",
+        "@types/react": "^19.2.7",
+        "@types/react-dom": "^19.2.3",
+        "@typescript-eslint/eslint-plugin": "^8.49.0",
+        "@typescript-eslint/parser": "^8.49.0",
+        "@vitejs/plugin-react": "^5.1.2",
+        "eslint-import-resolver-typescript": "^4.4.4",
+        "globals": "^16.5.0",
+        "tailwindcss": "^4.1.17",
+        "typescript": "^5.9.3",
+        "vite": "^7.2.7"
+    }
 }
