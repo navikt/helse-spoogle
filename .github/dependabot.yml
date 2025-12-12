@@ -7,6 +7,8 @@ updates:
       prefix: "⬆ "
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
 
   # Maintain dependencies for docker
   - package-ecosystem: "docker"
@@ -15,6 +17,8 @@ updates:
       prefix: "⬆ "
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
 
   # Maintain dependencies for gradle
   - package-ecosystem: "gradle"
@@ -23,6 +27,8 @@ updates:
       prefix: "⬆ "
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: "npm"
     directory: "/spoogle-frontend"
@@ -30,3 +36,5 @@ updates:
       prefix: "⬆ "
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
