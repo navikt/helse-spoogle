@@ -1,6 +1,6 @@
 plugins {
     base
-    kotlin("jvm") version "2.2.20" apply false
+    kotlin("jvm") version "2.3.0" apply false
 }
 
 tasks {
