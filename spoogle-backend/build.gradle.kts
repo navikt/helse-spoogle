@@ -13,7 +13,7 @@ private val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
     kotlin("jvm") apply true
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.21" apply true
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0" apply true
 }
 
 dependencies {
