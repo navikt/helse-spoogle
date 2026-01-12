@@ -1,4 +1,4 @@
-private val testcontainersPostgresqlVersion = "1.21.4"
+private val testcontainersPostgresqlVersion = "2.0.3"
 private val socketFactryVersion = "1.27.1"
 private val postgresqlVersion = "42.7.8"
 private val hikariVersion = "7.0.2"
@@ -26,7 +26,7 @@ dependencies {
     testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:$tbdLibsVersion")
     testImplementation("org.flywaydb:flyway-core:$flywayVersion")
     testImplementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
-    testImplementation("org.testcontainers:postgresql:$testcontainersPostgresqlVersion") {
+    testImplementation("org.testcontainers:testcontainers-postgresql:$testcontainersPostgresqlVersion") {
         exclude("com.fasterxml.jackson.core")
     }
     testImplementation(platform("org.junit:junit-bom:$junitVersion"))
