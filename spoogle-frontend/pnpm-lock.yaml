@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@navikt/ds-css':
-        specifier: ^7.37.0
-        version: 7.37.0
+        specifier: ^7.38.0
+        version: 7.38.0
       '@navikt/ds-react':
         specifier: ^7.37.0
         version: 7.37.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -464,8 +464,8 @@ packages:
   '@navikt/aksel-icons@7.39.0':
     resolution: {integrity: sha512-M36ZJ1HRYxyonPJmxOBkK4gjEjT1AVNHRLEk3nNioJZhIj2EDGl7Uw/ALjyghfkxzsof5Q/2m7XXIu3DvInxYQ==}
 
-  '@navikt/ds-css@7.37.0':
-    resolution: {integrity: sha512-Fvt6Cou4APj2BR8/1oH98H945si4Nr+IfTMwJTG7mBdnlqltGoQocOSyF7yKFl78UfB6z1x2bWLjpzGM8sgyZQ==}
+  '@navikt/ds-css@7.38.0':
+    resolution: {integrity: sha512-51dvtPgFHcfkKpnJ9fcwHJsfiyZuRsWaawSHxxv7jyXQkDTl8YEsZ0a31gAozgp2CW3wHJBDCSehC89Z9X4x8A==}
 
   '@navikt/ds-react@7.37.0':
     resolution: {integrity: sha512-6dDTNA6Q/iJ3kiBPk9wzejvsNAHqO/ep+iWrWrMF/dR9u7/xVzc7h1gJG9yz1pTcP9U5pODSS94H8PbkhYmX8w==}
@@ -2431,7 +2431,7 @@ snapshots:
 
   '@navikt/aksel-icons@7.39.0': {}
 
-  '@navikt/ds-css@7.37.0': {}
+  '@navikt/ds-css@7.38.0': {}
 
   '@navikt/ds-react@7.37.0(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
