@@ -111,7 +111,7 @@ jobs:
   deployDev:
     name: Deploy til dev
     needs: [build, analyze]
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     permissions:
       id-token: write
     steps:
