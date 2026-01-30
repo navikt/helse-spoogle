@@ -8,7 +8,7 @@ private val hikariVersion = "7.0.2"
 private val kotliqueryVersion = "1.9.1"
 private val postgresqlVersion = "42.7.9"
 private val testcontainersPostgresqlVersion = "2.0.3"
-private val ktorVersion = "3.3.3"
+private val ktorVersion = "3.4.0"
 private val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
