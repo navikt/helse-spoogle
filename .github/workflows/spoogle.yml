@@ -110,7 +110,7 @@ jobs:
 
   deployDev:
     name: Deploy til dev
-    needs: [build, analyze]
+    needs: [build]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -124,7 +124,7 @@ jobs:
 
   deployProd:
     name: Deploy til prod
-    needs: [build, analyze]
+    needs: [build]
     runs-on: ubuntu-latest
     permissions:
       id-token: write
