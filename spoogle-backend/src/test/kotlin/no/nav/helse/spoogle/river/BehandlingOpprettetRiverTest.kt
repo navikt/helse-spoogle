@@ -26,6 +26,14 @@ internal class BehandlingOpprettetRiverTest: AbstractDatabaseTest() {
         assertJson(expectedJson, tree)
     }
 
+    @Test
+    fun `Les inn behandling_opprettet på en selvstendig behandling`() {
+        testRapid.sendTestMessage(behandlingOpprettetSelvstendig(vedtaksperiodeId, behandlingId))
+        val tree = treService.finnTre(vedtaksperiodeId.toString())
+        assertNotNull(tree)
+        assertJson(expectedJsonSelvstendig, tree)
+    }
+
     @Language("JSON")
     private val expectedJson = """
        {
@@ -34,6 +42,37 @@ internal class BehandlingOpprettetRiverTest: AbstractDatabaseTest() {
             "children": [
             {
                 "id": "987654321",
+                "type": "ORGANISASJONSNUMMER",
+                "children": [
+                    {
+                        "id": "$vedtaksperiodeId",
+                        "type": "VEDTAKSPERIODE_ID",
+                        "children": [
+                          {
+                            "id": "$behandlingId",
+                            "type": "BEHANDLING_ID",
+                            "children": [],
+                            "ugyldig_fra": null
+                          }
+                        ],
+                        "ugyldig_fra": null
+                    }
+                ],
+                "ugyldig_fra": null
+            }
+            ],
+            "ugyldig_fra": null
+       } 
+    """
+
+    @Language("JSON")
+    private val expectedJsonSelvstendig = """
+       {
+            "id": "12345678910",
+            "type": "FØDSELSNUMMER",
+            "children": [
+            {
+                "id": "SELVSTENDIG",
                 "type": "ORGANISASJONSNUMMER",
                 "children": [
                     {

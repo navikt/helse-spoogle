@@ -2,6 +2,7 @@ package no.nav.helse.spoogle.river
 
 import com.github.navikt.tbd_libs.rapids_and_rivers.JsonMessage
 import com.github.navikt.tbd_libs.rapids_and_rivers.River
+import com.github.navikt.tbd_libs.rapids_and_rivers.isMissingOrNull
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageContext
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.MessageMetadata
 import com.github.navikt.tbd_libs.rapids_and_rivers_api.RapidsConnection
@@ -9,6 +10,7 @@ import io.micrometer.core.instrument.MeterRegistry
 import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.asUUID
 import no.nav.helse.spoogle.tre.Node
+import no.nav.helse.spoogle.tre.Node.Companion.organisasjonsnummer
 import no.nav.helse.spoogle.tre.Tre
 
 internal class BehandlingOpprettetRiver(
@@ -24,7 +26,8 @@ internal class BehandlingOpprettetRiver(
                 it.requireValue("@event_name", eventName())
             }
             validate {
-                it.requireKey("fødselsnummer", "organisasjonsnummer", "vedtaksperiodeId", "behandlingId")
+                it.requireKey("fødselsnummer", "vedtaksperiodeId", "behandlingId", "yrkesaktivitetstype")
+                it.interestedIn("organisasjonsnummer")
             }
         }.register(this)
     }
@@ -33,7 +36,8 @@ internal class BehandlingOpprettetRiver(
         packet: JsonMessage, context: MessageContext, metadata: MessageMetadata, meterRegistry: MeterRegistry
     ) {
         val fødselsnummer = packet["fødselsnummer"].asText()
-        val organisasjonsnummer = packet["organisasjonsnummer"].asText()
+        val yrkesaktivitetstype = packet["yrkesaktivitetstype"].asText()
+        val organisasjonsnummer = packet["organisasjonsnummer"].takeUnless { it.isMissingOrNull() }?.asText() ?: yrkesaktivitetstype
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
         val behandlingId = packet["behandlingId"].asUUID()
 

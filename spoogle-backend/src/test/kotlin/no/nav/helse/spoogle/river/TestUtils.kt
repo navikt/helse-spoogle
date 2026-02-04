@@ -15,6 +15,22 @@ internal fun behandlingOpprettet(
 ) = """{
     "@event_name": "behandling_opprettet",
     "organisasjonsnummer": "$organisasjonsnummer",
+    "yrkesaktivitetstype": "ARBEIDSTAKER",
+    "vedtaksperiodeId": "$vedtaksperiodeId",
+    "behandlingId": "$behandlingId",
+    "@id": "4c443e35-e993-49d3-a5c1-e230fa32f5e0",
+    "@opprettet": "2018-01-01T00:00:00.000",
+    "fødselsnummer": "$fødselsnummer"
+}"""
+
+@Language("JSON")
+internal fun behandlingOpprettetSelvstendig(
+    vedtaksperiodeId: UUID,
+    behandlingId: UUID,
+    fødselsnummer: String = "12345678910",
+) = """{
+    "@event_name": "behandling_opprettet",
+    "yrkesaktivitetstype": "SELVSTENDIG",
     "vedtaksperiodeId": "$vedtaksperiodeId",
     "behandlingId": "$behandlingId",
     "@id": "4c443e35-e993-49d3-a5c1-e230fa32f5e0",
