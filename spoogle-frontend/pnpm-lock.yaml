@@ -15,8 +15,8 @@ importers:
         specifier: ^7.39.1
         version: 7.39.1(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       '@navikt/ds-tailwind':
-        specifier: ^7.39.1
-        version: 7.39.1
+        specifier: ^8.5.2
+        version: 8.5.2
       '@tailwindcss/postcss':
         specifier: ^4.2.0
         version: 4.2.0
@@ -481,8 +481,8 @@ packages:
       '@types/react':
         optional: true
 
-  '@navikt/ds-tailwind@7.39.1':
-    resolution: {integrity: sha512-WHsshdkZEaT7TFM3CDbKaQYcqj2ilGldMSTIrNGRcjnpwFaBfgPvSU0WASedM7YMLmugqa0zOb4kWfmGithSLg==}
+  '@navikt/ds-tailwind@8.5.2':
+    resolution: {integrity: sha512-3r/QyhMAXdtRZYr+c31Do+mNi8NvWm5eFQ8MRRCMHzfBPRj1ypR3jrLrXGvmGBAsskp1zoI35uaVg1CUZLIb2w==}
 
   '@navikt/ds-tokens@7.40.0':
     resolution: {integrity: sha512-zBaBKLS5R2OZyXI4UUPOmiB15L/u/aJPHiyoccJDtmqrv5wRkc1oM6UCjzKK0D4gLZHBoxp7YBT0sR9Mp4DXFQ==}
@@ -2467,7 +2467,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.14
 
-  '@navikt/ds-tailwind@7.39.1': {}
+  '@navikt/ds-tailwind@8.5.2': {}
 
   '@navikt/ds-tokens@7.40.0': {}
 
