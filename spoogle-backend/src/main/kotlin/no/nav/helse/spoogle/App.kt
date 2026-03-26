@@ -31,7 +31,7 @@ fun main() {
 }
 
 private class RapidApp(env: Map<String, String>) {
-    private lateinit var rapidsConnection: RapidsConnection
+    private var rapidsConnection: RapidsConnection
     private val app = App(env) { rapidsConnection }
 
     init {

@@ -7,7 +7,7 @@ import kotliquery.sessionOf
 import org.flywaydb.core.Flyway
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
-import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.postgresql.PostgreSQLContainer
 import javax.sql.DataSource
 
 internal abstract class AbstractDatabaseTest {
@@ -15,7 +15,7 @@ internal abstract class AbstractDatabaseTest {
 
     protected companion object {
         private val postgres =
-            PostgreSQLContainer<Nothing>("postgres:15.5").apply {
+            PostgreSQLContainer("postgres:17").apply {
                 withReuse(false)
                 withLabel("app-navn", "spoogle-opprydding")
                 start()

@@ -1,9 +1,9 @@
 private val mainClass = "no.nav.helse.spoogle.AppKt"
 
-private val rapidsAndRiversVersion = "2025110410541762250064.d7e58c3fad81"
-private val tbdLibsVersion = "2025.11.04-10.54-c831038e"
+private val rapidsAndRiversVersion = "2026021921161771532161.7a37f8c9e0cc"
+private val tbdLibsVersion = "2026.02.19-20.58-521cdd3c"
 private val junitVersion = "6.0.3"
-private val flywayVersion = "11.20.3"
+private val flywayVersion = "12.1.1"
 private val hikariVersion = "7.0.2"
 private val kotliqueryVersion = "1.9.1"
 private val postgresqlVersion = "42.7.10"
@@ -13,7 +13,7 @@ private val logbackSyslog4jVersion = "1.0.0"
 
 plugins {
     kotlin("jvm") apply true
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.20" apply true
+    kotlin("plugin.serialization") version "2.3.20" apply true
 }
 
 dependencies {
