@@ -1,4 +1,4 @@
-private val testcontainersPostgresqlVersion = "2.0.3"
+private val testcontainersPostgresqlVersion = "2.0.4"
 private val socketFactryVersion = "1.28.1"
 private val postgresqlVersion = "42.7.10"
 private val hikariVersion = "7.0.2"
