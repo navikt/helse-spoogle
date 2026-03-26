@@ -7,7 +7,7 @@ private val flywayVersion = "11.20.3"
 private val hikariVersion = "7.0.2"
 private val kotliqueryVersion = "1.9.1"
 private val postgresqlVersion = "42.7.10"
-private val testcontainersPostgresqlVersion = "2.0.3"
+private val testcontainersPostgresqlVersion = "2.0.4"
 private val ktorVersion = "3.4.1"
 private val logbackSyslog4jVersion = "1.0.0"
 
