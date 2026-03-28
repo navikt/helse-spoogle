@@ -1,5 +1,5 @@
 private val testcontainersPostgresqlVersion = "2.0.4"
-private val socketFactryVersion = "1.28.2"
+private val socketFactoryVersion = "1.28.2"
 private val postgresqlVersion = "42.7.10"
 private val hikariVersion = "7.0.2"
 private val kotliqueryVersion = "1.9.1"
@@ -17,7 +17,7 @@ plugins {
 dependencies {
     api("com.github.navikt:rapids-and-rivers:$rapidsAndRiversVersion")
 
-    implementation("com.google.cloud.sql:postgres-socket-factory:$socketFactryVersion")
+    implementation("com.google.cloud.sql:postgres-socket-factory:$socketFactoryVersion")
     implementation("org.postgresql:postgresql:$postgresqlVersion")
     implementation("com.github.seratch:kotliquery:$kotliqueryVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
