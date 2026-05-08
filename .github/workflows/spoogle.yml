@@ -13,7 +13,9 @@ on:
       - 'Dockerfile'
     branches:
       - main
-
+  schedule:
+    - cron: '0 3 * * 3'
+      timezone: 'Europe/Oslo'
 jobs:
   build:
     permissions:
