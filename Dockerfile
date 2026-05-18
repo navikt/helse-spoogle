@@ -7,4 +7,4 @@ WORKDIR /app
 
 COPY spoogle-backend/build/libs/*.jar /app/
 
-CMD ["-jar", "app.jar"]
+CMD ["-jar", "spoogle-backend.jar"]

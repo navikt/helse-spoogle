@@ -7,4 +7,4 @@ WORKDIR /app
 
 COPY spoogle-opprydding-dev/build/libs/*.jar /app/
 
-CMD ["-jar", "app.jar"]
+CMD ["-jar", "spoogle-opprydding-dev.jar"]
