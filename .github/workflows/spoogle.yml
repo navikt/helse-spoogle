@@ -60,8 +60,7 @@ jobs:
       - name: Test og bygg
         run: ./gradlew :spoogle-backend:build
         env:
-          ORG_GRADLE_PROJECT_githubUser: x-access-token
-          ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Lag Docker image
         uses: nais/docker-build-push@v0

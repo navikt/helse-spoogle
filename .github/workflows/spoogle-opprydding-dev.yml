@@ -32,8 +32,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
       - name: test and build
         env:
-          ORG_GRADLE_PROJECT_githubUser: x-access-token
-          ORG_GRADLE_PROJECT_githubPassword: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew :spoogle-opprydding-dev:build
       - uses: nais/docker-build-push@v0
         id: docker-build-push
