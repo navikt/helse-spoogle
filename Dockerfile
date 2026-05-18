@@ -7,4 +7,5 @@ WORKDIR /app
 
 COPY spoogle-backend/build/libs/*.jar /app/
 
-CMD ["-jar", "spoogle-backend.jar"]
+ENTRYPOINT ["java", "-cp", "/app/lib/*", "no.nav.helse.spoogle.AppKt"]
+CMD []

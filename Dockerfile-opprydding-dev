@@ -7,4 +7,5 @@ WORKDIR /app
 
 COPY spoogle-opprydding-dev/build/libs/*.jar /app/
 
-CMD ["-jar", "spoogle-opprydding-dev.jar"]
+ENTRYPOINT ["java", "-cp", "/app/lib/*", "no.nav.helse.opprydding.AppKt"]
+CMD []
