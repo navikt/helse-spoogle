@@ -78,6 +78,7 @@ jobs:
     permissions:
       actions: read
       contents: read
+      id-token: write
       security-events: write
 
     strategy:
@@ -104,6 +105,8 @@ jobs:
 
       - name: Build
         run: ./gradlew clean build --no-build-cache -x test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v4
