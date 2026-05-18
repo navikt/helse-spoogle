@@ -1,62 +1,51 @@
 private val mainClass = "no.nav.helse.spoogle.AppKt"
 
-private val rapidsAndRiversVersion = "2026021921161771532161.7a37f8c9e0cc"
-private val tbdLibsVersion = "2026.02.19-20.58-521cdd3c"
-private val junitVersion = "6.0.3"
-private val flywayVersion = "12.1.1"
-private val hikariVersion = "7.0.2"
-private val kotliqueryVersion = "1.9.1"
-private val postgresqlVersion = "42.7.10"
-private val testcontainersPostgresqlVersion = "2.0.4"
-private val ktorVersion = "3.4.1"
-private val logbackSyslog4jVersion = "1.0.0"
-
 plugins {
-    kotlin("jvm") apply true
-    kotlin("plugin.serialization") version "2.3.10" apply true
+    alias(libs.plugins.kotlin.jvm) apply true
+    alias(libs.plugins.kotlin.serialization) apply true
 }
 
 dependencies {
-    api("com.github.navikt:rapids-and-rivers:$rapidsAndRiversVersion")
+    api(libs.rapids.and.rivers)
 
-    implementation("com.zaxxer:HikariCP:$hikariVersion")
-    implementation("com.github.seratch:kotliquery:$kotliqueryVersion")
-    implementation("org.postgresql:postgresql:$postgresqlVersion")
-    implementation("org.flywaydb:flyway-core:$flywayVersion")
-    implementation("org.flywaydb:flyway-database-postgresql:$flywayVersion")
+    implementation(libs.hikari)
+    implementation(libs.kotliquery)
+    implementation(libs.postgresql)
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.database.postgresql)
 
-    implementation("com.papertrailapp:logback-syslog4j:$logbackSyslog4jVersion") {
+    implementation(libs.logback.syslog4j) {
         exclude(group = "ch.qos.logback")
     }
 
-    implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("io.ktor:ktor-network-tls-certificates:$ktorVersion")
-    implementation("io.ktor:ktor-server-auth:$ktorVersion")
-    implementation("io.ktor:ktor-server-auth-jwt:$ktorVersion") {
+    implementation(libs.ktor.server.core.jvm)
+    implementation(libs.ktor.server.netty.jvm)
+    implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.network.tls.certificates)
+    implementation(libs.ktor.server.auth)
+    implementation(libs.ktor.server.auth.jwt) {
         exclude(group = "junit")
     }
-    implementation("io.ktor:ktor-server-forwarded-header:$ktorVersion")
-    implementation("io.ktor:ktor-server-cors:$ktorVersion")
-    implementation("io.ktor:ktor-server-call-id:$ktorVersion")
-    implementation("io.ktor:ktor-server-status-pages:$ktorVersion")
-    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
-    implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
-    implementation("no.nav.security:token-validation-ktor-v3:6.0.4")
+    implementation(libs.ktor.server.forwarded.header)
+    implementation(libs.ktor.server.cors)
+    implementation(libs.ktor.server.call.id)
+    implementation(libs.ktor.server.status.pages)
+    implementation(libs.ktor.server.call.logging)
+    implementation(libs.ktor.server.metrics.micrometer)
+    implementation(libs.token.validation.ktor)
 
-    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-client-core-jvm:$ktorVersion")
-    implementation("io.ktor:ktor-client-apache-jvm:$ktorVersion")
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.core.jvm)
+    implementation(libs.ktor.client.apache.jvm)
 
-    testImplementation("com.github.navikt.tbd-libs:rapids-and-rivers-test:$tbdLibsVersion")
-    testImplementation("no.nav.security:mock-oauth2-server:3.0.1")
-    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
-    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.testcontainers:testcontainers-postgresql:$testcontainersPostgresqlVersion")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation(libs.tbd.libs.test)
+    testImplementation(libs.mock.oauth2.server)
+    testImplementation(libs.ktor.server.test.host)
+    testImplementation(platform(libs.junit.bom))
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.testcontainers.postgresql)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 kotlin {
