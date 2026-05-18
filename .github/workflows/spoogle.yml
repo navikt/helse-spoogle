@@ -58,7 +58,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v5
 
       - name: Test og bygg
-        run: ./gradlew :spoogle-backend:build
+        run: ./gradlew :spoogle-backend:build :spoogle-backend:installDist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

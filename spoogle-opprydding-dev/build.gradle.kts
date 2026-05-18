@@ -1,7 +1,11 @@
-val mainClass = "no.nav.helse.opprydding.AppKt"
-
 plugins {
-    alias(libs.plugins.kotlin.jvm) apply true
+    id("application")
+    alias(libs.plugins.kotlin.jvm)
+}
+
+application {
+    mainClass.set("no.nav.helse.opprydding.AppKt")
+    applicationName = "app"
 }
 
 dependencies {
@@ -25,40 +29,16 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
+    jvmToolchain(21)
 }
 
 tasks {
-
     test {
         useJUnitPlatform()
         testLogging {
             events("skipped", "failed")
             showStackTraces = true
             exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-        }
-    }
-
-    named<Jar>("jar") {
-        archiveBaseName.set("app")
-
-        manifest {
-            attributes["Main-Class"] = mainClass
-            attributes["Class-Path"] =
-                configurations.runtimeClasspath.get().joinToString(separator = " ") {
-                    it.name
-                }
-        }
-
-        doLast {
-            configurations.runtimeClasspath.get().forEach {
-                val file = File("${layout.buildDirectory.get()}/libs/${it.name}")
-                if (!file.exists()) {
-                    it.copyTo(file)
-                }
-            }
         }
     }
 }

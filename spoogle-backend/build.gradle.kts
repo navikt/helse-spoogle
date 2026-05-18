@@ -1,8 +1,12 @@
-private val mainClass = "no.nav.helse.spoogle.AppKt"
-
 plugins {
-    alias(libs.plugins.kotlin.jvm) apply true
-    alias(libs.plugins.kotlin.serialization) apply true
+    id("application")
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
+}
+
+application {
+    mainClass.set("no.nav.helse.spoogle.AppKt")
+    applicationName = "app"
 }
 
 dependencies {
@@ -49,41 +53,21 @@ dependencies {
 }
 
 kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
+    jvmToolchain(21)
 }
 
 tasks {
+    processResources {
+        from("${rootProject.projectDir}/spoogle-frontend/dist") {
+            into("static")
+        }
+    }
     test {
         useJUnitPlatform()
         testLogging {
             events("skipped", "failed")
             showStackTraces = true
             exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-        }
-    }
-
-    jar {
-        archiveBaseName.set("app")
-
-        manifest {
-            attributes["Main-Class"] = mainClass
-            attributes["Class-Path"] =
-                configurations.runtimeClasspath.get().joinToString(separator = " ") {
-                    it.name
-                }
-        }
-
-        from("${rootProject.projectDir}/spoogle-frontend/dist") {
-            into("static")
-        }
-
-        doLast {
-            configurations.runtimeClasspath.get().forEach {
-                val file = File("${layout.buildDirectory.get()}/libs/${it.name}")
-                if (!file.exists()) it.copyTo(file)
-            }
         }
     }
 }

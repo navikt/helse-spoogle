@@ -33,7 +33,7 @@ jobs:
       - name: test and build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew :spoogle-opprydding-dev:build
+        run: ./gradlew :spoogle-opprydding-dev:build :spoogle-opprydding-dev:installDist
       - uses: nais/docker-build-push@v0
         id: docker-build-push
         with:
