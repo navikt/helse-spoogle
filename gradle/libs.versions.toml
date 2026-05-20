@@ -11,7 +11,7 @@ mock-oauth2-server = "3.0.3"
 postgresql = "42.7.10"
 rapids-and-rivers = "2026021921161771532161.7a37f8c9e0cc"
 tbd-libs = "2026.02.19-20.58-521cdd3c"
-testcontainers-postgresql = "2.0.4"
+testcontainers-postgresql = "2.0.5"
 token-validation-ktor = "6.0.7"
 
 [libraries]
