@@ -1,5 +1,5 @@
 [versions]
-flyway = "12.1.1"
+flyway = "12.6.1"
 google-cloud-sql-socket-factory = "1.28.3"
 hikari = "7.0.2"
 junit = "6.0.3"
