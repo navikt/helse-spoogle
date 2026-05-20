@@ -1,6 +1,6 @@
 [versions]
 flyway = "12.1.1"
-google-cloud-sql-socket-factory = "1.28.2"
+google-cloud-sql-socket-factory = "1.28.3"
 hikari = "7.0.2"
 junit = "6.0.3"
 kotlin = "2.3.10"
