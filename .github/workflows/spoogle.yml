@@ -1,22 +1,14 @@
 name: Spoogle
 
 on:
-  workflow_dispatch:
   push:
-    paths:
-      - 'deploy/**'
-      - 'spoogle-backend/**'
-      - 'spoogle-frontend/**'
-      - 'build.gradle.kts'
-      - 'gradle/libs.versions.toml'
-      - '.github/workflows/**'
-      - '!.github/workflows/spoogle-opprydding-dev.yml'
-      - 'Dockerfile'
     branches:
       - main
   schedule:
     - cron: '0 3 * * 3'
       timezone: 'Europe/Oslo'
+  workflow_dispatch:
+
 jobs:
   build:
     permissions:
