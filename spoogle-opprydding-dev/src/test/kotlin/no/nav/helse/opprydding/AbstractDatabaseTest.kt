@@ -75,18 +75,18 @@ internal abstract class AbstractDatabaseTest {
         fødselsnummer: String,
         organisasjonsnummer: String,
     ) {
-        Flyway
-            .configure()
-            .dataSource(dataSource)
-            .placeholders(
-                mapOf(
-                    "fødselsnummer" to fødselsnummer,
-                    "organisasjonsnummer" to organisasjonsnummer,
-                ),
+        @Language("PostgreSQL")
+        val query = """
+            INSERT INTO relasjon(node, forelder, type, opprettet) VALUES (:foedselsnummer, null, 'FØDSELSNUMMER', now());
+            INSERT INTO relasjon(node, forelder, type, opprettet) VALUES (:organisasjonsnummer, null, 'ORGANISASJONSNUMMER', now());
+        """.trimIndent()
+        sessionOf(dataSource).use { session ->
+            session.run(
+                queryOf(
+                    query, mapOf("foedselsnummer" to fødselsnummer, "organisasjonsnummer" to organisasjonsnummer)
+                ).asUpdate
             )
-            .locations("classpath:db/testperson")
-            .load()
-            .migrate()
+        }
     }
 
     @BeforeEach
