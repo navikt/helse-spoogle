@@ -16,7 +16,7 @@ internal abstract class AbstractDatabaseTest {
     protected companion object {
         private val postgres =
             PostgreSQLContainer("postgres:17").apply {
-                withReuse(false)
+                withReuse(true)
                 withLabel("app-navn", "spoogle-opprydding")
                 start()
 
