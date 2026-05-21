@@ -8,6 +8,7 @@ on:
       - 'spoogle-backend/**'
       - 'spoogle-frontend/**'
       - 'build.gradle.kts'
+      - 'gradle/libs.versions.toml'
       - '.github/workflows/**'
       - '!.github/workflows/spoogle-opprydding-dev.yml'
       - 'Dockerfile'

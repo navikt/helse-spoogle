@@ -8,6 +8,7 @@ on:
       - 'Dockerfile-opprydding-dev'
       - 'spoogle-opprydding-dev/**'
       - 'build.gradle.kts'
+      - 'gradle/libs.versions.toml'
       - '.github/workflows/spoogle-opprydding-dev.yml'
       - 'deploy/dev-opprydding.yml'
       - 'deploy/dev-db-policy.yml'
