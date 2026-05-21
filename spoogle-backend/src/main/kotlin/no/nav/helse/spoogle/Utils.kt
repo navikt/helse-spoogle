@@ -9,7 +9,7 @@ import kotlinx.serialization.encoding.Encoder
 import java.util.*
 import tools.jackson.databind.JsonNode
 
-internal fun JsonNode.asUUID() = UUID.fromString(asText())
+internal fun JsonNode.asUUID() = UUID.fromString(asString())
 
 object UUIDSerializer : KSerializer<UUID> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)

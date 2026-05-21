@@ -10,7 +10,6 @@ import io.micrometer.core.instrument.MeterRegistry
 import no.nav.helse.spoogle.TreService
 import no.nav.helse.spoogle.asUUID
 import no.nav.helse.spoogle.tre.Node
-import no.nav.helse.spoogle.tre.Node.Companion.organisasjonsnummer
 import no.nav.helse.spoogle.tre.Tre
 
 internal class BehandlingOpprettetRiver(
@@ -35,9 +34,9 @@ internal class BehandlingOpprettetRiver(
     override fun onPacket(
         packet: JsonMessage, context: MessageContext, metadata: MessageMetadata, meterRegistry: MeterRegistry
     ) {
-        val fødselsnummer = packet["fødselsnummer"].asText()
-        val yrkesaktivitetstype = packet["yrkesaktivitetstype"].asText()
-        val organisasjonsnummer = packet["organisasjonsnummer"].takeUnless { it.isMissingOrNull() }?.asText() ?: yrkesaktivitetstype
+        val fødselsnummer = packet["fødselsnummer"].asString()
+        val yrkesaktivitetstype = packet["yrkesaktivitetstype"].asString()
+        val organisasjonsnummer = packet["organisasjonsnummer"].takeUnless { it.isMissingOrNull() }?.asString() ?: yrkesaktivitetstype
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
         val behandlingId = packet["behandlingId"].asUUID()
 

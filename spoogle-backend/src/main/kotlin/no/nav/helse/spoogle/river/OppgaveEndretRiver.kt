@@ -30,8 +30,8 @@ internal class OppgaveEndretRiver(
     override fun onPacket(
         packet: JsonMessage, context: MessageContext, metadata: MessageMetadata, meterRegistry: MeterRegistry
     ) {
-        val oppgaveId = packet["oppgaveId"].asText()
-        val behandlingId = packet["behandlingId"].asText()
+        val oppgaveId = packet["oppgaveId"].asString()
+        val behandlingId = packet["behandlingId"].asString()
 
         val oppgaveIdNode = Node.oppgaveId(oppgaveId)
         val behandlingIdNode = Node.behandlingId(behandlingId)

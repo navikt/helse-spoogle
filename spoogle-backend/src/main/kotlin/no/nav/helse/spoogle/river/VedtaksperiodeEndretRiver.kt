@@ -30,8 +30,8 @@ internal class VedtaksperiodeEndretRiver(
     override fun onPacket(
         packet: JsonMessage, context: MessageContext, metadata: MessageMetadata, meterRegistry: MeterRegistry
     ) {
-        val fødselsnummer = packet["fødselsnummer"].asText()
-        val organisasjonsnummer = packet["organisasjonsnummer"].asText()
+        val fødselsnummer = packet["fødselsnummer"].asString()
+        val organisasjonsnummer = packet["organisasjonsnummer"].asString()
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
 
         val fødselsnummerNode = Node.fødselsnummer(fødselsnummer)
