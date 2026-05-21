@@ -9,3 +9,5 @@ COPY spoogle-opprydding-dev/build/install/app/ /app/
 
 ENTRYPOINT ["java", "-cp", "/app/lib/*", "no.nav.helse.opprydding.AppKt"]
 CMD []
+
+ARG BYGD_PA_NY='2026-04-22T19:20:44'
