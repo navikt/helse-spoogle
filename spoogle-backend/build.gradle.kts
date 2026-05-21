@@ -46,6 +46,7 @@ dependencies {
     testImplementation(libs.tbd.libs.test)
     testImplementation(libs.mock.oauth2.server)
     testImplementation(libs.ktor.server.test.host)
+    testImplementation(libs.jackson.kotlin)
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter)
     testImplementation(libs.testcontainers.postgresql)

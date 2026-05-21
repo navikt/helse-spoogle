@@ -6,6 +6,7 @@ junit = "6.0.3"
 kotlin = "2.3.21"
 kotliquery = "1.9.1"
 ktor = "3.4.3"
+jackson = "2.21.3"
 logback-syslog4j = "1.0.0"
 mock-oauth2-server = "3.0.3"
 postgresql = "42.7.11"
@@ -40,6 +41,7 @@ ktor-server-metrics-micrometer = { module = "io.ktor:ktor-server-metrics-microme
 ktor-server-netty-jvm = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
 ktor-server-status-pages = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
 ktor-server-test-host = { module = "io.ktor:ktor-server-test-host", version.ref = "ktor" }
+jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 logback-syslog4j = { module = "com.papertrailapp:logback-syslog4j", version.ref = "logback-syslog4j" }
 mock-oauth2-server = { module = "no.nav.security:mock-oauth2-server", version.ref = "mock-oauth2-server" }
 postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
