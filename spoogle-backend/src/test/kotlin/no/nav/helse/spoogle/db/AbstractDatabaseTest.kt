@@ -7,21 +7,19 @@ import kotliquery.sessionOf
 import org.flywaydb.core.Flyway
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.BeforeEach
-import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.postgresql.PostgreSQLContainer
 import javax.sql.DataSource
 
 internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = true) {
     companion object {
         internal val port: String
-        internal const val hostAddress: String = "localhost"
-        internal const val database: String = "test"
         private val postgres =
-            PostgreSQLContainer<Nothing>("postgres:15.5").apply {
+            PostgreSQLContainer("postgres:17").apply {
                 withReuse(true)
                 withLabel("app-navn", "spoogle")
                 start()
                 port = firstMappedPort.toString()
-                println("Database: jdbc:postgresql://$hostAddress:$firstMappedPort/test startet opp, credentials: test og test")
+                println("Database: jdbc:postgresql://localhost:$firstMappedPort/test startet opp, credentials: test og test")
                 println(jdbcUrl)
             }
 
