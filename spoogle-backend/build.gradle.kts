@@ -9,6 +9,15 @@ application {
     applicationName = "app"
 }
 
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "io.netty") {
+            useVersion("4.2.13.Final")
+            because("Bumper Netty til 4.2.13.Final — ingen ny Ktor 3.4.x-versjon er tilgjengelig")
+        }
+    }
+}
+
 dependencies {
     api(libs.rapids.and.rivers)
 
