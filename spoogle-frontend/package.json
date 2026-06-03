@@ -22,7 +22,7 @@
         "@navikt/ds-tailwind": "^8.11.0",
         "@tailwindcss/postcss": "^4.3.0",
         "classnames": "^2.5.1",
-        "dayjs": "^1.11.20",
+        "dayjs": "^1.11.21",
         "eslint": "^9.39.2",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-import": "^2.32.0",
