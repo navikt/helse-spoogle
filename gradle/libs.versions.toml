@@ -2,7 +2,7 @@
 flyway = "12.6.1"
 google-cloud-sql-socket-factory = "1.28.3"
 hikari = "7.0.2"
-junit = "6.0.3"
+junit = "6.1.0"
 kotlin = "2.3.21"
 kotliquery = "1.9.1"
 ktor = "3.4.3"
