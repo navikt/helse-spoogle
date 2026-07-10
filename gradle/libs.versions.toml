@@ -13,7 +13,7 @@ postgresql = "42.7.11"
 rapids-and-rivers = "2026051812441779101082"
 tbd-libs = "20260513.1819"
 testcontainers-postgresql = "2.0.5"
-token-validation-ktor = "6.0.7"
+token-validation-ktor = "6.0.8"
 
 [libraries]
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
