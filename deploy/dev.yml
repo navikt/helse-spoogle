@@ -54,6 +54,10 @@ spec:
         tier: db-f1-micro
         name: spoogle
         flags:
+          - name: cloudsql.logical_decoding
+            value: "off"
+          - name: cloudsql.enable_pglogical
+            value: "off"
           - name: cloudsql.enable_pgaudit
             value: "true"
           - name: pgaudit.log
