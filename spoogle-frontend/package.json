@@ -44,7 +44,7 @@
         "@typescript-eslint/parser": "^8.63.0",
         "@vitejs/plugin-react": "^5.2.0",
         "eslint-import-resolver-typescript": "^4.4.5",
-        "globals": "^17.6.0",
+        "globals": "^17.7.0",
         "tailwindcss": "^4.3.1",
         "typescript": "^5.9.3",
         "vite": "^7.3.5"
