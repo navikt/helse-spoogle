@@ -38,14 +38,14 @@ permissions:
 jobs:
   bygg-og-test:
     name: Bygg og test
-    uses: navikt/helse-sas-github-workflows/.github/workflows/bygg-og-test-med-gradle.yml@$SHA # v1.0.0
+    uses: navikt/helse-sas-github-workflows/.github/workflows/bygg-og-test-med-gradle.yml@d943bbae32e67f52766859e62f56aab033857bfe # v1.0.0
     permissions:
       contents: read
 
   bygg-image:
     name: Bygg image
     needs: bygg-og-test
-    uses: navikt/helse-sas-github-workflows/.github/workflows/bygg-modul-image-med-jib.yml@$SHA # v1.0.0
+    uses: navikt/helse-sas-github-workflows/.github/workflows/bygg-modul-image-med-jib.yml@d943bbae32e67f52766859e62f56aab033857bfe # v1.0.0
     with:
       modul: spoogle-opprydding-dev
     permissions:
@@ -57,7 +57,7 @@ jobs:
   deploy-dev:
     name: Deploy til dev
     needs: bygg-image
-    uses: navikt/helse-sas-github-workflows/.github/workflows/deploy.yml@$SHA # v1.0.0
+    uses: navikt/helse-sas-github-workflows/.github/workflows/deploy.yml@d943bbae32e67f52766859e62f56aab033857bfe # v1.0.0
     with:
       CLUSTER: dev-gcp
       RESOURCE: deploy/dev-opprydding.yml,deploy/dev-db-policy.yml
