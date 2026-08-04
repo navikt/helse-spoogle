@@ -1,11 +1,10 @@
 plugins {
-    id("application")
-    alias(libs.plugins.kotlin.jvm)
+    id("no.nav.helse.sas.sas-deployable")
 }
 
-application {
-    mainClass.set("no.nav.helse.opprydding.AppKt")
-    applicationName = "app"
+sasDeployable {
+    mainClass = "no.nav.helse.opprydding.AppKt"
+    imageName = "${rootProject.name}-opprydding-dev"
 }
 
 dependencies {
@@ -16,29 +15,11 @@ dependencies {
     implementation(libs.kotliquery)
     implementation(libs.hikari)
 
-    testImplementation(project(":spoogle-backend")) // for å få  tilgang på db/migrations-filene
+    testImplementation(project(":spoogle-backend")) // for å få tilgang på db/migrations-filene
     testImplementation(libs.tbd.libs.test)
     testImplementation(libs.flyway.core)
     testImplementation(libs.flyway.database.postgresql)
     testImplementation(libs.testcontainers.postgresql) {
         exclude("com.fasterxml.jackson.core")
-    }
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter)
-    testRuntimeOnly(libs.junit.platform.launcher)
-}
-
-kotlin {
-    jvmToolchain(21)
-}
-
-tasks {
-    test {
-        useJUnitPlatform()
-        testLogging {
-            events("skipped", "failed")
-            showStackTraces = true
-            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-        }
     }
 }

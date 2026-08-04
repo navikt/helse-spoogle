@@ -1,0 +1,146 @@
+name: main - spoogle-backend - Bygg, test og deploy
+
+# Avviker fra sas-standarden ved at bygg, test og image ikke bruker de gjenbrukbare workflowene:
+# frontenden må bygges med pnpm først, og det skjer i samme jobb som Gradle-bygget.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # Generelt oppsett - alt unntatt dokumentasjon / urelatert oppsett
+      - '**'
+      - '!**.md'
+      - '!CODEOWNERS'
+      - '!LICENSE'
+      - '!docs/**'
+      - '!deploy/**'
+      - '!.github/workflows/standard-dependabot-auto-merge.yml'
+      - '!.github/workflows/standard-dependency-submission.yml'
+      # Ressursene som deployes av denne workflowen
+      - 'deploy/dev.yml'
+      - 'deploy/prod.yml'
+      # Spesielt for denne tjenesten ellers
+      - '!.github/workflows/pr.yml'
+      - '!.github/workflows/main-opprydding-dev.yml'
+      - '!spoogle-opprydding-dev/**'
+  schedule:
+    - cron: '0 4 * * 3'
+      timezone: 'Europe/Oslo'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  actions: read # for sarif
+  contents: read
+  security-events: write # push sarif to github security
+  id-token: write # for nais login
+
+jobs:
+  bygg-image:
+    name: Bygg, test, og publiser image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      actions: read # for sarif upload on private repos
+      contents: read
+      id-token: write # for nais login
+      security-events: write # push sarif to github security
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+        with:
+          package_json_file: spoogle-frontend/package.json
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: spoogle-frontend/package.json
+          cache: pnpm
+          cache-dependency-path: spoogle-frontend/pnpm-lock.yaml
+
+      - name: pnpm install
+        run: pnpm install --frozen-lockfile
+        working-directory: spoogle-frontend
+
+      - name: pnpm run lint
+        run: pnpm run lint
+        working-directory: spoogle-frontend
+
+      # Frontenden bygges kun her, og pakkes inn i imaget som statiske ressurser.
+      - name: pnpm run build
+        run: pnpm run build
+        working-directory: spoogle-frontend
+
+      - uses: actions/setup-java@03ad4de0992f5dab5e18fcb136590ce7c4a0ac95 # v5.6.0
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6.2.0
+
+      - name: NAIS login
+        id: login
+        uses: nais/login@bb6c3e1e14e53d40d69d0d092bd2fce2e39ae3bf # v0
+        with:
+          team: tbd
+
+      - name: gradlew clean build :spoogle-backend:jib
+        id: jib
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./gradlew clean build :spoogle-backend:jib --build-cache \
+            -Pimage.registry='${{ steps.login.outputs.registry }}' \
+            -Pimage.tag=$(date -u +%Y.%m.%d-%H.%M)-$(git rev-parse --short=12 HEAD) \
+            -Djib.console=plain
+          ref="$(cat spoogle-backend/build/jib-image.name)@$(cat spoogle-backend/build/jib-image.digest)"
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
+
+      - name: Generer SBOM, attester og signer
+        uses: nais/attest-sign@bb00e4baa4e7acd00b6aff2502b2dfed3d4fad40 # v2.0.14
+        with:
+          image_ref: ${{ steps.jib.outputs.ref }}
+
+      - name: Scan docker image for secrets
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+        with:
+          image-ref: ${{ steps.jib.outputs.ref }}
+          format: 'sarif'
+          scanners: 'secret'
+          output: 'trivy.sarif'
+
+      - uses: github/codeql-action/upload-sarif@7188fc363630916deb702c7fdcf4e481b751f97a # v4.37.1
+        with:
+          sarif_file: 'trivy.sarif'
+    outputs:
+      image_ref: ${{ steps.jib.outputs.ref }}
+
+  deploy-dev:
+    name: Deploy til dev
+    needs: bygg-image
+    uses: navikt/helse-sas-github-workflows/.github/workflows/deploy.yml@d943bbae32e67f52766859e62f56aab033857bfe # v1.0.0
+    with:
+      CLUSTER: dev-gcp
+      RESOURCE: deploy/dev.yml
+      WORKLOAD_IMAGE: ${{ needs.bygg-image.outputs.image_ref }}
+    permissions:
+      contents: read
+      id-token: write # for nais login
+
+  deploy-prod:
+    name: Deploy til prod
+    needs: [bygg-image, deploy-dev]
+    uses: navikt/helse-sas-github-workflows/.github/workflows/deploy.yml@d943bbae32e67f52766859e62f56aab033857bfe # v1.0.0
+    with:
+      CLUSTER: prod-gcp
+      RESOURCE: deploy/prod.yml
+      WORKLOAD_IMAGE: ${{ needs.bygg-image.outputs.image_ref }}
+    permissions:
+      contents: read
+      id-token: write # for nais login

@@ -1,12 +1,10 @@
-*.log
-hs_err_pid*
-replay_pid*
-.DS_Store
-
+.gradle/
 .idea/
-!/.idea/codeStyles/*.xml
+.kotlin/
 build/
 out/
-.gradle/
+.DS_Store
 
+# Spesielt for dette prosjektet
+*.log
 testtoken.json

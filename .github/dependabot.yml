@@ -4,7 +4,7 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     commit-message:
-      prefix: "⬆ "
+      prefix: "⬆️ "
     schedule:
       interval: "daily"
     cooldown:
@@ -14,16 +14,18 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     commit-message:
-      prefix: "⬆ "
+      prefix: "⬆️ "
     schedule:
       interval: "daily"
     cooldown:
       default-days: 7
+      exclude:
+        - "no.nav.helse.sas.*"
 
   - package-ecosystem: "npm"
     directory: "/spoogle-frontend"
     commit-message:
-      prefix: "⬆ "
+      prefix: "⬆️ "
     schedule:
       interval: "daily"
     cooldown:

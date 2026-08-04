@@ -1,21 +1,10 @@
 plugins {
-    id("application")
-    alias(libs.plugins.kotlin.jvm)
+    id("no.nav.helse.sas.sas-deployable")
     alias(libs.plugins.kotlin.serialization)
 }
 
-application {
-    mainClass.set("no.nav.helse.spoogle.AppKt")
-    applicationName = "app"
-}
-
-configurations.all {
-    resolutionStrategy.eachDependency {
-        if (requested.group == "io.netty") {
-            useVersion("4.2.13.Final")
-            because("Bumper Netty til 4.2.13.Final — ingen ny Ktor 3.4.x-versjon er tilgjengelig")
-        }
-    }
+sasDeployable {
+    mainClass = "no.nav.helse.spoogle.AppKt"
 }
 
 dependencies {
@@ -56,28 +45,13 @@ dependencies {
     testImplementation(libs.mock.oauth2.server)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.jackson.kotlin)
-    testImplementation(platform(libs.junit.bom))
-    testImplementation(libs.junit.jupiter)
     testImplementation(libs.testcontainers.postgresql)
-    testRuntimeOnly(libs.junit.platform.launcher)
-}
-
-kotlin {
-    jvmToolchain(21)
 }
 
 tasks {
     processResources {
         from("${rootProject.projectDir}/spoogle-frontend/dist") {
             into("static")
-        }
-    }
-    test {
-        useJUnitPlatform()
-        testLogging {
-            events("skipped", "failed")
-            showStackTraces = true
-            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
         }
     }
 }

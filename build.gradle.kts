@@ -1,4 +1,4 @@
 plugins {
-    base
-    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.sas.root)
+    alias(libs.plugins.sas.deployable) apply false
 }
