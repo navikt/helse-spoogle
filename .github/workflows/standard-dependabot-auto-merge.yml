@@ -19,7 +19,8 @@ jobs:
         if: >-
           steps.metadata.outputs.update-type != 'version-update:semver-major'
           || steps.metadata.outputs.package-ecosystem == 'github_actions'
-          || contains(steps.metadata.outputs.dependency-names, 'no.nav.helse.sas.')
+          || contains(steps.metadata.outputs.dependency-names, 'no.nav.')
+          || contains(steps.metadata.outputs.dependency-names, 'com.github.navikt.')
         run: gh pr merge --auto --rebase "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
