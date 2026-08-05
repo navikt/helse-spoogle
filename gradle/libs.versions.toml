@@ -1,6 +1,6 @@
 [versions]
 flyway = "13.0.0"
-google-cloud-sql-socket-factory = "1.28.3"
+google-cloud-sql-socket-factory = "1.29.0"
 hikari = "7.0.2"
 kotlin = "2.4.10"
 kotliquery = "1.9.1"
