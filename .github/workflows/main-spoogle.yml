@@ -15,6 +15,7 @@ on:
       - '!LICENSE'
       - '!docs/**'
       - '!deploy/**'
+      - '!.github/dependabot.yml'
       - '!.github/workflows/standard-dependabot-auto-merge.yml'
       - '!.github/workflows/standard-dependency-submission.yml'
       # Ressursene som deployes av denne workflowen
