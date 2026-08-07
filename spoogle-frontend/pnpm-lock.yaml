@@ -13,7 +13,7 @@ importers:
         version: 8.16.1
       '@navikt/ds-react':
         specifier: ^8.16.1
-        version: 8.16.1(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@navikt/ds-tailwind':
         specifier: ^8.16.1
         version: 8.16.1
@@ -67,11 +67,11 @@ importers:
         specifier: ^9.39.5
         version: 9.39.5
       '@types/react':
-        specifier: ^19.2.17
-        version: 19.2.17
+        specifier: ^19.2.18
+        version: 19.2.18
       '@types/react-dom':
         specifier: ^19.2.4
-        version: 19.2.4(@types/react@19.2.17)
+        version: 19.2.4(@types/react@19.2.18)
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.65.0
         version: 8.65.0(@typescript-eslint/parser@8.65.0(eslint@9.39.2(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.2(jiti@2.7.0))(typescript@5.9.3)
@@ -747,8 +747,8 @@ packages:
     peerDependencies:
       '@types/react': ^19.2.0
 
-  '@types/react@19.2.17':
-    resolution: {integrity: sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw==}
+  '@types/react@19.2.18':
+    resolution: {integrity: sha512-AnzbBERsrLKtk2XSfTbYRLjQPdy116Sty4q+T+Bp3IC4l6jNBvreVPAHmpq9qhXQM7CXZPjLVmGMw9sy+hxQ3w==}
 
   '@typescript-eslint/eslint-plugin@8.65.0':
     resolution: {integrity: sha512-IEgob78X12rHpUmtcwFsXhZdVGJtwTVP8FiCLZkR6GlYVrl2PcuB+KhCE5BlVC/eQpQnu8WXRtkHZuPar+gCRA==}
@@ -2490,7 +2490,7 @@ snapshots:
 
   '@navikt/ds-css@8.16.1': {}
 
-  '@navikt/ds-react@8.16.1(@types/react@19.2.17)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@navikt/ds-react@8.16.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@floating-ui/react': 0.27.20(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@floating-ui/react-dom': 2.1.9(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -2498,10 +2498,10 @@ snapshots:
       '@navikt/ds-tokens': 8.16.1
       date-fns: 4.4.0
       react: 19.2.8
-      react-day-picker: 10.0.1(@types/react@19.2.17)(react@19.2.8)
+      react-day-picker: 10.0.1(@types/react@19.2.18)(react@19.2.8)
       react-dom: 19.2.8(react@19.2.8)
     optionalDependencies:
-      '@types/react': 19.2.17
+      '@types/react': 19.2.18
 
   '@navikt/ds-tailwind@8.16.1': {}
 
@@ -2689,11 +2689,11 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
-  '@types/react-dom@19.2.4(@types/react@19.2.17)':
+  '@types/react-dom@19.2.4(@types/react@19.2.18)':
     dependencies:
-      '@types/react': 19.2.17
+      '@types/react': 19.2.18
 
-  '@types/react@19.2.17':
+  '@types/react@19.2.18':
     dependencies:
       csstype: 3.2.3
 
@@ -3923,13 +3923,13 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  react-day-picker@10.0.1(@types/react@19.2.17)(react@19.2.8):
+  react-day-picker@10.0.1(@types/react@19.2.18)(react@19.2.8):
     dependencies:
       '@date-fns/tz': 1.5.0
       date-fns: 4.4.0
       react: 19.2.8
     optionalDependencies:
-      '@types/react': 19.2.17
+      '@types/react': 19.2.18
 
   react-dom@19.2.8(react@19.2.8):
     dependencies:
