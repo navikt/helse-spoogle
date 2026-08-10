@@ -30,19 +30,23 @@ fun main() {
     RapidApp(System.getenv()).start()
 }
 
-private class RapidApp(env: Map<String, String>) {
+private class RapidApp(
+    env: Map<String, String>,
+) {
     private var rapidsConnection: RapidsConnection
     private val app = App(env) { rapidsConnection }
 
     init {
-        rapidsConnection = RapidApplication.create(
-            env = env,
-            meterRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT).also(Metrics.globalRegistry::add),
-            builder = {
-                withKtorModule {
-                    app.ktorApp(this)
-                }
-            })
+        rapidsConnection =
+            RapidApplication.create(
+                env = env,
+                meterRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT).also(Metrics.globalRegistry::add),
+                builder = {
+                    withKtorModule {
+                        app.ktorApp(this)
+                    }
+                },
+            )
     }
 
     fun start() = app.start()

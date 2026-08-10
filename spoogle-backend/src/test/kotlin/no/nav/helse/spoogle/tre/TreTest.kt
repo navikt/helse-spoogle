@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class TreTest {
-
     @Test
     fun `to json`() {
         val rootNode = Node.fødselsnummer("fnr")

@@ -16,7 +16,7 @@ internal fun Application.statusPages() {
         suspend fun respondToException(
             status: HttpStatusCode,
             call: ApplicationCall,
-            cause: Throwable
+            cause: Throwable,
         ) {
             val errorId = UUID.randomUUID()
             call.respond(status, Feilrespons(errorId.toString(), cause.message))

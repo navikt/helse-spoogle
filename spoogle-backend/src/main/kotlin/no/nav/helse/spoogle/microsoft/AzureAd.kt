@@ -2,7 +2,9 @@ package no.nav.helse.spoogle.microsoft
 
 import no.nav.security.token.support.v3.IssuerConfig
 
-class AzureAD private constructor(private val config: Config) {
+class AzureAD private constructor(
+    private val config: Config,
+) {
     internal fun issuer(): String = "AAD"
 
     internal fun issuerConfig(): IssuerConfig =
@@ -33,15 +35,14 @@ class AzureAD private constructor(private val config: Config) {
     internal fun hasValidGroups(groups: List<String>) = requiredGroups.any { it in groups }
 
     internal companion object {
-        internal fun fromEnv(env: Map<String, String>): AzureAD {
-            return AzureAD(
+        internal fun fromEnv(env: Map<String, String>): AzureAD =
+            AzureAD(
                 Config(
                     discoveryUrl = env.getValue("AZURE_APP_WELL_KNOWN_URL"),
                     clientId = env.getValue("AZURE_APP_CLIENT_ID"),
                     validGroupId = env.getValue("AZURE_VALID_GROUP_IDS").split(","),
                 ),
             )
-        }
     }
 
     private class Config(

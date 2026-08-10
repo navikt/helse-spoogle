@@ -13,44 +13,26 @@ open class Node private constructor(
     private val ugyldigeBarn: MutableMap<Node, LocalDateTime> = mutableMapOf()
 
     internal companion object {
-        internal fun fødselsnummer(fødselsnummer: String): Node {
-            return Node(fødselsnummer, FØDSELSNUMMER)
-        }
+        internal fun fødselsnummer(fødselsnummer: String): Node = Node(fødselsnummer, FØDSELSNUMMER)
 
-        internal fun aktørId(aktørId: String): Node {
-            return Node(aktørId, AKTØR_ID)
-        }
+        internal fun aktørId(aktørId: String): Node = Node(aktørId, AKTØR_ID)
 
         internal fun organisasjonsnummer(
             organisasjonsnummer: String,
             fødselsnummer: String,
-        ): Node {
-            return OrganisasjonsnummerNode(organisasjonsnummer, fødselsnummer)
-        }
+        ): Node = OrganisasjonsnummerNode(organisasjonsnummer, fødselsnummer)
 
-        internal fun søknadId(søknadId: String): Node {
-            return Node(søknadId, SØKNAD_ID)
-        }
+        internal fun søknadId(søknadId: String): Node = Node(søknadId, SØKNAD_ID)
 
-        internal fun inntektsmeldingId(inntektsmeldingId: String): Node {
-            return Node(inntektsmeldingId, INNTEKTSMELDING_ID)
-        }
+        internal fun inntektsmeldingId(inntektsmeldingId: String): Node = Node(inntektsmeldingId, INNTEKTSMELDING_ID)
 
-        internal fun vedtaksperiodeId(vedtaksperiodeId: String): Node {
-            return Node(vedtaksperiodeId, VEDTAKSPERIODE_ID)
-        }
+        internal fun vedtaksperiodeId(vedtaksperiodeId: String): Node = Node(vedtaksperiodeId, VEDTAKSPERIODE_ID)
 
-        internal fun behandlingId(behandlingId: String): Node {
-            return Node(behandlingId, BEHANDLING_ID)
-        }
+        internal fun behandlingId(behandlingId: String): Node = Node(behandlingId, BEHANDLING_ID)
 
-        internal fun oppgaveId(oppgaveId: String): Node {
-            return Node(oppgaveId, OPPGAVE_ID)
-        }
+        internal fun oppgaveId(oppgaveId: String): Node = Node(oppgaveId, OPPGAVE_ID)
 
-        internal fun utbetalingId(utbetalingId: String): Node {
-            return Node(utbetalingId, UTBETALING_ID)
-        }
+        internal fun utbetalingId(utbetalingId: String): Node = Node(utbetalingId, UTBETALING_ID)
     }
 
     internal fun finn(targetId: String): List<String> {

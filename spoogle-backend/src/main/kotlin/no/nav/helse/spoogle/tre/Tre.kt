@@ -1,7 +1,7 @@
 package no.nav.helse.spoogle.tre
 
 internal class Tre private constructor(
-    private val rotnode: Node
+    private val rotnode: Node,
 ) {
     internal fun toDto(): TreDto = TreDto(rotnode.toDto())
 
@@ -19,5 +19,5 @@ internal class Tre private constructor(
 }
 
 data class TreDto(
-    val rotnode: NodeDto
+    val rotnode: NodeDto,
 )

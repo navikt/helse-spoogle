@@ -9,26 +9,30 @@ import io.micrometer.core.instrument.MeterRegistry
 import org.slf4j.LoggerFactory
 
 internal class SlettPersonRiver(
-    rapidsConnection: RapidsConnection, private val personDao: PersonDao
+    rapidsConnection: RapidsConnection,
+    private val personDao: PersonDao,
 ) : River.PacketListener {
-
     private companion object {
         private val sikkerlogg = LoggerFactory.getLogger("tjenestekall")
     }
 
     init {
-        River(rapidsConnection).apply {
-            precondition {
-                it.requireValue("@event_name", "slett_person")
-            }
-            validate {
-                it.requireKey("@id", "fødselsnummer")
-            }
-        }.register(this)
+        River(rapidsConnection)
+            .apply {
+                precondition {
+                    it.requireValue("@event_name", "slett_person")
+                }
+                validate {
+                    it.requireKey("@id", "fødselsnummer")
+                }
+            }.register(this)
     }
 
     override fun onPacket(
-        packet: JsonMessage, context: MessageContext, metadata: MessageMetadata, meterRegistry: MeterRegistry
+        packet: JsonMessage,
+        context: MessageContext,
+        metadata: MessageMetadata,
+        meterRegistry: MeterRegistry,
     ) {
         val fødselsnummer = packet["fødselsnummer"].asString()
         sikkerlogg.info("Sletter person med fødselsnummer: $fødselsnummer")

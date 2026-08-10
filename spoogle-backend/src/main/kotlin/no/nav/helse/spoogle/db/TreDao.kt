@@ -11,7 +11,9 @@ import org.intellij.lang.annotations.Language
 import java.time.LocalDateTime
 import javax.sql.DataSource
 
-internal class TreDao(private val dataSource: DataSource) {
+internal class TreDao(
+    private val dataSource: DataSource,
+) {
     internal fun nyRelasjon(
         barn: NodeDto,
         forelder: NodeDto?,
@@ -91,18 +93,20 @@ internal class TreDao(private val dataSource: DataSource) {
         val uniqueNodes = mutableMapOf<Pair<String, String>, Node>()
 
         return sessionOf(dataSource).use { session ->
-            session.run(
-                queryOf(query, mapOf("fodselsnummer" to fødselsnummer)).map<Relasjon?> {
-                    val parentId = it.stringOrNull("forelder_id") ?: return@map null
-                    val parentType = it.stringOrNull("forelder_type") ?: return@map null
-                    val childId = it.string("barn_id")
-                    val childType = it.string("barn_type")
-                    val ugyldigFra = it.localDateTimeOrNull("ugyldig_fra")
-                    val parentNode = uniqueNodes.getOrPut(parentId to parentType) { toNode(parentId, parentType, fødselsnummer) }
-                    val childNode = uniqueNodes.getOrPut(childId to childType) { toNode(childId, childType, fødselsnummer) }
-                    Relasjon(parentNode, childNode, ugyldigFra)
-                }.asList,
-            ).filterNotNull()
+            session
+                .run(
+                    queryOf(query, mapOf("fodselsnummer" to fødselsnummer))
+                        .map<Relasjon?> {
+                            val parentId = it.stringOrNull("forelder_id") ?: return@map null
+                            val parentType = it.stringOrNull("forelder_type") ?: return@map null
+                            val childId = it.string("barn_id")
+                            val childType = it.string("barn_type")
+                            val ugyldigFra = it.localDateTimeOrNull("ugyldig_fra")
+                            val parentNode = uniqueNodes.getOrPut(parentId to parentType) { toNode(parentId, parentType, fødselsnummer) }
+                            val childNode = uniqueNodes.getOrPut(childId to childType) { toNode(childId, childType, fødselsnummer) }
+                            Relasjon(parentNode, childNode, ugyldigFra)
+                        }.asList,
+                ).filterNotNull()
         }
     }
 

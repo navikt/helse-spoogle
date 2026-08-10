@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Feilrespons(
     val errorId: String,
-    val description: String?
+    val description: String?,
 )

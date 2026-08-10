@@ -9,12 +9,12 @@ import no.nav.helse.spoogle.BrukerException
 
 internal fun Route.brukerRoutes(identityIssuer: String) {
     get("/api/bruker") {
-        val bruker = try {
-            Bruker.fromCall(identityIssuer, call)
-        } catch (e: BrukerException) {
-            return@get call.respond(e.httpStatusCode, e.message!!)
-        }
+        val bruker =
+            try {
+                Bruker.fromCall(identityIssuer, call)
+            } catch (e: BrukerException) {
+                return@get call.respond(e.httpStatusCode, e.message!!)
+            }
         call.respond(HttpStatusCode.OK, bruker)
     }
 }
-

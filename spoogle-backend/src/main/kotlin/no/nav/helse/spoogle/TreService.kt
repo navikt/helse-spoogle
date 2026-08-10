@@ -11,7 +11,9 @@ internal interface ITreeService {
     fun finnTre(id: String): Tre?
 }
 
-internal class TreService(dataSource: DataSource) : ITreeService {
+internal class TreService(
+    dataSource: DataSource,
+) : ITreeService {
     private val dao = TreDao(dataSource)
 
     override fun finnTre(id: String): Tre? {

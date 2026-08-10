@@ -137,16 +137,17 @@ internal class RoutingTest {
                 }
                 putAll(andreClaims)
             }
-        return oauthMock.issueToken(
-            issuerId = issuerId.toString(),
-            clientId = clientId.toString(),
-            tokenCallback =
-                DefaultOAuth2TokenCallback(
-                    issuerId = issuerId.toString(),
-                    audience = listOf(clientId.toString()),
-                    claims = claims,
-                ),
-        ).serialize()
+        return oauthMock
+            .issueToken(
+                issuerId = issuerId.toString(),
+                clientId = clientId.toString(),
+                tokenCallback =
+                    DefaultOAuth2TokenCallback(
+                        issuerId = issuerId.toString(),
+                        audience = listOf(clientId.toString()),
+                        claims = claims,
+                    ),
+            ).serialize()
     }
 
     private fun withTestApplication(block: suspend ApplicationTestBuilder.() -> Unit) {

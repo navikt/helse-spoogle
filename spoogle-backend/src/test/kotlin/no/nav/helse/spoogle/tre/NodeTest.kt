@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
 class NodeTest {
-
     @Test
     fun forelder() {
         val fnr = Node.fødselsnummer("12345678910")

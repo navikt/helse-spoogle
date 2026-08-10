@@ -12,23 +12,28 @@ import no.nav.helse.spoogle.tre.Node
 
 internal class UtbetalingForkastetRiver(
     private val treService: TreService,
-    rapidsConnection: RapidsConnection
-): SpoogleRiver() {
+    rapidsConnection: RapidsConnection,
+) : SpoogleRiver() {
     override fun eventName(): String = "utbetaling_endret"
+
     init {
-        River(rapidsConnection).apply {
-            precondition {
-                it.requireValue("@event_name", eventName())
-                it.requireValue("gjeldendeStatus", "FORKASTET")
-            }
-            validate {
-                it.requireKey("utbetalingId")
-            }
-        }.register(this)
+        River(rapidsConnection)
+            .apply {
+                precondition {
+                    it.requireValue("@event_name", eventName())
+                    it.requireValue("gjeldendeStatus", "FORKASTET")
+                }
+                validate {
+                    it.requireKey("utbetalingId")
+                }
+            }.register(this)
     }
 
     override fun onPacket(
-        packet: JsonMessage, context: MessageContext, metadata: MessageMetadata, meterRegistry: MeterRegistry
+        packet: JsonMessage,
+        context: MessageContext,
+        metadata: MessageMetadata,
+        meterRegistry: MeterRegistry,
     ) {
         val utbetalingId = packet["utbetalingId"].asUUID()
         val utbetalingIdNode = Node.utbetalingId(utbetalingId.toString())

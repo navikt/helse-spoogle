@@ -13,22 +13,25 @@ import no.nav.helse.spoogle.tre.Tre
 
 internal class VedtaksperiodeEndretRiver(
     private val treService: TreService,
-    rapidsConnection: RapidsConnection
-): River.PacketListener {
-
+    rapidsConnection: RapidsConnection,
+) : River.PacketListener {
     init {
-        River(rapidsConnection).apply {
-            precondition {
-                it.requireValue("@event_name", "vedtaksperiode_endret")
-            }
-            validate {
-                it.requireKey("fødselsnummer", "organisasjonsnummer", "vedtaksperiodeId")
-            }
-        }.register(this)
+        River(rapidsConnection)
+            .apply {
+                precondition {
+                    it.requireValue("@event_name", "vedtaksperiode_endret")
+                }
+                validate {
+                    it.requireKey("fødselsnummer", "organisasjonsnummer", "vedtaksperiodeId")
+                }
+            }.register(this)
     }
 
     override fun onPacket(
-        packet: JsonMessage, context: MessageContext, metadata: MessageMetadata, meterRegistry: MeterRegistry
+        packet: JsonMessage,
+        context: MessageContext,
+        metadata: MessageMetadata,
+        meterRegistry: MeterRegistry,
     ) {
         val fødselsnummer = packet["fødselsnummer"].asString()
         val organisasjonsnummer = packet["organisasjonsnummer"].asString()

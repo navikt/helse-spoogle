@@ -17,18 +17,22 @@ internal class OppgaveEndretRiver(
     override fun eventName(): String = "oppgave_opprettet"
 
     init {
-        River(rapidsConnection).apply {
-            precondition {
-                it.requireAny("@event_name", listOf(eventName(), "oppgave_oppdatert"))
-            }
-            validate {
-                it.requireKey("oppgaveId", "behandlingId")
-            }
-        }.register(this)
+        River(rapidsConnection)
+            .apply {
+                precondition {
+                    it.requireAny("@event_name", listOf(eventName(), "oppgave_oppdatert"))
+                }
+                validate {
+                    it.requireKey("oppgaveId", "behandlingId")
+                }
+            }.register(this)
     }
 
     override fun onPacket(
-        packet: JsonMessage, context: MessageContext, metadata: MessageMetadata, meterRegistry: MeterRegistry
+        packet: JsonMessage,
+        context: MessageContext,
+        metadata: MessageMetadata,
+        meterRegistry: MeterRegistry,
     ) {
         val oppgaveId = packet["oppgaveId"].asString()
         val behandlingId = packet["behandlingId"].asString()

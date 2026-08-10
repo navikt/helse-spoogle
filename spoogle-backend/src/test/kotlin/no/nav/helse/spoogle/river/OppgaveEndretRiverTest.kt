@@ -66,6 +66,4 @@ internal class OppgaveEndretRiverTest : AbstractDatabaseTest() {
             "ugyldig_fra": null
        } 
     """
-
-
 }

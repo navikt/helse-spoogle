@@ -13,23 +13,27 @@ import no.nav.helse.spoogle.tre.Tre
 
 internal class InntektsmeldingHåndtertRiver(
     private val treService: TreService,
-    rapidsConnection: RapidsConnection
-): SpoogleRiver() {
+    rapidsConnection: RapidsConnection,
+) : SpoogleRiver() {
     override fun eventName(): String = "inntektsmelding_håndtert"
 
     init {
-        River(rapidsConnection).apply {
-            precondition {
-                it.requireValue("@event_name", eventName())
-            }
-            validate {
-                it.requireKey("inntektsmeldingId", "vedtaksperiodeId")
-            }
-        }.register(this)
+        River(rapidsConnection)
+            .apply {
+                precondition {
+                    it.requireValue("@event_name", eventName())
+                }
+                validate {
+                    it.requireKey("inntektsmeldingId", "vedtaksperiodeId")
+                }
+            }.register(this)
     }
 
     override fun onPacket(
-        packet: JsonMessage, context: MessageContext, metadata: MessageMetadata, meterRegistry: MeterRegistry
+        packet: JsonMessage,
+        context: MessageContext,
+        metadata: MessageMetadata,
+        meterRegistry: MeterRegistry,
     ) {
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
         val søknadId = packet["inntektsmeldingId"].asUUID()

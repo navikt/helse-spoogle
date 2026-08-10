@@ -14,25 +14,28 @@ import no.nav.helse.spoogle.tre.Tre
 
 internal class BehandlingOpprettetRiver(
     private val treService: TreService,
-    rapidsConnection: RapidsConnection
-): SpoogleRiver() {
-
+    rapidsConnection: RapidsConnection,
+) : SpoogleRiver() {
     override fun eventName(): String = "behandling_opprettet"
 
     init {
-        River(rapidsConnection).apply {
-            precondition {
-                it.requireValue("@event_name", eventName())
-            }
-            validate {
-                it.requireKey("fødselsnummer", "vedtaksperiodeId", "behandlingId", "yrkesaktivitetstype")
-                it.interestedIn("organisasjonsnummer")
-            }
-        }.register(this)
+        River(rapidsConnection)
+            .apply {
+                precondition {
+                    it.requireValue("@event_name", eventName())
+                }
+                validate {
+                    it.requireKey("fødselsnummer", "vedtaksperiodeId", "behandlingId", "yrkesaktivitetstype")
+                    it.interestedIn("organisasjonsnummer")
+                }
+            }.register(this)
     }
 
     override fun onPacket(
-        packet: JsonMessage, context: MessageContext, metadata: MessageMetadata, meterRegistry: MeterRegistry
+        packet: JsonMessage,
+        context: MessageContext,
+        metadata: MessageMetadata,
+        meterRegistry: MeterRegistry,
     ) {
         val fødselsnummer = packet["fødselsnummer"].asString()
         val yrkesaktivitetstype = packet["yrkesaktivitetstype"].asString()

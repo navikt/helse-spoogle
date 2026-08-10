@@ -5,7 +5,9 @@ import kotliquery.sessionOf
 import org.intellij.lang.annotations.Language
 import javax.sql.DataSource
 
-internal class PersonDao(private val dataSource: DataSource) {
+internal class PersonDao(
+    private val dataSource: DataSource,
+) {
     internal fun slett(fødselsnummer: String) {
         @Language("PostgreSQL")
         val query =

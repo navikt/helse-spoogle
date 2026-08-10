@@ -61,7 +61,8 @@ internal abstract class AbstractDatabaseTest {
         }
 
         init {
-            Flyway.configure()
+            Flyway
+                .configure()
                 .dataSource(dataSource)
                 .locations("classpath:db/migration")
                 .load()
@@ -76,15 +77,17 @@ internal abstract class AbstractDatabaseTest {
         organisasjonsnummer: String,
     ) {
         @Language("PostgreSQL")
-        val query = """
+        val query =
+            """
             INSERT INTO relasjon(node, forelder, type, opprettet) VALUES (:foedselsnummer, null, 'FØDSELSNUMMER', now());
             INSERT INTO relasjon(node, forelder, type, opprettet) VALUES (:organisasjonsnummer, null, 'ORGANISASJONSNUMMER', now());
-        """.trimIndent()
+            """.trimIndent()
         sessionOf(dataSource).use { session ->
             session.run(
                 queryOf(
-                    query, mapOf("foedselsnummer" to fødselsnummer, "organisasjonsnummer" to organisasjonsnummer)
-                ).asUpdate
+                    query,
+                    mapOf("foedselsnummer" to fødselsnummer, "organisasjonsnummer" to organisasjonsnummer),
+                ).asUpdate,
             )
         }
     }

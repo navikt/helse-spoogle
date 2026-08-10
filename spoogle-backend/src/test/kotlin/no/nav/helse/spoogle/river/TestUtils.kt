@@ -102,7 +102,10 @@ internal fun vedtaksperiodeForkastet(
 }
     """
 
-internal fun assertJson(expectedJson: String, tre: Tre?) {
+internal fun assertJson(
+    expectedJson: String,
+    tre: Tre?,
+) {
     val json = tre?.let { jacksonObjectMapper().readTree(it.toJson()) }
     assertEquals(jacksonObjectMapper().readTree(expectedJson), json)
 }

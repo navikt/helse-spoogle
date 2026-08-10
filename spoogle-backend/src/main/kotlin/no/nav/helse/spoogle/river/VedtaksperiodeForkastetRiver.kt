@@ -12,24 +12,27 @@ import no.nav.helse.spoogle.tre.Node
 
 internal class VedtaksperiodeForkastetRiver(
     private val treService: TreService,
-    rapidsConnection: RapidsConnection
-): SpoogleRiver() {
-
+    rapidsConnection: RapidsConnection,
+) : SpoogleRiver() {
     override fun eventName(): String = "vedtaksperiode_forkastet"
 
     init {
-        River(rapidsConnection).apply {
-            precondition {
-                it.requireValue("@event_name", eventName())
-            }
-            validate {
-                it.requireKey("vedtaksperiodeId")
-            }
-        }.register(this)
+        River(rapidsConnection)
+            .apply {
+                precondition {
+                    it.requireValue("@event_name", eventName())
+                }
+                validate {
+                    it.requireKey("vedtaksperiodeId")
+                }
+            }.register(this)
     }
 
     override fun onPacket(
-        packet: JsonMessage, context: MessageContext, metadata: MessageMetadata, meterRegistry: MeterRegistry
+        packet: JsonMessage,
+        context: MessageContext,
+        metadata: MessageMetadata,
+        meterRegistry: MeterRegistry,
     ) {
         val vedtaksperiodeId = packet["vedtaksperiodeId"].asUUID()
         val vedtaksperiodeIdNode = Node.vedtaksperiodeId(vedtaksperiodeId.toString())

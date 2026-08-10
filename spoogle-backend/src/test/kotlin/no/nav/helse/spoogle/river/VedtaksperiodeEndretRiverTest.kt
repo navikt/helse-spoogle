@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import java.util.*
 
-internal class VedtaksperiodeEndretRiverTest: AbstractDatabaseTest() {
+internal class VedtaksperiodeEndretRiverTest : AbstractDatabaseTest() {
     private val testRapid = TestRapid()
     private val treService = TreService(dataSource)
     private val vedtaksperiodeId = UUID.fromString("d100e098-8f77-4985-bd6b-bb067dbaaf37")
@@ -48,6 +48,4 @@ internal class VedtaksperiodeEndretRiverTest: AbstractDatabaseTest() {
             "ugyldig_fra": null
        } 
     """
-
-
 }

@@ -1,9 +1,9 @@
+import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
+import io.ktor.server.engine.*
 import io.ktor.server.netty.Netty
 import no.nav.helse.spoogle.App
 import no.nav.helse.spoogle.db.AbstractDatabaseTest
 import no.nav.security.mock.oauth2.MockOAuth2Server
-import com.github.navikt.tbd_libs.rapids_and_rivers.test_support.TestRapid
-import io.ktor.server.engine.*
 import no.nav.security.mock.oauth2.token.DefaultOAuth2TokenCallback
 import org.intellij.lang.annotations.Language
 import java.io.File
@@ -37,13 +37,16 @@ internal class LocalApp : AbstractDatabaseTest(doTruncate = false) {
     private val app: App by lazy { App(environmentVariables) { testRapid } }
 
     internal fun start() {
-        val server = embeddedServer(
-            Netty, applicationEnvironment {}, configure = {
-                connector {
-                    port = 8080
-                }
-            }
-        ) { app.ktorApp(this) }
+        val server =
+            embeddedServer(
+                Netty,
+                applicationEnvironment {},
+                configure = {
+                    connector {
+                        port = 8080
+                    }
+                },
+            ) { app.ktorApp(this) }
 
         app.start()
         server.start(wait = false)
@@ -145,16 +148,17 @@ private object OauthMock {
                 }
                 putAll(andreClaims)
             }
-        return server.issueToken(
-            issuerId = issuerId,
-            clientId = clientId,
-            tokenCallback =
-                DefaultOAuth2TokenCallback(
-                    issuerId = issuerId,
-                    audience = listOf(clientId),
-                    claims = claims,
-                    expiry = 604800, // en uke
-                ),
-        ).serialize()
+        return server
+            .issueToken(
+                issuerId = issuerId,
+                clientId = clientId,
+                tokenCallback =
+                    DefaultOAuth2TokenCallback(
+                        issuerId = issuerId,
+                        audience = listOf(clientId),
+                        claims = claims,
+                        expiry = 604800, // en uke
+                    ),
+            ).serialize()
     }
 }

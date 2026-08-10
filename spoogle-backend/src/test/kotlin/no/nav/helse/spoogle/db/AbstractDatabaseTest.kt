@@ -10,7 +10,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.testcontainers.postgresql.PostgreSQLContainer
 import javax.sql.DataSource
 
-internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = true) {
+internal abstract class AbstractDatabaseTest(
+    private val doTruncate: Boolean = true,
+) {
     companion object {
         internal val port: String
         private val postgres =
@@ -42,7 +44,8 @@ internal abstract class AbstractDatabaseTest(private val doTruncate: Boolean = t
 
         init {
             println(jdbcUrl)
-            Flyway.configure()
+            Flyway
+                .configure()
                 .dataSource(dataSource)
                 .failOnMissingLocations(true)
                 .cleanDisabled(false)

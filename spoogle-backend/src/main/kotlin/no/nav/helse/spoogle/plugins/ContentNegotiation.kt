@@ -14,7 +14,7 @@ internal fun Application.configureServerContentNegotiation() {
     }
 }
 
-internal fun <T: HttpClientEngineConfig> HttpClientConfig<T>.configureClientContentNegotiation() {
+internal fun <T : HttpClientEngineConfig> HttpClientConfig<T>.configureClientContentNegotiation() {
     install(ClientContentNegotiation) {
         json()
     }
