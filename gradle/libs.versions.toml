@@ -11,7 +11,7 @@ rapids-and-rivers = "2026071513121784113927"
 sasGradlePlugins = "20260807.0944"
 tbd-libs = "20260702.1010"
 testcontainers-postgresql = "2.0.5"
-token-validation-ktor = "6.0.11"
+token-validation-ktor = "6.0.12"
 
 [libraries]
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
