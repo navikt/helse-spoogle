@@ -9,7 +9,7 @@ mock-oauth2-server = "5.0.2"
 postgresql = "42.7.13"
 rapids-and-rivers = "2026071513121784113927"
 sasGradlePlugins = "20260807.0944"
-tbd-libs = "20260702.1010"
+tbd-libs = "20260811.1310"
 testcontainers-postgresql = "2.0.5"
 token-validation-ktor = "6.0.11"
 
