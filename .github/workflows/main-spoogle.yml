@@ -136,7 +136,7 @@ jobs:
 
   deploy-prod:
     name: Deploy til prod
-    needs: [bygg-image, deploy-dev]
+    needs: bygg-image
     uses: navikt/helse-sas-github-workflows/.github/workflows/deploy.yml@d943bbae32e67f52766859e62f56aab033857bfe # v1.0.0
     with:
       CLUSTER: prod-gcp
