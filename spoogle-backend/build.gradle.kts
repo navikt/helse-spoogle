@@ -1,9 +1,9 @@
 plugins {
-    id("no.nav.helse.sas.sas-deployable")
+    id("no.nav.sykepenger.deployable")
     alias(libs.plugins.kotlin.serialization)
 }
 
-sasDeployable {
+sykepengerDeployable {
     mainClass = "no.nav.helse.spoogle.AppKt"
 }
 

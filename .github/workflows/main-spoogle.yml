@@ -1,6 +1,6 @@
 name: main - spoogle-backend - Bygg, test og deploy
 
-# Avviker fra sas-standarden ved at bygg, test og image ikke bruker de gjenbrukbare workflowene:
+# Avviker fra sykepenger-standarden ved at bygg, test og image ikke bruker de gjenbrukbare workflowene:
 # frontenden må bygges med pnpm først, og det skjer i samme jobb som Gradle-bygget.
 
 on:

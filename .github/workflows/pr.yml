@@ -1,6 +1,6 @@
 name: PR - Bygg og test alt
 
-# Avviker fra sas-standarden (`standard-pr.yml`) ved at frontenden bygges med pnpm før Gradle-bygget.
+# Avviker fra sykepenger-standarden (`standard-pr.yml`) ved at frontenden bygges med pnpm før Gradle-bygget.
 
 on:
   pull_request:

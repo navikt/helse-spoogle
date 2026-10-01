@@ -8,7 +8,7 @@ logback-syslog4j = "1.0.0"
 mock-oauth2-server = "5.0.2"
 postgresql = "42.7.13"
 rapids-and-rivers = "2026091610031789545782"
-sasGradlePlugins = "20260930.1152"
+sykepengerGradlePlugins = "20261001.1830"
 tbd-libs = "20260930.1309"
 testcontainers-postgresql = "2.0.5"
 token-validation-ktor = "6.0.11"
@@ -47,6 +47,5 @@ token-validation-ktor = { module = "no.nav.security:token-validation-ktor-v3", v
 
 [plugins]
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-sas-deployable = { id = "no.nav.helse.sas.sas-deployable", version.ref = "sasGradlePlugins" }
-sas-kotlin = { id = "no.nav.helse.sas.sas-kotlin", version.ref = "sasGradlePlugins" }
-sas-root = { id = "no.nav.helse.sas.sas-root", version.ref = "sasGradlePlugins" }
+sykepenger-deployable = { id = "no.nav.sykepenger.deployable", version.ref = "sykepengerGradlePlugins" }
+sykepenger-root = { id = "no.nav.sykepenger.root", version.ref = "sykepengerGradlePlugins" }
