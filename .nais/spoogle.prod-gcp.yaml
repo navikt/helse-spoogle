@@ -1,0 +1,39 @@
+spec:
+  ingresses:
+    - https://spoogle.intern.nav.no
+    - https://spoogle.ansatt.nav.no
+  replicas:
+    max: 2
+  kafka:
+    pool: nav-prod
+  azure:
+    application:
+      tenant: nav.no
+      claims:
+        groups:
+          - id: "f787f900-6697-440d-a086-d5bb56e26a9c" # gammel hjemmemekka tbd-gruppe
+          - id: "c0227409-2085-4eb2-b487-c4ba270986a3" # nais-tbd
+  gcp:
+    sqlInstances:
+      - type: POSTGRES_17
+        diskAutoresize: true
+        tier: db-custom-1-3840
+        flags:
+          - name: cloudsql.enable_pgaudit
+            value: "true"
+          - name: pgaudit.log
+            value: "write,ddl,role"
+          - name: pgaudit.log_parameter
+            value: "on"
+          - name: pgaudit.log_relation
+            value: "on"
+        databases:
+          - name: spoogle
+            envVarPrefix: DATABASE
+  env:
+    - name: KAFKA_CONSUMER_GROUP_ID
+      value: tbd-spoogle-v3
+    - name: KAFKA_RESET_POLICY
+      value: earliest
+    - name: AZURE_VALID_GROUP_IDS
+      value: f787f900-6697-440d-a086-d5bb56e26a9c,c0227409-2085-4eb2-b487-c4ba270986a3

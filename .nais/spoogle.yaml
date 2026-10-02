@@ -1,0 +1,52 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: spoogle
+  namespace: tbd
+  labels:
+    team: tbd
+spec:
+  port: 8080
+  strategy:
+    type: Recreate
+  liveness:
+    path: isalive
+    initialDelay: 5
+  readiness:
+    path: isready
+    initialDelay: 5
+  resources:
+    limits:
+      memory: 768Mi
+    requests:
+      cpu: 100m
+      memory: 768Mi
+  replicas:
+    min: 1
+    cpuThresholdPercentage: 90
+  prometheus:
+    enabled: true
+    path: /metrics
+  azure:
+    sidecar:
+      enabled: true
+      autoLogin: true
+    application:
+      enabled: true
+      claims:
+        extra:
+          - "NAVident"
+      allowAllUsers: false
+  env:
+    - name: KAFKA_RAPID_TOPIC
+      value: tbd.rapid.v1
+  observability:
+    logging:
+      destinations:
+        - id: elastic
+        - id: loki
+  accessPolicy:
+    outbound:
+      rules:
+        - application: logging
+          namespace: nais-system
