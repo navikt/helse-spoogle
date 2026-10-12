@@ -82,7 +82,7 @@ jobs:
           distribution: temurin
           java-version: 25
 
-      - uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6.3.0
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
 
       - name: NAIS login
         id: login
@@ -125,7 +125,7 @@ jobs:
   deploy-dev:
     name: Deploy til dev
     needs: bygg-image
-    uses: navikt/sykepenger-github-workflows/.github/workflows/deploy-v2.yml@77c349d62b631cf0fedc02278c68abd33bc8ea5b # v1.0.10
+    uses: navikt/sykepenger-github-workflows/.github/workflows/deploy-v2.yml@fc1bc4b862baacc4b4d8e0519bf3dc9040a2e644 # v1.0.11
     with:
       manifest: .nais/spoogle.yaml
       environment: dev-gcp
@@ -137,7 +137,7 @@ jobs:
   deploy-prod:
     name: Deploy til prod
     needs: bygg-image
-    uses: navikt/sykepenger-github-workflows/.github/workflows/deploy-v2.yml@77c349d62b631cf0fedc02278c68abd33bc8ea5b # v1.0.10
+    uses: navikt/sykepenger-github-workflows/.github/workflows/deploy-v2.yml@fc1bc4b862baacc4b4d8e0519bf3dc9040a2e644 # v1.0.11
     with:
       manifest: .nais/spoogle.yaml
       environment: prod-gcp
