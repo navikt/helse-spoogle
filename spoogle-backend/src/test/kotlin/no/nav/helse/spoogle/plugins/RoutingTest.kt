@@ -115,11 +115,32 @@ internal class RoutingTest {
             assertEquals(HttpStatusCode.Unauthorized, response.status)
         }
 
+    @Test
+    fun `finn tre med OBO-token fra forhåndsautorisert app`() =
+        withTestApplication {
+            val response =
+                client.get("/api/sok/$vedtaksperiodeId") {
+                    header("Authorization", "Bearer ${accessToken(azp = forhåndsautorisertClientId)}")
+                }
+            assertEquals(HttpStatusCode.OK, response.status)
+        }
+
+    @Test
+    fun `finn tre med token fra ukjent app`() =
+        withTestApplication {
+            val response =
+                client.get("/api/sok/$vedtaksperiodeId") {
+                    header("Authorization", "Bearer ${accessToken(azp = UUID.randomUUID())}")
+                }
+            assertEquals(HttpStatusCode.Unauthorized, response.status)
+        }
+
     private fun accessToken(
         harNavIdent: Boolean = true,
         grupper: List<String> = listOf("$groupId"),
         andreClaims: Map<String, String> = emptyMap(),
         oid: UUID = UUID.randomUUID(),
+        azp: UUID = clientId,
     ): String {
         val claims: Map<String, Any> =
             mutableMapOf<String, Any>(
@@ -140,7 +161,7 @@ internal class RoutingTest {
         return oauthMock
             .issueToken(
                 issuerId = issuerId.toString(),
-                clientId = clientId.toString(),
+                clientId = azp.toString(),
                 tokenCallback =
                     DefaultOAuth2TokenCallback(
                         issuerId = issuerId.toString(),
@@ -204,6 +225,7 @@ internal class RoutingTest {
         private val issuerId = UUID.randomUUID()
         private val groupId = UUID.randomUUID()
         private val clientId = UUID.randomUUID()
+        private val forhåndsautorisertClientId = UUID.randomUUID()
 
         private val vedtaksperiodeId = UUID.randomUUID()
         private val utbetalingId = UUID.randomUUID()
@@ -215,6 +237,7 @@ internal class RoutingTest {
                 "LOCAL_DEVELOPMENT" to "true",
                 "AZURE_VALID_GROUP_IDS" to "$groupId",
                 "AZURE_APP_JWK" to "some_jwk",
+                "AZURE_APP_PRE_AUTHORIZED_APPS" to """[{"name":"dev-gcp:tbd:speil","clientId":"$forhåndsautorisertClientId"}]""",
             )
 
         private fun repository() =

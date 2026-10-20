@@ -31,6 +31,8 @@ spec:
     sidecar:
       enabled: true
       autoLogin: true
+      autoLoginIgnorePaths:
+        - /api/sok/*
     application:
       enabled: true
       claims:
@@ -46,6 +48,9 @@ spec:
         - id: elastic
         - id: loki
   accessPolicy:
+    inbound:
+      rules:
+        - application: speil
     outbound:
       rules:
         - application: logging

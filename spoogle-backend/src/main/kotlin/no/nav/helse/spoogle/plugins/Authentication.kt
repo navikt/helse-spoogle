@@ -31,7 +31,7 @@ internal fun Application.configureAuthentication(azureAD: AzureAD) {
                 val audience = claims.getAsList("aud").toList()
 
                 val hasValidGroup = azureAD.hasValidGroups(groups)
-                val hasValidClaimValues = azureAD.hasValidClaimValues(mapOf("aud" to audience, "azp" to appId))
+                val hasValidClaimValues = azureAD.hasValidClaimValues(audience, appId)
                 val validToken = hasValidClaimValues && hasValidGroup
 
                 if (!validToken) {

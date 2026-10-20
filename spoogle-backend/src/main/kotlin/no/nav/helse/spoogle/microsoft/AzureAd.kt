@@ -1,5 +1,9 @@
 package no.nav.helse.spoogle.microsoft
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import no.nav.security.token.support.v3.IssuerConfig
 
 class AzureAD private constructor(
@@ -14,23 +18,16 @@ class AzureAD private constructor(
             acceptedAudience = listOf(config.clientId),
         )
 
-    private val requiredClaims =
-        mapOf(
-            "NAVident" to null,
-            "preferred_username" to null,
-            "name" to null,
-            "azp" to config.clientId,
-            "aud" to listOf(config.clientId),
-        )
+    private val requiredClaims = listOf("NAVident", "preferred_username", "name", "azp", "aud")
     private val requiredGroups = config.validGroupId
+    private val authorizedParties = setOf(config.clientId) + config.preAuthorizedClientIds
 
-    internal fun hasValidClaimValues(claimsAndValues: Map<String, Any>) =
-        claimsAndValues.entries.fold(true) { _, (key, value) ->
-            if (requiredClaims[key] == value) return@fold true
-            false
-        }
+    internal fun hasValidClaimValues(
+        audience: List<String>,
+        authorizedParty: String?,
+    ) = config.clientId in audience && authorizedParty in authorizedParties
 
-    internal fun hasValidClaims(claims: List<String>) = requiredClaims.keys.all { it in claims }
+    internal fun hasValidClaims(claims: List<String>) = requiredClaims.all { it in claims }
 
     internal fun hasValidGroups(groups: List<String>) = requiredGroups.any { it in groups }
 
@@ -41,13 +38,25 @@ class AzureAD private constructor(
                     discoveryUrl = env.getValue("AZURE_APP_WELL_KNOWN_URL"),
                     clientId = env.getValue("AZURE_APP_CLIENT_ID"),
                     validGroupId = env.getValue("AZURE_VALID_GROUP_IDS").split(","),
+                    preAuthorizedClientIds = env["AZURE_APP_PRE_AUTHORIZED_APPS"]?.let(::clientIds) ?: emptySet(),
                 ),
             )
+
+        private fun clientIds(preAuthorizedApps: String): Set<String> =
+            Json
+                .parseToJsonElement(preAuthorizedApps)
+                .jsonArray
+                .map {
+                    it.jsonObject
+                        .getValue("clientId")
+                        .jsonPrimitive.content
+                }.toSet()
     }
 
     private class Config(
         val discoveryUrl: String,
         val clientId: String,
         val validGroupId: List<String>,
+        val preAuthorizedClientIds: Set<String>,
     )
 }
