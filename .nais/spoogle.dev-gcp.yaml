@@ -24,7 +24,7 @@ spec:
           - name: cloudsql.enable_pglogical
             value: "off"
           - name: cloudsql.enable_pgaudit
-            value: "true"
+            value: "on"
           - name: pgaudit.log
             value: "write"
         databases:

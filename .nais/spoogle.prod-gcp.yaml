@@ -20,7 +20,7 @@ spec:
         tier: db-custom-1-3840
         flags:
           - name: cloudsql.enable_pgaudit
-            value: "true"
+            value: "on"
           - name: pgaudit.log
             value: "write,ddl,role"
           - name: pgaudit.log_parameter
