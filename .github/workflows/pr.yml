@@ -35,9 +35,13 @@ jobs:
           node-version-file: spoogle-frontend/package.json
           cache: pnpm
           cache-dependency-path: spoogle-frontend/pnpm-lock.yaml
+          registry-url: https://npm.pkg.github.com
+          scope: "@navikt"
 
       - name: pnpm install
         run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
         working-directory: spoogle-frontend
 
       - name: pnpm run lint
