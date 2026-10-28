@@ -1,13 +1,11 @@
+import { readFile } from 'node:fs/promises';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const tokenfile: { token: string } | undefined = await import('../testtoken.json') // eslint-disable-line import/no-unresolved
-    .then((it) => it)
-    .catch(() => {
-        /* Do nothing */
-    });
+// testtoken.json er valgfri og finnes kun lokalt, så den leses ved kjøring i stedet for å importeres
+const tokenfile: { token: string } | undefined = await readFile(new URL('../testtoken.json', import.meta.url), 'utf-8')
+    .then((it) => JSON.parse(it))
+    .catch(() => undefined);
 
 // https://vitejs.dev/config/
 export default defineConfig({

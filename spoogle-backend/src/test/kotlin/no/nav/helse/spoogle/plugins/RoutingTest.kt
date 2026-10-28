@@ -1,5 +1,6 @@
 package no.nav.helse.spoogle.plugins
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.cookies.HttpCookies
@@ -14,7 +15,6 @@ import no.nav.helse.spoogle.microsoft.AzureAD
 import no.nav.helse.spoogle.tre.Node
 import no.nav.helse.spoogle.tre.Tre
 import no.nav.security.mock.oauth2.MockOAuth2Server
-import no.nav.security.mock.oauth2.http.objectMapper
 import no.nav.security.mock.oauth2.token.DefaultOAuth2TokenCallback
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.AfterAll
@@ -218,6 +218,7 @@ internal class RoutingTest {
     """
 
     private companion object {
+        private val objectMapper = jacksonObjectMapper()
         private val oauthMock =
             MockOAuth2Server().also {
                 it.start()
