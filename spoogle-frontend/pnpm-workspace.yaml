@@ -9,3 +9,9 @@ lockfile: true
 preferFrozenLockfile: true
 
 nodeVersion: 24.11.1
+
+minimumReleaseAge: 10080 # 7 dager i minutter, samme cooldown som i Dependabot-oppsettet
+
+overrides:
+  # esbuild er en peer-avhengighet av vite, og blir ikke oppdatert automatisk. Versjoner før 0.28.1 har sårbarheter.
+  esbuild: ^0.28.1
