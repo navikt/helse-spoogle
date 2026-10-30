@@ -1,9 +1,9 @@
 package no.nav.helse.spoogle.river
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.nav.helse.spoogle.tre.Tre
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Assertions.assertEquals
+import tools.jackson.module.kotlin.jacksonObjectMapper
 import java.util.*
 
 @Language("JSON")
