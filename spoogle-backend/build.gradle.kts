@@ -48,7 +48,7 @@ dependencies {
     testImplementation(libs.testcontainers.postgresql)
 
     constraints {
-        implementation("com.google.guava:guava:33.7.2-jre") {
+        implementation("com.google.guava:guava:33.8.0-jre") {
             because("ktor-server-auth-jwt drar inn sårbar guava via com.auth0:jwks-rsa")
         }
     }
